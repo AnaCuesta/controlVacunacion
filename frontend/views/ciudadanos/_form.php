@@ -57,15 +57,15 @@ use bookin\aws\checkbox\AwesomeCheckbox;
 
     <p><strong><em> INGRESE LA LATITUD Y LONGITUD: </em></strong></p>
 
-<div class="row">
-  <div class="form-group col-xs-1"></div>
-  <div class="form-group col-xs-5">
-    <?= $form->field($model, 'LAT')->textInput(['maxlength' => true]) ?>
-  </div>
-  <div class="form-group col-xs-5">
-    <?= $form->field($model, 'LONGITUD')->textInput(['maxlength' => true]) ?>
-  </div>
-</div>
+    <div class="row">
+      <div class="form-group col-xs-1"></div>
+      <div class="form-group col-xs-5">
+        <?= $form->field($model, 'LAT')->textInput(['maxlength' => true]) ?>
+      </div>
+      <div class="form-group col-xs-5">
+        <?= $form->field($model, 'LONGITUD')->textInput(['maxlength' => true]) ?>
+      </div>
+    </div>
 
     <?= $form->field($model, 'TELFCIUD')->textInput(['maxlength' => true]) ?>
 
