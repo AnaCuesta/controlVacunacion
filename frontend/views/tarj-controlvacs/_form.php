@@ -14,8 +14,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'CODTARCONTVAC')->textInput() ?>
 
-    <?= $form->field($model, 'CODTIPODOC')->textInput() ?>
-
     <?= $form->field($model, 'NUMORDENTAR')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'FECREGTAR')->textInput() ?>

@@ -8,8 +8,7 @@ use Yii;
  * This is the model class for table "tarj_controlvacs".
  *
  * @property integer $CODTARCONTVAC
- * @property integer $CODTIPODOC
- * @property string $NUMORDENTAR
+ * @property integer * @property string $NUMORDENTAR
  * @property string $FECREGTAR
  * @property string $FECHNAC
  * @property string $LUGARNAC
@@ -38,7 +37,7 @@ class TarjControlvacs extends \yii\db\ActiveRecord
     {
         return [
             [['CODTARCONTVAC', 'NUMORDENTAR', 'FECREGTAR', 'FECHNAC', 'LUGARNAC', 'LUGARINSCRIPCION', 'EDADINGRESO', 'APELLIDOSNOMBRESMADRE', 'APELLIDOSNOMBRESPADRE', 'CODCALENDARIOVAC'], 'required'],
-            [['CODTARCONTVAC', 'CODTIPODOC', 'CODCALENDARIOVAC'], 'integer'],
+            [['CODTARCONTVAC',  'CODCALENDARIOVAC'], 'integer'],
             [['FECREGTAR', 'FECHNAC'], 'safe'],
             [['OBSERV'], 'string'],
             [['NUMORDENTAR'], 'string', 'max' => 10],
@@ -55,7 +54,6 @@ class TarjControlvacs extends \yii\db\ActiveRecord
     {
         return [
             'CODTARCONTVAC' => 'Codtarcontvac',
-            'CODTIPODOC' => 'Codtipodoc',
             'NUMORDENTAR' => 'Numordentar',
             'FECREGTAR' => 'Fecregtar',
             'FECHNAC' => 'Fechnac',
