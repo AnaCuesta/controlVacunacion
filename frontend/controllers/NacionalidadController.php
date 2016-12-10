@@ -8,6 +8,7 @@ use frontend\models\NacionalidadSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Json;
 
 /**
  * NacionalidadController implements the CRUD actions for Nacionalidad model.
