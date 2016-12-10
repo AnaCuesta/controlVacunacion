@@ -39,7 +39,7 @@ use kartik\select2\Select2;
         <?= $form->field($model, 'CODNACIONALIDAD')->widget(Select2::classname(), [
                    'data' => ArrayHelper::map(Nacionalidad::find()->all(), 'CODNACIONALIDAD', 'NACIONALIDAD'),
                    'language' => 'de',
-                   'options' => ['placeholder' => 'Seleccione la Nacionalidad ...'],
+                   'options' => ['placeholder' => 'Seleccione la Nacionalidad ...', 'id' => 'idNacion'],
                    'pluginOptions' => [
                        'allowClear' => true
                    ],
@@ -98,9 +98,12 @@ use kartik\select2\Select2;
 </div>
 
 <?php
-
 $script = <<< JS
 //here you right all you code javascript  stuff CODNACIONALIDAD
+$('#idNacion').change(function(){
+alert();
+});
+
 JS;
 $this->registerJs($script);
  ?>
