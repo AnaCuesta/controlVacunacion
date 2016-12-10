@@ -76,16 +76,15 @@ class ProvinciaController extends Controller
     public function actionListaParroquia($id)
     {
 
-
       $contarParroquia  = PARROQUIA::find()->where(['CODCANTON'=> $id])->count();
       $parroquia = PARROQUIA::find()->where(['CODCANTON'=> $id])->all();
 
       if($contarParroquia > 0){
-        echo "<option>Seleccione la opción..</option>";
-        foreach ($parroquia as  $value) {
 
+      foreach ($parroquia as  $value) {
           echo "<option value='".$value->CODPARROQUIA."'>".$value->PARROQUIA."</option>";
         }
+
       }else {
         echo "<option></option>";
       }

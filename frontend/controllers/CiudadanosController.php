@@ -8,7 +8,10 @@ use frontend\models\CiudadanosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use frontend\models\Provincia;
+use frontend\models\Canton;
+use frontend\models\Parroquia;
+use yii\helpers\ArrayHelper;
 /**
  * CiudadanosController implements the CRUD actions for Ciudadanos model.
  */
@@ -64,9 +67,18 @@ class CiudadanosController extends Controller
     public function actionCreate()
     {
         $model = new Ciudadanos();
+        $provincia = new  Provincia();
+        $canton = new  Canton();
+        $parroquia = new  Parroquia();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->idCiudadano]);
+        if ($model->load(Yii::$app->request->post())) {
+
+          print_r($model->Provincia);
+          die();
+          $model->save();
+
+          return $this->redirect(['view', 'id' => $model->idCiudadano]);
+
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -82,10 +94,26 @@ class CiudadanosController extends Controller
      */
     public function actionUpdate($id)
     {
+        $provincia = new  Provincia();
+        $canton = new  Canton();
+        $parroquia = new  Parroquia();
+
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->idCiudadano]);
+        if ($model->load(Yii::$app->request->post()) ) {
+
+          $provincia =  Provincia::find()->where(['CODPROVINCIA' => $model->PROVINCIA])->one();
+          $canton =  Canton::find()->where(['CODCANTON' => $model->CANTON])->one();
+          $parroquia =  Parroquia::find()->where(['CODPARROQUIA' => $model->PARROQUIA])->one();
+          $parroquia =  Genero::find()->where(['CODPARROQUIA' => $model->PARROQUIA])->one();
+
+          $model->PROVINCIA =  $provincia->PROVINCIA;
+          $model->CANTON =  $canton->CANTON;
+          $model->PARROQUIA = $parroquia->PARROQUIA;
+          $model->save();
+
+          return $this->redirect(['view', 'id' => $model->idCiudadano]);
+
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -105,12 +133,6 @@ class CiudadanosController extends Controller
 
         return $this->redirect(['index']);
     }
-
-    public function actionCiudadanos()
-    {
-        return $this->render('ciudadanos');
-    }
-
 
     /**
      * Finds the Ciudadanos model based on its primary key value.

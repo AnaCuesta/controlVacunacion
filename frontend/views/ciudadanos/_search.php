@@ -23,23 +23,23 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'NOMBRES') ?>
 
-    <?= $form->field($model, 'CODSEXO') ?>
+    <?= $form->field($model, 'SEXO') ?>
 
-    <?php // echo $form->field($model, 'CODEDAD') ?>
+    <?php // echo $form->field($model, 'EDAD') ?>
 
-    <?php // echo $form->field($model, 'CODNACIONALIDAD') ?>
+    <?php // echo $form->field($model, 'NACIONALIDAD') ?>
 
-    <?php // echo $form->field($model, 'CODAUTOIDETNICA') ?>
+    <?php // echo $form->field($model, 'AUTOIDETNICA') ?>
 
-    <?php // echo $form->field($model, 'CODLUGARRESIDE') ?>
+    <?php // echo $form->field($model, 'LUGARRESIDE') ?>
 
-    <?php // echo $form->field($model, 'CODPROVINCIA') ?>
+    <?php // echo $form->field($model, 'PROVINCIA') ?>
 
-    <?php // echo $form->field($model, 'CODCANTON') ?>
+    <?php // echo $form->field($model, 'CANTON') ?>
 
-    <?php // echo $form->field($model, 'CODPARROQUIA') ?>
+    <?php // echo $form->field($model, 'PARROQUIA') ?>
 
-    <?php // echo $form->field($model, 'CODLOCALIDAD') ?>
+    <?php // echo $form->field($model, 'LOCALIDAD') ?>
 
     <?php // echo $form->field($model, 'DIRCIUD') ?>
 

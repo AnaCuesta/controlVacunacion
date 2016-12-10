@@ -28,13 +28,13 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'NOMBRES')->textInput(['maxlength' => true]) ?>
 
-      <?= $form->field($model, 'CODSEXO')->dropDownList(
+      <?= $form->field($model, 'SEXO')->dropDownList(
                  ArrayHelper::map(Genero::find()->all(), 'CODSEXO', 'SEXO'),  ['prompt'=>'Seleccione la opción...']) ?>
 
-    <?= $form->field($model, 'CODEDAD')->dropDownList(
+    <?= $form->field($model, 'EDAD')->dropDownList(
                  ArrayHelper::map(Edades::find()->all(), 'CODEDAD', 'EDADRMA'),  ['prompt'=>'Seleccione la opción...']) ?>
 
-    <?= $form->field($model, 'CODNACIONALIDAD')->widget(Select2::classname(), [
+    <?= $form->field($model, 'NACIONALIDAD')->widget(Select2::classname(), [
                    'data' => ArrayHelper::map(Nacionalidad::find()->all(), 'CODNACIONALIDAD', 'NACIONALIDAD'),
                    'language' => 'de',
                    'options' => [  'prompt'=>'Seleccione la opción...'],
@@ -53,29 +53,29 @@ use kartik\select2\Select2;
                               ]) ?-->
 
 
-    <?= $form->field($model, 'CODAUTOIDETNICA')->textInput() ?>
+    <?= $form->field($model, 'AUTOIDETNICA')->textInput() ?>
 
-    <?= $form->field($model, 'CODLUGARRESIDE')->textInput() ?>
+    <?= $form->field($model, 'LUGARRESIDE')->textInput() ?>
 
-    <?= $form->field($model, 'CODPROVINCIA')->widget(Select2::classname(), [
+    <?= $form->field($model, 'PROVINCIA')->widget(Select2::classname(), [
                    'data' => ArrayHelper::map(PROVINCIA::find()->all(), 'CODPROVINCIA', 'PROVINCIA'),
                    'language' => 'de',
                    'options' => [  'prompt'=>'Seleccione la opción...',
                      'onchange'=>'$.post("index.php?r=provincia/lista-cantones&id='.'"+$(this).val(), function( data ){
-                       $("select#ciudadanos-codcanton").html( data );
+                       $("select#ciudadanos-canton").html( data );
                      });',
                   ],
                    'pluginOptions' => [
                        'allowClear' => true
-                   ],
-               ]); ?>
+               ],
+    ]); ?>
 
-    <?= $form->field($model, 'CODCANTON')->widget(Select2::classname(), [
+    <?= $form->field($model, 'CANTON')->widget(Select2::classname(), [
                               //'data' => ArrayHelper::map(CANTON::find()->all(), 'CODCANTON', 'CANTON'),
                               'language' => 'de',
                               'options' => [  'prompt'=>'Seleccione la opción...',
                               'onchange'=>'$.post("index.php?r=provincia/lista-parroquia&id='.'"+$(this).val(), function( data ){
-                                   $("select#ciudadanos-codparroquia").html( data );
+                                   $("select#ciudadanos-parroquia").html( data );
                                  });',
                               ],
                               'pluginOptions' => [
@@ -83,7 +83,7 @@ use kartik\select2\Select2;
                               ],
      ]); ?>
 
-    <?= $form->field($model, 'CODPARROQUIA')->widget(Select2::classname(), [
+    <?= $form->field($model, 'PARROQUIA')->widget(Select2::classname(), [
                //'data' => ArrayHelper::map(Parroquia::find()->all(), 'CODPARROQUIA', 'PARROQUIA'),  ['prompt'=>'Seleccione la opción...']) ,
                'language' => 'de',
                'options' => [  'prompt'=>'Seleccione la opción...'],
@@ -94,7 +94,7 @@ use kartik\select2\Select2;
 
 
 
-    <?= $form->field($model, 'CODLOCALIDAD')->textInput() ?>
+    <?= $form->field($model, 'LOCALIDAD')->textInput() ?>
 
     <?= $form->field($model, 'DIRCIUD')->textInput(['maxlength' => true]) ?>
 

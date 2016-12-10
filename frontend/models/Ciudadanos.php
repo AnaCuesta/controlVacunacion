@@ -11,15 +11,15 @@ use Yii;
  * @property string $CEDULA
  * @property string $APELLIDOS
  * @property string $NOMBRES
- * @property integer $CODSEXO
- * @property integer $CODEDAD
- * @property integer $CODNACIONALIDAD
- * @property integer $CODAUTOIDETNICA
- * @property string $CODLUGARRESIDE
- * @property integer $CODPROVINCIA
- * @property integer $CODCANTON
- * @property integer $CODPARROQUIA
- * @property integer $CODLOCALIDAD
+ * @property string $SEXO
+ * @property integer $EDAD
+ * @property string $NACIONALIDAD
+ * @property string $AUTOIDETNICA
+ * @property string $LUGARRESIDE
+ * @property string $PROVINCIA
+ * @property string $CANTON
+ * @property string $PARROQUIA
+ * @property string $LOCALIDAD
  * @property string $DIRCIUD
  * @property string $LONGITUD
  * @property string $LAT
@@ -44,14 +44,16 @@ class Ciudadanos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['N_HISTCLINIC', 'CEDULA', 'APELLIDOS', 'NOMBRES', 'CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODLUGARRESIDE', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'required'],
-            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD'], 'integer'],
+            [['N_HISTCLINIC', 'CEDULA', 'APELLIDOS', 'NOMBRES', 'SEXO', 'EDAD', 'NACIONALIDAD', 'AUTOIDETNICA', 'LUGARRESIDE', 'PROVINCIA', 'CANTON', 'PARROQUIA', 'LOCALIDAD', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'required'],
+            [['EDAD'], 'integer'],
             [['N_HISTCLINIC'], 'string', 'max' => 10],
             [['CEDULA'], 'string', 'max' => 15],
-            [['APELLIDOS', 'NOMBRES'], 'string', 'max' => 30],
-            [['CODLUGARRESIDE'], 'string', 'max' => 50],
+            [['APELLIDOS', 'NOMBRES', 'CANTON'], 'string', 'max' => 30],
+            [['SEXO', 'AUTOIDETNICA'], 'string', 'max' => 11],
+            [['NACIONALIDAD'], 'string', 'max' => 40],
+            [['LUGARRESIDE'], 'string', 'max' => 50],
+            [['PROVINCIA', 'PARROQUIA', 'LOCALIDAD', 'LONGITUD', 'LAT'], 'string', 'max' => 20],
             [['DIRCIUD', 'CORREOCIUD'], 'string', 'max' => 120],
-            [['LONGITUD', 'LAT'], 'string', 'max' => 20],
             [['TELFCIUD'], 'string', 'max' => 25],
             [['SNPERTENECEUO'], 'string', 'max' => 45],
         ];
@@ -63,26 +65,26 @@ class Ciudadanos extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-      'N_HISTCLINIC' => 'N° Historia Clínica',
-      'CEDULA' => 'Cédula',
-      'APELLIDOS' => 'Apellidos',
-      'NOMBRES' => 'Nombres',
-      'CODSEXO' => 'Sexo',
-      'CODEDAD' => 'Edad',
-      'CODNACIONALIDAD' => 'Nacionalidad',
-      'CODAUTOIDETNICA' => 'Autoidentificación étnica',
-      'CODLUGARRESIDE' => 'Lugar de Residencia',
-      'CODPROVINCIA' => 'Provincia',
-      'CODCANTON' => 'Cantón',
-      'CODPARROQUIA' => 'Parroquia',
-      'CODLOCALIDAD' => 'Localidad',
-      'DIRCIUD' => 'Dirección',
-      'LONGITUD' => 'Longitud',
-      'LAT' => 'Latitud',
-      'TELFCIUD' => 'Teléfono',
-      'CORREOCIUD' => 'Correo Electrónico',
-      'SNPERTENECEUO' => 'SELECCIONE:',
-      'idCiudadano' => 'Id Ciudadano',
-        ];
+              'N_HISTCLINIC' => 'N° Historia Clínica',
+              'CEDULA' => 'Cédula',
+              'APELLIDOS' =>  'Apellidos',
+              'NOMBRES' => 'Nombres',
+              'SEXO' => 'Sexo',
+              'EDAD' => 'Edad',
+              'NACIONALIDAD' => 'Nacionalidad',
+              'AUTOIDETNICA' => 'Autoidentificación étnica',
+              'LUGARRESIDE' =>'Lugar de Residencia',
+              'PROVINCIA' =>'Provincia',
+              'CANTON' => 'Cantón',
+              'PARROQUIA' => 'Parroquia',
+              'LOCALIDAD' =>'Localidad',
+              'DIRCIUD' => 'Dirección',
+              'LONGITUD' => 'Longitud',
+              'LAT' => 'Latitud',
+              'TELFCIUD' => 'Teléfono',
+              'CORREOCIUD' => 'Correo Electrónico',
+              'SNPERTENECEUO' => 'SELECCIONE:',
+              'idCiudadano' =>'Id Ciudadano',
+      ];
     }
 }

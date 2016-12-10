@@ -18,8 +18,8 @@ class CiudadanosSearch extends Ciudadanos
     public function rules()
     {
         return [
-            [['N_HISTCLINIC', 'CEDULA', 'APELLIDOS', 'NOMBRES', 'CODLUGARRESIDE', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'safe'],
-            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD', 'idCiudadano'], 'integer'],
+            [['N_HISTCLINIC', 'CEDULA', 'APELLIDOS', 'NOMBRES', 'SEXO', 'NACIONALIDAD', 'AUTOIDETNICA', 'LUGARRESIDE', 'PROVINCIA', 'CANTON', 'PARROQUIA', 'LOCALIDAD', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'safe'],
+            [['EDAD', 'idCiudadano'], 'integer'],
         ];
     }
 
@@ -59,14 +59,7 @@ class CiudadanosSearch extends Ciudadanos
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'CODSEXO' => $this->CODSEXO,
-            'CODEDAD' => $this->CODEDAD,
-            'CODNACIONALIDAD' => $this->CODNACIONALIDAD,
-            'CODAUTOIDETNICA' => $this->CODAUTOIDETNICA,
-            'CODPROVINCIA' => $this->CODPROVINCIA,
-            'CODCANTON' => $this->CODCANTON,
-            'CODPARROQUIA' => $this->CODPARROQUIA,
-            'CODLOCALIDAD' => $this->CODLOCALIDAD,
+            'EDAD' => $this->EDAD,
             'idCiudadano' => $this->idCiudadano,
         ]);
 
@@ -74,7 +67,14 @@ class CiudadanosSearch extends Ciudadanos
             ->andFilterWhere(['like', 'CEDULA', $this->CEDULA])
             ->andFilterWhere(['like', 'APELLIDOS', $this->APELLIDOS])
             ->andFilterWhere(['like', 'NOMBRES', $this->NOMBRES])
-            ->andFilterWhere(['like', 'CODLUGARRESIDE', $this->CODLUGARRESIDE])
+            ->andFilterWhere(['like', 'SEXO', $this->SEXO])
+            ->andFilterWhere(['like', 'NACIONALIDAD', $this->NACIONALIDAD])
+            ->andFilterWhere(['like', 'AUTOIDETNICA', $this->AUTOIDETNICA])
+            ->andFilterWhere(['like', 'LUGARRESIDE', $this->LUGARRESIDE])
+            ->andFilterWhere(['like', 'PROVINCIA', $this->PROVINCIA])
+            ->andFilterWhere(['like', 'CANTON', $this->CANTON])
+            ->andFilterWhere(['like', 'PARROQUIA', $this->PARROQUIA])
+            ->andFilterWhere(['like', 'LOCALIDAD', $this->LOCALIDAD])
             ->andFilterWhere(['like', 'DIRCIUD', $this->DIRCIUD])
             ->andFilterWhere(['like', 'LONGITUD', $this->LONGITUD])
             ->andFilterWhere(['like', 'LAT', $this->LAT])
