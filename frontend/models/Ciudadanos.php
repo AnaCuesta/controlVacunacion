@@ -16,7 +16,6 @@ use Yii;
  * @property integer $CODNACIONALIDAD
  * @property integer $CODAUTOIDETNICA
  * @property integer $CODLUGARRESIDE
- * @property integer $CODTARCONTVAC
  * @property integer $CODPROVINCIA
  * @property integer $CODCANTON
  * @property integer $CODPARROQUIA
@@ -46,7 +45,7 @@ class Ciudadanos extends \yii\db\ActiveRecord
     {
         return [
             [['N_HISTCLINIC','APELLIDOS', 'NOMBRES', 'CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODLUGARRESIDE', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'required'],
-            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA',  'CODTARCONTVAC', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD'], 'integer'],
+            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA',   'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD'], 'integer'],
             [['N_HISTCLINIC'], 'string', 'max' => 15, 'message' => 'El campo no puede quedar vacio'],
             [['CEDULA'], 'required', 'message' => 'El campo Cédula no puede quedar vacio'],
             [['CEDULA'],'string', 'max' => 30],
@@ -74,7 +73,6 @@ class Ciudadanos extends \yii\db\ActiveRecord
             'CODNACIONALIDAD' => 'Nacionalidad',
             'CODAUTOIDETNICA' => 'Autoidentificación étnica',
             'CODLUGARRESIDE' => 'Lugar de Residencia',
-            //'CODTARCONTVAC' => 'Codtarcontvac',
             'CODPROVINCIA' => 'Provincia',
             'CODCANTON' => 'Cantón',
             'CODPARROQUIA' => 'Parroquia',

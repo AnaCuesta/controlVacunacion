@@ -19,7 +19,7 @@ class CiudadanosSearch extends Ciudadanos
     {
         return [
             [['N_HISTCLINIC', 'CEDULA', 'APELLIDOS', 'NOMBRES', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'safe'],
-            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODLUGARRESIDE', 'CODTARCONTVAC', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD', 'idCiudadano'], 'integer'],
+            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODLUGARRESIDE', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD', 'idCiudadano'], 'integer'],
         ];
     }
 
@@ -64,7 +64,7 @@ class CiudadanosSearch extends Ciudadanos
             'CODNACIONALIDAD' => $this->CODNACIONALIDAD,
             'CODAUTOIDETNICA' => $this->CODAUTOIDETNICA,
             'CODLUGARRESIDE' => $this->CODLUGARRESIDE,
-            'CODTARCONTVAC' => $this->CODTARCONTVAC,
+        
             'CODPROVINCIA' => $this->CODPROVINCIA,
             'CODCANTON' => $this->CODCANTON,
             'CODPARROQUIA' => $this->CODPARROQUIA,

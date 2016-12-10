@@ -10,6 +10,7 @@ use frontend\models\Provincia;
 use frontend\models\Canton;
 use frontend\models\Parroquia;
 use bookin\aws\checkbox\AwesomeCheckbox;
+use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Ciudadanos */
 /* @var $form yii\widgets\ActiveForm */
@@ -33,9 +34,16 @@ use bookin\aws\checkbox\AwesomeCheckbox;
     <?= $form->field($model, 'CODEDAD')->dropDownList(
                  ArrayHelper::map(Edades::find()->all(), 'CODEDAD', 'EDADRMA'),  ['prompt'=>'Seleccione la opción...']) ?>
 
-    <?= $form->field($model, 'CODNACIONALIDAD')->dropDownList(
-                 ArrayHelper::map(Nacionalidad::find()->all(), 'CODNACIONALIDAD', 'NACIONALIDAD'),  ['prompt'=>'Seleccione la opción...']) ?>
-
+    <!--?= $form->field($model, 'CODNACIONALIDAD')->dropDownList(
+                 ArrayHelper::map(Nacionalidad::find()->all(), 'CODNACIONALIDAD', 'NACIONALIDAD'),  ['prompt'=>'Seleccione la opción...']) ?-->
+        <?= $form->field($model, 'CODNACIONALIDAD')->widget(Select2::classname(), [
+                   'data' => ArrayHelper::map(Nacionalidad::find()->all(), 'CODNACIONALIDAD', 'NACIONALIDAD'),
+                   'language' => 'de',
+                   'options' => ['placeholder' => 'Seleccione la Nacionalidad ...'],
+                   'pluginOptions' => [
+                       'allowClear' => true
+                   ],
+               ]); ?>
 
     <?= $form->field($model, 'CODAUTOIDETNICA')->textInput() ?>
 
@@ -88,3 +96,11 @@ use bookin\aws\checkbox\AwesomeCheckbox;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+
+$script = <<< JS
+//here you right all you code javascript  stuff CODNACIONALIDAD
+JS;
+$this->registerJs($script);
+ ?>
