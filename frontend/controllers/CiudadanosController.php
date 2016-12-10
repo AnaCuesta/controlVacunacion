@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use frontend\models\Provincia;
 use frontend\models\Canton;
 use frontend\models\Parroquia;
+use frontend\models\Genero;
 use yii\helpers\ArrayHelper;
 /**
  * CiudadanosController implements the CRUD actions for Ciudadanos model.
@@ -97,6 +98,7 @@ class CiudadanosController extends Controller
         $provincia = new  Provincia();
         $canton = new  Canton();
         $parroquia = new  Parroquia();
+        $genero = new  Genero();
 
         $model = $this->findModel($id);
 
@@ -105,11 +107,14 @@ class CiudadanosController extends Controller
           $provincia =  Provincia::find()->where(['CODPROVINCIA' => $model->PROVINCIA])->one();
           $canton =  Canton::find()->where(['CODCANTON' => $model->CANTON])->one();
           $parroquia =  Parroquia::find()->where(['CODPARROQUIA' => $model->PARROQUIA])->one();
-          $parroquia =  Genero::find()->where(['CODPARROQUIA' => $model->PARROQUIA])->one();
+          $genero =  Genero::find()->where(['CODSEXO' => $model->SEXO])->one();
+        
 
           $model->PROVINCIA =  $provincia->PROVINCIA;
           $model->CANTON =  $canton->CANTON;
           $model->PARROQUIA = $parroquia->PARROQUIA;
+          $model->SEXO = $genero->SEXO;
+
           $model->save();
 
           return $this->redirect(['view', 'id' => $model->idCiudadano]);
