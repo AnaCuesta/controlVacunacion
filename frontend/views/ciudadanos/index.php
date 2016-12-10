@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Crear Ciudadanos', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Ciudadanos', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -33,7 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'CODNACIONALIDAD',
             // 'CODAUTOIDETNICA',
             // 'CODLUGARRESIDE',
-            // 'CODTARCONTVAC',
             // 'CODPROVINCIA',
             // 'CODCANTON',
             // 'CODPARROQUIA',

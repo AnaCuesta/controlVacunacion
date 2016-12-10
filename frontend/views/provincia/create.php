@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Ciudadanos */
+/* @var $model frontend\models\Provincia */
 
-$this->title = 'Create Ciudadanos';
-$this->params['breadcrumbs'][] = ['label' => 'Ciudadanos', 'url' => ['index']];
+$this->title = 'Create Provincia';
+$this->params['breadcrumbs'][] = ['label' => 'Provincias', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="ciudadanos-create">
+<div class="provincia-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

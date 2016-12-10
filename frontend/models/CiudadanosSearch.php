@@ -18,8 +18,8 @@ class CiudadanosSearch extends Ciudadanos
     public function rules()
     {
         return [
-            [['N_HISTCLINIC', 'CEDULA', 'APELLIDOS', 'NOMBRES', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'safe'],
-            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODLUGARRESIDE', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD', 'idCiudadano'], 'integer'],
+            [['N_HISTCLINIC', 'CEDULA', 'APELLIDOS', 'NOMBRES', 'CODLUGARRESIDE', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'safe'],
+            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD', 'idCiudadano'], 'integer'],
         ];
     }
 
@@ -63,8 +63,6 @@ class CiudadanosSearch extends Ciudadanos
             'CODEDAD' => $this->CODEDAD,
             'CODNACIONALIDAD' => $this->CODNACIONALIDAD,
             'CODAUTOIDETNICA' => $this->CODAUTOIDETNICA,
-            'CODLUGARRESIDE' => $this->CODLUGARRESIDE,
-        
             'CODPROVINCIA' => $this->CODPROVINCIA,
             'CODCANTON' => $this->CODCANTON,
             'CODPARROQUIA' => $this->CODPARROQUIA,
@@ -76,6 +74,7 @@ class CiudadanosSearch extends Ciudadanos
             ->andFilterWhere(['like', 'CEDULA', $this->CEDULA])
             ->andFilterWhere(['like', 'APELLIDOS', $this->APELLIDOS])
             ->andFilterWhere(['like', 'NOMBRES', $this->NOMBRES])
+            ->andFilterWhere(['like', 'CODLUGARRESIDE', $this->CODLUGARRESIDE])
             ->andFilterWhere(['like', 'DIRCIUD', $this->DIRCIUD])
             ->andFilterWhere(['like', 'LONGITUD', $this->LONGITUD])
             ->andFilterWhere(['like', 'LAT', $this->LAT])

@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'CODNACIONALIDAD',
             'CODAUTOIDETNICA',
             'CODLUGARRESIDE',
-            'CODTARCONTVAC',
             'CODPROVINCIA',
             'CODCANTON',
             'CODPARROQUIA',

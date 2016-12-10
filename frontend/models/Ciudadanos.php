@@ -15,7 +15,7 @@ use Yii;
  * @property integer $CODEDAD
  * @property integer $CODNACIONALIDAD
  * @property integer $CODAUTOIDETNICA
- * @property integer $CODLUGARRESIDE
+ * @property string $CODLUGARRESIDE
  * @property integer $CODPROVINCIA
  * @property integer $CODCANTON
  * @property integer $CODPARROQUIA
@@ -44,16 +44,15 @@ class Ciudadanos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['N_HISTCLINIC','APELLIDOS', 'NOMBRES', 'CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODLUGARRESIDE', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'required'],
-            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA',   'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD'], 'integer'],
-            [['N_HISTCLINIC'], 'string', 'max' => 15, 'message' => 'El campo no puede quedar vacio'],
-            [['CEDULA'], 'required', 'message' => 'El campo Cédula no puede quedar vacio'],
-            [['CEDULA'],'string', 'max' => 30],
+            [['N_HISTCLINIC', 'CEDULA', 'APELLIDOS', 'NOMBRES', 'CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODLUGARRESIDE', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'required'],
+            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD'], 'integer'],
+            [['N_HISTCLINIC'], 'string', 'max' => 10],
+            [['CEDULA'], 'string', 'max' => 15],
             [['APELLIDOS', 'NOMBRES'], 'string', 'max' => 30],
+            [['CODLUGARRESIDE'], 'string', 'max' => 50],
             [['DIRCIUD', 'CORREOCIUD'], 'string', 'max' => 120],
             [['LONGITUD', 'LAT'], 'string', 'max' => 20],
             [['TELFCIUD'], 'string', 'max' => 25],
-            [['CODLUGARRESIDE'], 'string', 'max' => 50],
             [['SNPERTENECEUO'], 'string', 'max' => 45],
         ];
     }
@@ -64,26 +63,26 @@ class Ciudadanos extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'N_HISTCLINIC' => 'N° Historia Clínica',
-            'CEDULA' => 'Cédula',
-            'APELLIDOS' => 'Apellidos',
-            'NOMBRES' => 'Nombres',
-            'CODSEXO' => 'Sexo',
-            'CODEDAD' => 'Edad',
-            'CODNACIONALIDAD' => 'Nacionalidad',
-            'CODAUTOIDETNICA' => 'Autoidentificación étnica',
-            'CODLUGARRESIDE' => 'Lugar de Residencia',
-            'CODPROVINCIA' => 'Provincia',
-            'CODCANTON' => 'Cantón',
-            'CODPARROQUIA' => 'Parroquia',
-            'CODLOCALIDAD' => 'Localidad',
-            'DIRCIUD' => 'Dirección',
-            'LONGITUD' => 'Longitud',
-            'LAT' => 'Latitud',
-            'TELFCIUD' => 'Teléfono',
-            'CORREOCIUD' => 'Correo Electrónico',
-            'SNPERTENECEUO' => 'SELECCIONE:',
-            'idCiudadano' => 'Id Ciudadano',
+      'N_HISTCLINIC' => 'N° Historia Clínica',
+      'CEDULA' => 'Cédula',
+      'APELLIDOS' => 'Apellidos',
+      'NOMBRES' => 'Nombres',
+      'CODSEXO' => 'Sexo',
+      'CODEDAD' => 'Edad',
+      'CODNACIONALIDAD' => 'Nacionalidad',
+      'CODAUTOIDETNICA' => 'Autoidentificación étnica',
+      'CODLUGARRESIDE' => 'Lugar de Residencia',
+      'CODPROVINCIA' => 'Provincia',
+      'CODCANTON' => 'Cantón',
+      'CODPARROQUIA' => 'Parroquia',
+      'CODLOCALIDAD' => 'Localidad',
+      'DIRCIUD' => 'Dirección',
+      'LONGITUD' => 'Longitud',
+      'LAT' => 'Latitud',
+      'TELFCIUD' => 'Teléfono',
+      'CORREOCIUD' => 'Correo Electrónico',
+      'SNPERTENECEUO' => 'SELECCIONE:',
+      'idCiudadano' => 'Id Ciudadano',
         ];
     }
 }

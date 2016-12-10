@@ -34,29 +34,64 @@ use kartik\select2\Select2;
     <?= $form->field($model, 'CODEDAD')->dropDownList(
                  ArrayHelper::map(Edades::find()->all(), 'CODEDAD', 'EDADRMA'),  ['prompt'=>'Seleccione la opción...']) ?>
 
-    <!--?= $form->field($model, 'CODNACIONALIDAD')->dropDownList(
-                 ArrayHelper::map(Nacionalidad::find()->all(), 'CODNACIONALIDAD', 'NACIONALIDAD'),  ['prompt'=>'Seleccione la opción...']) ?-->
-        <?= $form->field($model, 'CODNACIONALIDAD')->widget(Select2::classname(), [
+    <?= $form->field($model, 'CODNACIONALIDAD')->widget(Select2::classname(), [
                    'data' => ArrayHelper::map(Nacionalidad::find()->all(), 'CODNACIONALIDAD', 'NACIONALIDAD'),
                    'language' => 'de',
-                   'options' => ['placeholder' => 'Seleccione la Nacionalidad ...', 'id' => 'idNacion'],
+                   'options' => [  'prompt'=>'Seleccione la opción...'],
                    'pluginOptions' => [
                        'allowClear' => true
                    ],
                ]); ?>
 
+    <!--?= $form->field($model, 'CODNACIONALIDAD')->dropDownList(
+                            ArrayHelper::map(Nacionalidad::find()->all(), 'CODNACIONALIDAD', 'NACIONALIDAD'),  [
+                              'prompt'=>'Seleccione la opción...',
+                              'onchange'=>'$.post("index.php?r=nacionalidad/list&id='.'"+$(this).val(), function( data ){
+                                $("select#ciudadanos-codprovincia").html( data );
+                              });',
+
+                              ]) ?-->
+
+
     <?= $form->field($model, 'CODAUTOIDETNICA')->textInput() ?>
 
     <?= $form->field($model, 'CODLUGARRESIDE')->textInput() ?>
 
-    <?= $form->field($model, 'CODPROVINCIA')->dropDownList(
-             ArrayHelper::map(PROVINCIA::find()->all(), 'CODPROVINCIA', 'PROVINCIA'),  ['prompt'=>'Seleccione la opción...']) ?>
+    <?= $form->field($model, 'CODPROVINCIA')->widget(Select2::classname(), [
+                   'data' => ArrayHelper::map(PROVINCIA::find()->all(), 'CODPROVINCIA', 'PROVINCIA'),
+                   'language' => 'de',
+                   'options' => [  'prompt'=>'Seleccione la opción...',
+                     'onchange'=>'$.post("index.php?r=provincia/lista-cantones&id='.'"+$(this).val(), function( data ){
+                       $("select#ciudadanos-codcanton").html( data );
+                     });',
+                  ],
+                   'pluginOptions' => [
+                       'allowClear' => true
+                   ],
+               ]); ?>
 
-    <?= $form->field($model, 'CODCANTON')->dropDownList(
-             ArrayHelper::map(CANTON::find()->all(), 'CODCANTON', 'CANTON'),  ['prompt'=>'Seleccione la opción...']) ?>
+    <?= $form->field($model, 'CODCANTON')->widget(Select2::classname(), [
+                              //'data' => ArrayHelper::map(CANTON::find()->all(), 'CODCANTON', 'CANTON'),
+                              'language' => 'de',
+                              'options' => [  'prompt'=>'Seleccione la opción...',
+                              'onchange'=>'$.post("index.php?r=provincia/lista-parroquia&id='.'"+$(this).val(), function( data ){
+                                   $("select#ciudadanos-codparroquia").html( data );
+                                 });',
+                              ],
+                              'pluginOptions' => [
+                                  'allowClear' => true
+                              ],
+     ]); ?>
 
-    <?= $form->field($model, 'CODPARROQUIA')->dropDownList(
-             ArrayHelper::map(Parroquia::find()->all(), 'CODPARROQUIA', 'PARROQUIA'),  ['prompt'=>'Seleccione la opción...']) ?>
+    <?= $form->field($model, 'CODPARROQUIA')->widget(Select2::classname(), [
+               //'data' => ArrayHelper::map(Parroquia::find()->all(), 'CODPARROQUIA', 'PARROQUIA'),  ['prompt'=>'Seleccione la opción...']) ,
+               'language' => 'de',
+               'options' => [  'prompt'=>'Seleccione la opción...'],
+               'pluginOptions' => [
+                       'allowClear' => true
+               ],
+     ]); ?>
+
 
 
     <?= $form->field($model, 'CODLOCALIDAD')->textInput() ?>
@@ -101,8 +136,20 @@ use kartik\select2\Select2;
 $script = <<< JS
 //here you right all you code javascript  stuff CODNACIONALIDAD
 $('#idNacion').change(function(){
-alert();
+  var idNacion = $(this).val();
+//alert(idNacion); devuelve los id de todos los elementos del select
+//http://phppot.com/jquery/jquery-dependent-dropdown-list-countries-and-states/
+//http://www.codexworld.com/dynamic-dependent-select-box-using-jquery-ajax-php/
+//https://www.youtube.com/watch?v=wNNhIdtMyOA
+//$.get('index.php?r=nacionalidad/codigo-nacionalidad', {idNacion : idNacion}, function(data){
+//alert(data);
+//var data = $.parseJSON(data);
+//option:selected
+//$('#ciudadanos-codprovincia' ).attr('value', data.CODNACIONALIDAD);
+//$('#ciudadanos-codprovincia' ).text( data.CODNACIONALIDAD);
+
 });
+
 
 JS;
 $this->registerJs($script);

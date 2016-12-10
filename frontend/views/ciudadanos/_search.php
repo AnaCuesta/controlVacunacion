@@ -33,8 +33,6 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'CODLUGARRESIDE') ?>
 
-  
-
     <?php // echo $form->field($model, 'CODPROVINCIA') ?>
 
     <?php // echo $form->field($model, 'CODCANTON') ?>
