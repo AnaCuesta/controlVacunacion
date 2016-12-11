@@ -13,6 +13,7 @@ use frontend\models\Canton;
 use frontend\models\Parroquia;
 use frontend\models\Genero;
 use yii\helpers\ArrayHelper;
+use frontend\models\Nacionalidad;
 /**
  * CiudadanosController implements the CRUD actions for Ciudadanos model.
  */
@@ -71,11 +72,25 @@ class CiudadanosController extends Controller
         $provincia = new  Provincia();
         $canton = new  Canton();
         $parroquia = new  Parroquia();
+        $genero = new  Genero();
+        $nacionalidad = new  Nacionalidad();
 
         if ($model->load(Yii::$app->request->post())) {
 
-          print_r($model->Provincia);
-          die();
+          $provincia =  Provincia::find()->where(['CODPROVINCIA' => $model->PROVINCIA])->one();
+          $canton =  Canton::find()->where(['CODCANTON' => $model->CANTON])->one();
+          $parroquia =  Parroquia::find()->where(['CODPARROQUIA' => $model->PARROQUIA])->one();
+          $genero =  Genero::find()->where(['CODSEXO' => $model->SEXO])->one();
+          $nacionalidad =  Nacionalidad::find()->where(['CODNACIONALIDAD' => $model->NACIONALIDAD])->one();
+
+
+          $model->PROVINCIA =  $provincia->PROVINCIA;
+          $model->CANTON =  $canton->CANTON;
+          $model->PARROQUIA = $parroquia->PARROQUIA;
+          $model->SEXO = $genero->SEXO;
+          $model->NACIONALIDAD = $nacionalidad->NACIONALIDAD;
+
+
           $model->save();
 
           return $this->redirect(['view', 'id' => $model->idCiudadano]);
@@ -99,6 +114,7 @@ class CiudadanosController extends Controller
         $canton = new  Canton();
         $parroquia = new  Parroquia();
         $genero = new  Genero();
+        $nacionalidad = new  Nacionalidad();
 
         $model = $this->findModel($id);
 
@@ -108,12 +124,14 @@ class CiudadanosController extends Controller
           $canton =  Canton::find()->where(['CODCANTON' => $model->CANTON])->one();
           $parroquia =  Parroquia::find()->where(['CODPARROQUIA' => $model->PARROQUIA])->one();
           $genero =  Genero::find()->where(['CODSEXO' => $model->SEXO])->one();
-        
+          $nacionalidad =  Nacionalidad::find()->where(['CODNACIONALIDAD' => $model->NACIONALIDAD])->one();
+
 
           $model->PROVINCIA =  $provincia->PROVINCIA;
           $model->CANTON =  $canton->CANTON;
           $model->PARROQUIA = $parroquia->PARROQUIA;
           $model->SEXO = $genero->SEXO;
+          $model->NACIONALIDAD = $nacionalidad->NACIONALIDAD;
 
           $model->save();
 

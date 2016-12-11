@@ -11,6 +11,7 @@ use frontend\models\Canton;
 use frontend\models\Parroquia;
 use bookin\aws\checkbox\AwesomeCheckbox;
 use kartik\select2\Select2;
+use frontend\models\Autoidetnica;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Ciudadanos */
 /* @var $form yii\widgets\ActiveForm */
@@ -53,7 +54,18 @@ use kartik\select2\Select2;
                               ]) ?-->
 
 
-    <?= $form->field($model, 'AUTOIDETNICA')->textInput() ?>
+
+
+
+    <?= $form->field($model, 'AUTOIDETNICA')->widget(Select2::classname(), [
+               'data' => ArrayHelper::map(Autoidetnica::find()->all(), 'CODAUTOIDETNICA', 'AUTOIDETNICA') ,
+               'language' => 'de',
+               'options' => [  'prompt'=>'Seleccione la opción...'],
+               'pluginOptions' => [
+                       'allowClear' => true
+               ],
+     ]); ?>
+
 
     <?= $form->field($model, 'LUGARRESIDE')->textInput() ?>
 

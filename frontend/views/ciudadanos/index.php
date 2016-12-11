@@ -2,7 +2,9 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use frontend\models\Ciudadanos;
+use yii\data\ActiveDataProvider;
+use yii\db\Query;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\CiudadanosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -18,6 +20,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Ciudadanos', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
+    <?php
+    $query = new Query();
+    $dataProvider = new ActiveDataProvider([
+          'query' => $query->from('ciudadanos'),
+          'pagination' => [
+              'pageSize' => 3,
+          ],
+    ]);
+   ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
