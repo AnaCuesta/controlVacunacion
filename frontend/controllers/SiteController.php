@@ -79,10 +79,6 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionCiudadanos()
-    {
-        return $this->render('ciudadanos');
-    }
 
     /**
      * Logs in a user.

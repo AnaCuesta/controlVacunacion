@@ -47,33 +47,37 @@ AppAsset::register($this);
          'label' => 'MODULOS',
          'items' => [
             '<li  class="dropdown-header">Sistema de gestión de la  información</li>',
-           
+
             [
+
             'label' => 'Ciudadano',   'url' => ['/ciudadanos/index'],
             //'options' => ['class'=>'text-strong']
             ],
 
-         
+            [
+              'label' => 'Establecimiento',   'url' => ['/establecimiento/index'],
+            ],
+
             ['label' => 'Tarjeta de Control de Vacunación',  'url' => ['tarj-controlvacs/index']],
 
-          
+
             ['label' => 'Registros',  'url' => ['regdiarios/index']],
 
 
 
             '<li  role="separator" class="divider"></li>',
             '<li  class="dropdown-header"> Sistema de información geografica </li>',
-    
+
          ],
-       
+
     ];
 
 
- 
 
-   
 
- 
+
+
+
     if (Yii::$app->user->isGuest) {
        // $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
        $menuItemsIcon = ['<li><a href="?r=site/login" class="btn btn-success "><span class="glyphicon glyphicon-user"></span> Logeo</a></li>'];
@@ -101,7 +105,7 @@ AppAsset::register($this);
         'items' =>  $menuItemsModulo ,
     ]);
 
-   
+
 
 
     echo Nav::widget([
@@ -110,7 +114,7 @@ AppAsset::register($this);
     ]);
 
 
-  
+
     NavBar::end();
     ?>
 

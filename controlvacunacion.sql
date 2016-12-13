@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-11-2016 a las 19:47:16
--- Versión del servidor: 10.1.16-MariaDB
--- Versión de PHP: 5.6.24
+-- Tiempo de generación: 12-12-2016 a las 15:52:28
+-- Versión del servidor: 5.7.10-log
+-- Versión de PHP: 5.6.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,6 +19,27 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `controlvacunacion`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acciones`
+--
+
+CREATE TABLE `acciones` (
+  `idAcciones` int(11) NOT NULL,
+  `descripcionAccion` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `acciones`
+--
+
+INSERT INTO `acciones` (`idAcciones`, `descripcionAccion`) VALUES
+(1, 'crear'),
+(2, 'ver'),
+(3, 'eliminar'),
+(4, 'actualizar');
 
 -- --------------------------------------------------------
 
@@ -68,7 +89,8 @@ INSERT INTO `canton` (`CODCANTON`, `CANTON`, `CODPROVINCIA`) VALUES
 ('04', 'Quinindé', '08'),
 ('05', 'San Lorenzo', '08'),
 ('06', 'Atacames', '08'),
-('07', 'Rioverde', '08');
+('07', 'Rioverde', '08'),
+('10', 'Gauyaquil', '01');
 
 -- --------------------------------------------------------
 
@@ -110,6 +132,42 @@ CREATE TABLE `ciudadanoregd` (
   `N_HISTCLINIC` varchar(10) NOT NULL,
   `CODCIUDADANOREGD` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ciudadanos`
+--
+
+CREATE TABLE `ciudadanos` (
+  `N_HISTCLINIC` varchar(10) NOT NULL,
+  `CEDULA` varchar(15) NOT NULL,
+  `APELLIDOS` varchar(30) NOT NULL,
+  `NOMBRES` varchar(30) NOT NULL,
+  `SEXO` varchar(11) NOT NULL,
+  `EDAD` int(11) NOT NULL,
+  `NACIONALIDAD` varchar(40) NOT NULL,
+  `AUTOIDETNICA` varchar(11) NOT NULL,
+  `LUGARRESIDE` varchar(50) NOT NULL,
+  `PROVINCIA` varchar(20) NOT NULL,
+  `CANTON` varchar(30) NOT NULL,
+  `PARROQUIA` varchar(20) NOT NULL,
+  `LOCALIDAD` varchar(20) NOT NULL,
+  `DIRCIUD` varchar(120) NOT NULL,
+  `LONGITUD` varchar(20) NOT NULL,
+  `LAT` varchar(20) NOT NULL,
+  `TELFCIUD` varchar(25) NOT NULL,
+  `CORREOCIUD` varchar(120) NOT NULL,
+  `SNPERTENECEUO` varchar(45) NOT NULL,
+  `idCiudadano` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `ciudadanos`
+--
+
+INSERT INTO `ciudadanos` (`N_HISTCLINIC`, `CEDULA`, `APELLIDOS`, `NOMBRES`, `SEXO`, `EDAD`, `NACIONALIDAD`, `AUTOIDETNICA`, `LUGARRESIDE`, `PROVINCIA`, `CANTON`, `PARROQUIA`, `LOCALIDAD`, `DIRCIUD`, `LONGITUD`, `LAT`, `TELFCIUD`, `CORREOCIUD`, `SNPERTENECEUO`, `idCiudadano`) VALUES
+('1', '11', 'lopez', 'norma', 'Hombre', 1, 'Ecuatoriano', '1', 'Esmeraldas', 'Esmeraldas', 'Esmeraldas', 'Bartolomé Ruíz', 'ums', 'codesa', '22', '22', '09090909099', 'lopez@gmail.com', 'NO', 2);
 
 -- --------------------------------------------------------
 
@@ -237,6 +295,26 @@ CREATE TABLE `edad` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `edades`
+--
+
+CREATE TABLE `edades` (
+  `CODEDAD` int(11) NOT NULL,
+  `EDADRMA` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `edades`
+--
+
+INSERT INTO `edades` (`CODEDAD`, `EDADRMA`) VALUES
+(1, '10'),
+(2, '20'),
+(3, '30');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `escenariovac`
 --
 
@@ -343,19 +421,20 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 
 CREATE TABLE `nacionalidad` (
   `CODNACIONALIDAD` int(11) NOT NULL,
-  `NACIONALIDAD` char(25) NOT NULL
+  `NACIONALIDAD` char(25) NOT NULL,
+  `NOMBREPAIS` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `nacionalidad`
 --
 
-INSERT INTO `nacionalidad` (`CODNACIONALIDAD`, `NACIONALIDAD`) VALUES
-(1, 'Ecuatoriano'),
-(2, 'Colombiano'),
-(3, 'Peruano'),
-(4, 'Cubano'),
-(5, 'Otros');
+INSERT INTO `nacionalidad` (`CODNACIONALIDAD`, `NACIONALIDAD`, `NOMBREPAIS`) VALUES
+(1, 'Ecuatoriano', ''),
+(2, 'Colombiano', ''),
+(3, 'Peruano', ''),
+(4, 'Cubano', ''),
+(5, 'Otros', '');
 
 -- --------------------------------------------------------
 
@@ -400,14 +479,32 @@ INSERT INTO `parroquia` (`CODPARROQUIA`, `PARROQUIA`, `CODCANTON`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `perfil`
+--
+
+CREATE TABLE `perfil` (
+  `idPerfil` int(11) NOT NULL,
+  `descripcionPerfil` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `perfil`
+--
+
+INSERT INTO `perfil` (`idPerfil`, `descripcionPerfil`) VALUES
+(1, 'Enfermera'),
+(2, 'Enfermero');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `perfil_u`
 --
 
 CREATE TABLE `perfil_u` (
   `ID_PERFIL` int(11) NOT NULL,
   `CODCUENTA` int(11) DEFAULT NULL,
-  `NOMBREPERFIL` varchar(30) NOT NULL,
-  `ATRIBUTOPERFIL` varchar(30) NOT NULL
+  `NOMBREPERFIL` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='perfil de usuario';
 
 -- --------------------------------------------------------
@@ -444,6 +541,7 @@ CREATE TABLE `provincia` (
 --
 
 INSERT INTO `provincia` (`CODPROVINCIA`, `PROVINCIA`) VALUES
+('01', 'Guayas'),
 ('08', 'Esmeraldas');
 
 -- --------------------------------------------------------
@@ -453,6 +551,22 @@ INSERT INTO `provincia` (`CODPROVINCIA`, `PROVINCIA`) VALUES
 --
 
 CREATE TABLE `regdiario` (
+  `CODREGISTRODIARIO` int(11) NOT NULL,
+  `UNICODIGOES` varchar(11) DEFAULT NULL,
+  `CODTIPODOC` int(11) DEFAULT NULL,
+  `NUMORDENR` int(11) NOT NULL,
+  `DIASVACMES` int(11) NOT NULL,
+  `TOTALRD` int(11) NOT NULL,
+  `NOMBREVACUNADOR` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Registro Diario';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `regdiarios`
+--
+
+CREATE TABLE `regdiarios` (
   `CODREGISTRODIARIO` int(11) NOT NULL,
   `UNICODIGOES` varchar(11) DEFAULT NULL,
   `CODTIPODOC` int(11) DEFAULT NULL,
@@ -541,7 +655,7 @@ INSERT INTO `r_edad_vac` (`CODRANGOEDAD`, `CODVACUNA`, `RANGOEDAD`) VALUES
 -- Estructura de tabla para la tabla `tarj_controlvac`
 --
 
-CREATE TABLE `tarj_controlvacs` (
+CREATE TABLE `tarj_controlvac` (
   `CODTARCONTVAC` int(11) NOT NULL,
   `CODTIPODOC` int(11) DEFAULT NULL,
   `NUMORDENTAR` varchar(10) NOT NULL,
@@ -555,6 +669,37 @@ CREATE TABLE `tarj_controlvacs` (
   `APELLIDOSNOMBRESTUTOR` varchar(50) DEFAULT NULL,
   `OBSERV` text,
   `CODCALENDARIOVAC` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Tarjeta de control de vacunacion';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tarj_controlvacs`
+--
+
+CREATE TABLE `tarj_controlvacs` (
+  `CODTARCONTVAC` int(11) NOT NULL,
+  `NUMORDENTAR` varchar(10) NOT NULL,
+  `FECREGTAR` date NOT NULL,
+  `FECHNAC` date NOT NULL,
+  `LUGARNAC` varchar(50) NOT NULL,
+  `LUGARINSCRIPCION` varchar(30) NOT NULL,
+  `EDADINGRESO` varchar(15) NOT NULL,
+  `APELLIDOSNOMBRESMADRE` varchar(50) NOT NULL,
+  `APELLIDOSNOMBRESPADRE` varchar(50) NOT NULL,
+  `APELLIDOSNOMBRESTUTOR` varchar(50) DEFAULT NULL,
+  `OBSERV` text,
+  `CODCALENDARIOVAC` int(11) NOT NULL,
+  `N_HISTCLINIC` varchar(10) NOT NULL,
+  `APELLIDOS` varchar(30) NOT NULL,
+  `NOMBRES` varchar(30) NOT NULL,
+  `CODAUTOIDETNICA` int(11) NOT NULL,
+  `CODNACIONALIDAD` int(11) NOT NULL,
+  `CODLUGARRESIDE` varchar(50) NOT NULL,
+  `CODPROVINCIA` int(11) NOT NULL,
+  `CODCANTON` int(11) NOT NULL,
+  `CODPARROQUIA` int(11) NOT NULL,
+  `TELFCIUD` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Tarjeta de control de vacunacion';
 
 -- --------------------------------------------------------
@@ -586,7 +731,7 @@ CREATE TABLE `user` (
   `updated_at` int(11) NOT NULL,
   `Apellido` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `Nombre` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `Profesion` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `Profesion` int(11) NOT NULL,
   `Sexo` int(11) NOT NULL,
   `fechaRegistro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -596,7 +741,28 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `status`, `created_at`, `updated_at`, `Apellido`, `Nombre`, `Profesion`, `Sexo`, `fechaRegistro`) VALUES
-(1, 'juan', 'W20cM1Id4UUo32EaygZCy0OGyBwAJgVt', '$2y$13$MPh1sKFXFyVOebIEFZAM/e32txwiv94wELKuVRzR9h7U0KLWwZ1xi', NULL, 'juan@gmail.com', 10, 1480177932, 1480177932, '', '', '', 0, '2016-11-26 17:28:33');
+(19, 'juan', '_l8TpbNvJq7H_ZfOiZMeC8ZrkC2XJ0OC', '$2y$13$ofHiZko/is3BwU4TtcIa7OpAFbM6qCIHGrRNLJ.LBY5xBQakJXrWe', NULL, 'juan2@gmail.com', 10, 1480217895, 1480217895, 'Lopez', 'Juan', 0, 1, '2016-11-27 03:38:15');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario_acciones`
+--
+
+CREATE TABLE `usuario_acciones` (
+  `idUsuario` int(11) NOT NULL,
+  `idAcciones` int(11) NOT NULL,
+  `idUsurioAcciones` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `usuario_acciones`
+--
+
+INSERT INTO `usuario_acciones` (`idUsuario`, `idAcciones`, `idUsurioAcciones`) VALUES
+(20, 1, 13),
+(20, 2, 14),
+(20, 3, 15);
 
 -- --------------------------------------------------------
 
@@ -674,6 +840,12 @@ INSERT INTO `zona_ubic` (`CODZONAUBIC`, `ZONAUBICACION`) VALUES
 --
 
 --
+-- Indices de la tabla `acciones`
+--
+ALTER TABLE `acciones`
+  ADD PRIMARY KEY (`idAcciones`);
+
+--
 -- Indices de la tabla `autoidetnica`
 --
 ALTER TABLE `autoidetnica`
@@ -704,6 +876,12 @@ ALTER TABLE `ciudadano`
 ALTER TABLE `ciudadanoregd`
   ADD PRIMARY KEY (`CODREGISTRODIARIO`,`N_HISTCLINIC`,`CODCIUDADANOREGD`),
   ADD KEY `FK_RELATIONSHIP_30` (`N_HISTCLINIC`);
+
+--
+-- Indices de la tabla `ciudadanos`
+--
+ALTER TABLE `ciudadanos`
+  ADD PRIMARY KEY (`idCiudadano`);
 
 --
 -- Indices de la tabla `ciudadanovacuna`
@@ -737,6 +915,12 @@ ALTER TABLE `dosis`
 -- Indices de la tabla `edad`
 --
 ALTER TABLE `edad`
+  ADD PRIMARY KEY (`CODEDAD`);
+
+--
+-- Indices de la tabla `edades`
+--
+ALTER TABLE `edades`
   ADD PRIMARY KEY (`CODEDAD`);
 
 --
@@ -795,6 +979,12 @@ ALTER TABLE `parroquia`
   ADD KEY `FK_HAY` (`CODCANTON`);
 
 --
+-- Indices de la tabla `perfil`
+--
+ALTER TABLE `perfil`
+  ADD PRIMARY KEY (`idPerfil`);
+
+--
 -- Indices de la tabla `perfil_u`
 --
 ALTER TABLE `perfil_u`
@@ -824,6 +1014,12 @@ ALTER TABLE `regdiario`
   ADD KEY `FK_UTILIZA_REGISTRO` (`UNICODIGOES`);
 
 --
+-- Indices de la tabla `regdiarios`
+--
+ALTER TABLE `regdiarios`
+  ADD PRIMARY KEY (`CODREGISTRODIARIO`);
+
+--
 -- Indices de la tabla `r_edad_vac`
 --
 ALTER TABLE `r_edad_vac`
@@ -836,6 +1032,12 @@ ALTER TABLE `r_edad_vac`
 ALTER TABLE `tarj_controlvac`
   ADD PRIMARY KEY (`CODTARCONTVAC`),
   ADD KEY `FK_ES_DOCUMENTO` (`CODTIPODOC`);
+
+--
+-- Indices de la tabla `tarj_controlvacs`
+--
+ALTER TABLE `tarj_controlvacs`
+  ADD PRIMARY KEY (`CODTARCONTVAC`);
 
 --
 -- Indices de la tabla `tipodocumento`
@@ -851,6 +1053,12 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `password_reset_token` (`password_reset_token`);
+
+--
+-- Indices de la tabla `usuario_acciones`
+--
+ALTER TABLE `usuario_acciones`
+  ADD PRIMARY KEY (`idUsurioAcciones`);
 
 --
 -- Indices de la tabla `vacuna`
@@ -875,10 +1083,35 @@ ALTER TABLE `zona_ubic`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `acciones`
+--
+ALTER TABLE `acciones`
+  MODIFY `idAcciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT de la tabla `ciudadanos`
+--
+ALTER TABLE `ciudadanos`
+  MODIFY `idCiudadano` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `edades`
+--
+ALTER TABLE `edades`
+  MODIFY `CODEDAD` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT de la tabla `perfil`
+--
+ALTER TABLE `perfil`
+  MODIFY `idPerfil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+--
+-- AUTO_INCREMENT de la tabla `usuario_acciones`
+--
+ALTER TABLE `usuario_acciones`
+  MODIFY `idUsurioAcciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- Restricciones para tablas volcadas
 --

@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $query = new Query();
     $dataProvider = new ActiveDataProvider([
-          'query' => $query->from('ciudadanos'),
+          'query' => $query->from('ciudadanos')->indexBy('idCiudadano'),
           'pagination' => [
               'pageSize' => 3,
           ],
@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'TELFCIUD',
             // 'CORREOCIUD',
             // 'SNPERTENECEUO',
-            // 'idCiudadano',
+            //'idCiudadano',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
