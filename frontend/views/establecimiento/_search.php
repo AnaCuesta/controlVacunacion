@@ -25,13 +25,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'TIPOESTABLECIMIENTO') ?>
 
-
-
     <?php // echo $form->field($model, 'CODPARROQUIA') ?>
 
-
-
     <?php // echo $form->field($model, 'LOCALIDADEST') ?>
+
+    <?php // echo $form->field($model, 'CODCANTON') ?>
+
+    <?php // echo $form->field($model, 'CODPROVINCIA') ?>
+
+    <?php // echo $form->field($model, 'CODZONA') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

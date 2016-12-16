@@ -29,10 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'CODDISTRITO',
             'CODZONAUBIC',
             'TIPOESTABLECIMIENTO',
-
             // 'CODPARROQUIA',
-          
             // 'LOCALIDADEST',
+            // 'CODCANTON',
+            // 'CODPROVINCIA',
+            // 'CODZONA',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

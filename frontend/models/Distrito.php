@@ -32,7 +32,7 @@ class Distrito extends \yii\db\ActiveRecord
         return [
             [['CODDISTRITO', 'DISTRITO', 'CODZONA'], 'required'],
             [['CODZONA'], 'integer'],
-            [['CODDISTRITO'], 'string', 'max' => 11],
+            //[['CODDISTRITO'], 'string', 'max' => 11],
             [['DISTRITO'], 'string', 'max' => 10],
             [['CODZONA'], 'exist', 'skipOnError' => true, 'targetClass' => Zona::className(), 'targetAttribute' => ['CODZONA' => 'CODZONA']],
         ];

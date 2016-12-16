@@ -8,6 +8,9 @@ use frontend\models\EstablecimientoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use frontend\models\Zona;
+use frontend\models\Distrito;
+use frontend\models\Nombreestablecimiento;
 
 /**
  * EstablecimientoController implements the CRUD actions for Establecimiento model.
@@ -54,6 +57,49 @@ class EstablecimientoController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+    /**
+     * Devuelve todas las zonas
+     *
+     * @return mixed
+     */
+    public function actionListaDistritos($id)
+    {
+
+      $contarZonas  = ZONA::find()->where(['CODZONA'=> $id])->count();
+      $distrito = Distrito::find()->where(['CODZONA'=> $id])->all();
+
+      if($contarZonas > 0){
+        echo "<option>Seleccione la opción..</option>";
+        foreach ($distrito  as  $value) {
+          echo "<option value='".$value->CODDISTRITO."'>".$value->DISTRITO."</option>";
+        }
+      }else {
+        echo "<option></option>";
+      }
+
+    }
+    /**
+     * Devuelve todas los nombres de los establecimientos
+     *
+     * @return mixed
+     */
+    public function actionListaNombreEstablecimiento($id)
+    {
+
+
+      $contarNombreEstablecimiento  = Distrito::find()->where(['CODDISTRITO'=> $id])->count();
+      $Nombreestablecimiento = Nombreestablecimiento::find()->where(['idDistrito'=> $id])->all();
+
+      if($contarNombreEstablecimiento  > 0){
+        echo "<option>Seleccione la opción..</option>";
+        foreach ($Nombreestablecimiento  as  $value) {
+          echo "<option value='".$value->idDistrito."'>".$value->nombreEstalecimiento."</option>";
+        }
+      }else {
+        echo "<option></option>";
+      }
+
     }
 
     /**

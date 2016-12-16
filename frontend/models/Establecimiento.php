@@ -14,6 +14,9 @@ use Yii;
  * @property string $TIPOESTABLECIMIENTO
  * @property string $CODPARROQUIA
  * @property string $LOCALIDADEST
+ * @property string $CODCANTON
+ * @property string $CODPROVINCIA
+ * @property integer $CODZONA
  *
  * @property Parroquia $cODPARROQUIA
  * @property Distrito $cODDISTRITO
@@ -37,10 +40,10 @@ class Establecimiento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['UNICODIGOES', 'NOMBREESTABLECIMIENTO', 'CODDISTRITO', 'CODZONAUBIC', 'TIPOESTABLECIMIENTO', 'LOCALIDADEST'], 'required'],
-            [['CODZONAUBIC'], 'integer'],
-            [['UNICODIGOES', 'CODDISTRITO', 'CODPARROQUIA'], 'string', 'max' => 11],
-            [['NOMBREESTABLECIMIENTO', 'TIPOESTABLECIMIENTO', 'LOCALIDADEST'], 'string', 'max' => 30],
+            [['UNICODIGOES', 'NOMBREESTABLECIMIENTO', 'CODZONAUBIC', 'TIPOESTABLECIMIENTO', 'LOCALIDADEST', 'CODCANTON', 'CODPROVINCIA', 'CODZONA'], 'required'],
+            [['CODZONAUBIC', 'CODZONA'], 'integer'],
+            [['UNICODIGOES',  'CODPARROQUIA', 'CODPROVINCIA'], 'string', 'max' => 11],
+            [['NOMBREESTABLECIMIENTO', 'TIPOESTABLECIMIENTO', 'LOCALIDADEST', 'CODCANTON'], 'string', 'max' => 30],
             [['CODPARROQUIA'], 'exist', 'skipOnError' => true, 'targetClass' => Parroquia::className(), 'targetAttribute' => ['CODPARROQUIA' => 'CODPARROQUIA']],
             [['CODDISTRITO'], 'exist', 'skipOnError' => true, 'targetClass' => Distrito::className(), 'targetAttribute' => ['CODDISTRITO' => 'CODDISTRITO']],
             [['CODZONAUBIC'], 'exist', 'skipOnError' => true, 'targetClass' => ZonaUbic::className(), 'targetAttribute' => ['CODZONAUBIC' => 'CODZONAUBIC']],
@@ -53,13 +56,16 @@ class Establecimiento extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'UNICODIGOES' => 'Unicodigoes',
-            'NOMBREESTABLECIMIENTO' => 'Nombreestablecimiento',
+            'UNICODIGOES' => 'Unicódigo E.S',
+            'NOMBREESTABLECIMIENTO' => 'Nombre del Establecimiento',
             'CODDISTRITO' => 'Coddistrito',
-            'CODZONAUBIC' => 'Codzonaubic',
-            'TIPOESTABLECIMIENTO' => 'Tipoestablecimiento',
-            'CODPARROQUIA' => 'Codparroquia',
-            'LOCALIDADEST' => 'Localidadest',
+            'CODZONAUBIC' => 'Zona Ubicación:',
+            'TIPOESTABLECIMIENTO' => 'Tipo de Establecimiento',
+            'CODPARROQUIA' => 'Parroquia',
+            'LOCALIDADEST' => 'Nombre de la localidad o Institución',
+            'CODCANTON' => 'Cantón',
+            'CODPROVINCIA' => 'Provincia',
+            'CODZONA' => 'Zona',
         ];
     }
 

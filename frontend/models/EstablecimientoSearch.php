@@ -18,8 +18,8 @@ class EstablecimientoSearch extends Establecimiento
     public function rules()
     {
         return [
-            [['UNICODIGOES', 'NOMBREESTABLECIMIENTO', 'CODDISTRITO', 'CODPARROQUIA', 'LOCALIDADEST'], 'safe'],
-            [['CODZONAUBIC'], 'integer'],
+            [['UNICODIGOES', 'NOMBREESTABLECIMIENTO', 'CODDISTRITO', 'TIPOESTABLECIMIENTO', 'CODPARROQUIA', 'LOCALIDADEST', 'CODCANTON', 'CODPROVINCIA'], 'safe'],
+            [['CODZONAUBIC', 'CODZONA'], 'integer'],
         ];
     }
 
@@ -60,7 +60,7 @@ class EstablecimientoSearch extends Establecimiento
         // grid filtering conditions
         $query->andFilterWhere([
             'CODZONAUBIC' => $this->CODZONAUBIC,
-
+            'CODZONA' => $this->CODZONA,
         ]);
 
         $query->andFilterWhere(['like', 'UNICODIGOES', $this->UNICODIGOES])
@@ -68,7 +68,9 @@ class EstablecimientoSearch extends Establecimiento
             ->andFilterWhere(['like', 'CODDISTRITO', $this->CODDISTRITO])
             ->andFilterWhere(['like', 'TIPOESTABLECIMIENTO', $this->TIPOESTABLECIMIENTO])
             ->andFilterWhere(['like', 'CODPARROQUIA', $this->CODPARROQUIA])
-            ->andFilterWhere(['like', 'LOCALIDADEST', $this->LOCALIDADEST]);
+            ->andFilterWhere(['like', 'LOCALIDADEST', $this->LOCALIDADEST])
+            ->andFilterWhere(['like', 'CODCANTON', $this->CODCANTON])
+            ->andFilterWhere(['like', 'CODPROVINCIA', $this->CODPROVINCIA]);
 
         return $dataProvider;
     }

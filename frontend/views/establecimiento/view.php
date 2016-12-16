@@ -2,8 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use yii\grid\GridView;
-use yii\data\ArrayDataProvider;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Establecimiento */
@@ -27,52 +25,20 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?php
-    $data =  [
-      ['UNICODIGOES' => 1, 'NOMBREESTABLECIMIENTO' => 'name 1'],
-    ];
-      $provider = new ArrayDataProvider([
-          'allModels' => $data,
-          'pagination' => [
-              'pageSize' => 10,
-          ],
-          'sort' => [
-              'attributes' => ['id', 'name'],
-          ],
-      ]);
-
-    ?>
-
-
-    <?= GridView::widget([
-
-        'dataProvider' => $provider,
-        'columns' => [
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
             'UNICODIGOES',
             'NOMBREESTABLECIMIENTO',
             'CODDISTRITO',
             'CODZONAUBIC',
             'TIPOESTABLECIMIENTO',
-
             'CODPARROQUIA',
-
             'LOCALIDADEST',
+            'CODCANTON',
+            'CODPROVINCIA',
+            'CODZONA',
         ],
     ]) ?>
-<?php
-    echo DetailView::widget([
-    'model' => $model,
-    'attributes' => [
-        'UNICODIGOES',               // title attribute (in plain text)
-        'UNICODIGOES',    // description attribute in HTML
-        [                      // the owner name of the model
-            'label' => 'UNICODIGOES',
-            'value' => $model->NOMBREESTABLECIMIENTO,
-        ],
-
-    ],
-]);
-
-?>
 
 </div>

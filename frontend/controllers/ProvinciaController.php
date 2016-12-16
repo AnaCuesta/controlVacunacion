@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+
 /**
  * ProvinciaController implements the CRUD actions for Provincia model.
  */
@@ -53,6 +54,7 @@ class ProvinciaController extends Controller
      **/
     public function actionListaCantones($id)
     {
+      
 
       $contarCantones  = Canton::find()->where(['CODPROVINCIA'=> $id])->count();
       $cantones = Canton::find()->where(['CODPROVINCIA'=> $id])->all();
