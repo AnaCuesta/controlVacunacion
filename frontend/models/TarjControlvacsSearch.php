@@ -18,8 +18,8 @@ class TarjControlvacsSearch extends TarjControlvacs
     public function rules()
     {
         return [
-            [['CODTARCONTVAC', 'CODTIPODOC', 'CODCALENDARIOVAC'], 'integer'],
-            [['NUMORDENTAR', 'FECREGTAR', 'FECHNAC', 'LUGARNAC', 'LUGARINSCRIPCION', 'EDADINGRESO', 'APELLIDOSNOMBRESMADRE', 'APELLIDOSNOMBRESPADRE', 'APELLIDOSNOMBRESTUTOR', 'OBSERV'], 'safe'],
+            [['CODTARCONTVAC', 'id_ciudadano', 'idEstablecimiento'], 'integer'],
+            [['NUMORDENTAR', 'FECHNAC', 'LUGARNAC', 'LUGARINSCRIPCION', 'EDADINGRESO', 'APELLIDOSNOMBRESMADRE', 'APELLIDOSNOMBRESPADRE', 'APELLIDOSNOMBRESTUTOR', 'OBSERV'], 'safe'],
         ];
     }
 
@@ -60,10 +60,9 @@ class TarjControlvacsSearch extends TarjControlvacs
         // grid filtering conditions
         $query->andFilterWhere([
             'CODTARCONTVAC' => $this->CODTARCONTVAC,
-            'CODTIPODOC' => $this->CODTIPODOC,
-            'FECREGTAR' => $this->FECREGTAR,
             'FECHNAC' => $this->FECHNAC,
-            'CODCALENDARIOVAC' => $this->CODCALENDARIOVAC,
+            'id_ciudadano' => $this->id_ciudadano,
+            'idEstablecimiento' => $this->idEstablecimiento,
         ]);
 
         $query->andFilterWhere(['like', 'NUMORDENTAR', $this->NUMORDENTAR])

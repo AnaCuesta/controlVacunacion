@@ -17,17 +17,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'CODTARCONTVAC') ?>
 
-    <?= $form->field($model, 'CODTIPODOC') ?>
-
     <?= $form->field($model, 'NUMORDENTAR') ?>
-
-    <?= $form->field($model, 'FECREGTAR') ?>
 
     <?= $form->field($model, 'FECHNAC') ?>
 
-    <?php // echo $form->field($model, 'LUGARNAC') ?>
+    <?= $form->field($model, 'LUGARNAC') ?>
 
-    <?php // echo $form->field($model, 'LUGARINSCRIPCION') ?>
+    <?= $form->field($model, 'LUGARINSCRIPCION') ?>
 
     <?php // echo $form->field($model, 'EDADINGRESO') ?>
 
@@ -39,7 +35,9 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'OBSERV') ?>
 
-    <?php // echo $form->field($model, 'CODCALENDARIOVAC') ?>
+    <?php // echo $form->field($model, 'id_ciudadano') ?>
+
+    <?php // echo $form->field($model, 'idEstablecimiento') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

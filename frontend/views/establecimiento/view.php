@@ -2,6 +2,11 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use frontend\models\ZonaUbic;
+use frontend\models\Provincia;
+use frontend\models\Canton;
+use frontend\models\Parroquia;
+use frontend\models\Zona;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Establecimiento */
@@ -24,21 +29,56 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
+    <?php
 
-    <?= DetailView::widget([
+
+    $nombre = ZonaUbic::find()->where(['CODZONAUBIC' => $model->CODZONAUBIC])->one();
+    $nombreProvincia = Provincia::find()->where(['CODPROVINCIA' => $model->CODPROVINCIA])->one();
+    $nombreCanton = Canton::find()->where(['CODCANTON' => $model->CODCANTON])->one();
+    $nombreParroquia = Parroquia::find()->where(['CODPARROQUIA' => $model->CODPARROQUIA])->one();
+    $nombreZona = Zona::find()->where(['CODZONA' => $model->CODZONA])->one();
+    //print_r($nombre);
+    //die();
+
+    echo DetailView::widget([
         'model' => $model,
         'attributes' => [
             'UNICODIGOES',
             'NOMBREESTABLECIMIENTO',
-            'CODDISTRITO',
-            'CODZONAUBIC',
+            [
+              'label' => 'Zona Ubicación',
+              'value' =>  $nombre->ZONAUBICACION,
+
+            ],
+            [
+              'label' => 'Distrito',
+              'value' =>  $model->CODDISTRITO,
+
+            ],
+            [
+              'label' => 'Provincia',
+              'value' => $nombreProvincia->PROVINCIA,
+
+            ],
+            [
+              'label' => 'Cantón',
+              'value' =>    $nombreCanton->CANTON,
+
+            ],
+            [
+              'label' => 'Parroquia',
+              'value' =>$nombreParroquia->PARROQUIA
+
+            ],
+            [
+              'label' => 'Zona',
+              'value' =>$nombreZona->ZONA
+
+            ],
             'TIPOESTABLECIMIENTO',
-            'CODPARROQUIA',
             'LOCALIDADEST',
-            'CODCANTON',
-            'CODPROVINCIA',
-            'CODZONA',
+
         ],
-    ]) ?>
+    ]); ?>
 
 </div>

@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Establecimiento */
 
-$this->title = 'Update Establecimiento: ' . $model->UNICODIGOES;
+$this->title = 'Crear Establecimiento: ' . $model->UNICODIGOES;
 $this->params['breadcrumbs'][] = ['label' => 'Establecimientos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->UNICODIGOES, 'url' => ['view', 'id' => $model->UNICODIGOES]];
 $this->params['breadcrumbs'][] = 'Update';

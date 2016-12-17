@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Establecimiento */
 
-$this->title = 'Create Establecimiento';
+$this->title = 'Crear Establecimiento:';
 $this->params['breadcrumbs'][] = ['label' => 'Establecimientos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

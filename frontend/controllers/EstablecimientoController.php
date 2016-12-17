@@ -92,12 +92,12 @@ class EstablecimientoController extends Controller
       $Nombreestablecimiento = Nombreestablecimiento::find()->where(['idDistrito'=> $id])->all();
 
       if($contarNombreEstablecimiento  > 0){
-        echo "<option>Seleccione la opción..</option>";
+
         foreach ($Nombreestablecimiento  as  $value) {
-          echo "<option value='".$value->idDistrito."'>".$value->nombreEstalecimiento."</option>";
+          echo "<option value='".$value->nombreEstalecimiento."'>".$value->nombreEstalecimiento."</option>";
         }
       }else {
-        echo "<option></option>";
+          echo "<option>Seleccione la opción..</option>";
       }
 
     }

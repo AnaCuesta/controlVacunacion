@@ -1,20 +1,18 @@
 <?php
 
-namespace frontend\controllers;
+namespace backend\controllers;
 
 use Yii;
-use frontend\models\Canton;
-use frontend\models\Parroquia;
-use frontend\models\ProvinciaSearch;
+use frontend\models\TarjControlvacs;
+use frontend\models\TarjControlvacsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-
 /**
- * ProvinciaController implements the CRUD actions for Provincia model.
+ * TarjControlvacsController implements the CRUD actions for TarjControlvacs model.
  */
-class ProvinciaController extends Controller
+class TarjControlvacsController extends Controller
 {
     /**
      * @inheritdoc
@@ -32,12 +30,12 @@ class ProvinciaController extends Controller
     }
 
     /**
-     * Lists all Provincia models.
+     * Lists all TarjControlvacs models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ProvinciaSearch();
+        $searchModel = new TarjControlvacsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,57 +45,8 @@ class ProvinciaController extends Controller
     }
 
     /**
-     *
-     *
-     * Devuelve todos los registros de los cantones
-     *
-     **/
-    public function actionListaCantones($id)
-    {
-
-
-      $contarCantones  = Canton::find()->where(['CODPROVINCIA'=> $id])->count();
-      $cantones = Canton::find()->where(['CODPROVINCIA'=> $id])->all();
-
-
-      if($contarCantones > 0){
-        echo "<option>Seleccione la opción..</option>";
-        foreach ($cantones as  $value) {
-
-          echo "<option value='".$value->CODCANTON."'>".$value->CANTON."</option>";
-        }
-      }else {
-        echo "<option></option>";
-      }
-
-    }
-    /**
-     *
-     *
-     * Devuelve todos los registros de las Parroquias
-     *
-     **/
-    public function actionListaParroquia($id)
-    {
-
-      $contarParroquia  = PARROQUIA::find()->where(['CODCANTON'=> $id])->count();
-      $parroquia = PARROQUIA::find()->where(['CODCANTON'=> $id])->all();
-
-      if($contarParroquia > 0){
-
-      foreach ($parroquia as  $value) {
-          echo "<option value='".$value->CODPARROQUIA."'>".$value->PARROQUIA."</option>";
-        }
-
-      }else {
-        echo "<option></option>";
-      }
-
-    }
-
-    /**
-     * Displays a single Provincia model.
-     * @param string $id
+     * Displays a single TarjControlvacs model.
+     * @param integer $id
      * @return mixed
      */
     public function actionView($id)
@@ -108,16 +57,16 @@ class ProvinciaController extends Controller
     }
 
     /**
-     * Creates a new Provincia model.
+     * Creates a new TarjControlvacs model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Provincia();
+        $model = new TarjControlvacs();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->CODPROVINCIA]);
+            return $this->redirect(['view', 'id' => $model->CODTARCONTVAC]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -126,9 +75,9 @@ class ProvinciaController extends Controller
     }
 
     /**
-     * Updates an existing Provincia model.
+     * Updates an existing TarjControlvacs model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -136,7 +85,7 @@ class ProvinciaController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->CODPROVINCIA]);
+            return $this->redirect(['view', 'id' => $model->CODTARCONTVAC]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -145,9 +94,9 @@ class ProvinciaController extends Controller
     }
 
     /**
-     * Deletes an existing Provincia model.
+     * Deletes an existing TarjControlvacs model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -158,15 +107,15 @@ class ProvinciaController extends Controller
     }
 
     /**
-     * Finds the Provincia model based on its primary key value.
+     * Finds the TarjControlvacs model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return Provincia the loaded model
+     * @param integer $id
+     * @return TarjControlvacs the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Provincia::findOne($id)) !== null) {
+        if (($model = TarjControlvacs::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

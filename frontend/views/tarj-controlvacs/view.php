@@ -29,9 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'CODTARCONTVAC',
-            'CODTIPODOC',
             'NUMORDENTAR',
-            'FECREGTAR',
             'FECHNAC',
             'LUGARNAC',
             'LUGARINSCRIPCION',
@@ -40,7 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'APELLIDOSNOMBRESPADRE',
             'APELLIDOSNOMBRESTUTOR',
             'OBSERV:ntext',
-            'CODCALENDARIOVAC',
+            'id_ciudadano',
+            'idEstablecimiento',
         ],
     ]) ?>
 
