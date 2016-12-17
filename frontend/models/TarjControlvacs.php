@@ -23,7 +23,7 @@ use Yii;
 class TarjControlvacs extends \yii\db\ActiveRecord
 {
 
-    public $historiaClinicaCiudadano;
+
     public $apellidoCiudadano;
     public $nombreCiudadano;
     public $nacionalidadCiudadano;
@@ -32,6 +32,7 @@ class TarjControlvacs extends \yii\db\ActiveRecord
     public $cantonCiudadano;
     public $parroquiaCiudadano;
     public $localidadCiudadano;
+    public $residenciaCiudadano;
     public $direccionCiudadano;
     public $telefonoCiudadano;
     public $zona;
@@ -76,7 +77,7 @@ class TarjControlvacs extends \yii\db\ActiveRecord
     {
         return [
             'CODTARCONTVAC' => 'Codtarcontvac',
-            'historiaClinicaCiudadano' => 'N° Historia Clinica',
+            
             'nombreCiudadano' => 'Nombres del Niño(a)',
             'apellidoCiudadano' => 'Apellidos del Niño(a)',
             'nacionalidadCiudadano' => 'Nacionalidad',
@@ -96,8 +97,9 @@ class TarjControlvacs extends \yii\db\ActiveRecord
             'APELLIDOSNOMBRESPADRE' => 'Apellidos y Nombres del Padre',
             'APELLIDOSNOMBRESTUTOR' => 'Apellidos y Nombres del Tutor',
             'OBSERV' => 'Observaciones',
-            'id_ciudadano' => 'Id Ciudadano',
-            'idEstablecimiento' => 'Id Establecimiento',
+            'id_ciudadano' => 'N° Historia Clinica',
+            'residenciaCiudadano' => 'Lugar de Residencia',
+            'idEstablecimiento' => 'Nombre Establecimeinto',
         ];
     }
 }

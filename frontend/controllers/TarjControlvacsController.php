@@ -8,7 +8,13 @@ use frontend\models\TarjControlvacsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use frontend\models\Establecimiento;
+use frontend\models\Zona;
+use frontend\models\Canton;
+use frontend\models\Distrito;
+use frontend\models\Provincia;
+use frontend\models\Ciudadanos;
+use yii\helpers\Json;
 /**
  * TarjControlvacsController implements the CRUD actions for TarjControlvacs model.
  */
@@ -73,6 +79,64 @@ class TarjControlvacsController extends Controller
             ]);
         }
     }
+
+    /**    
+     *  Obtiene el nombre de la zona 
+     * @return mixed
+     */
+    public function actionListadoZona($id)
+    {
+        $id = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+        $zona = Zona::find()->where(['CODZONA' => $id->CODZONA])->one();
+        echo Json::encode($zona->ZONA);
+    }
+    /**    
+     *  Obtiene el nombre del distrito
+     * @return mixed
+     */
+    public function actionListadoDistrito($id)
+    {
+        $id = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+        $distrito = Distrito::find()->where(['CODDISTRITO' => $id->CODDISTRITO])->one();
+        echo Json::encode($distrito->DISTRITO);
+    }
+   /**    
+     *  Obtiene el nombre de la provincia
+     * @return mixed
+     */
+    public function actionListadoProvincia($id)
+    {
+        $id = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+        $provincia = Provincia::find()->where(['CODPROVINCIA' => $id->CODPROVINCIA])->one();
+        echo Json::encode($provincia->PROVINCIA);
+    }  
+    /**    
+     *  Obtiene el nombre de la Canton
+     * @return mixed
+     */
+    public function actionListadoCanton($id)
+    {
+        $id = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+        $canton = Canton::find()->where(['CODCANTON' => $id->CODCANTON])->one();
+        echo Json::encode($canton->CANTON);
+    } 
+
+     /**    
+     *  Obtiene el los datos del Ciudadano
+     * @return mixed
+     */
+    public function actionListadoCiudadano($id)
+    {
+        $id = Ciudadanos::find()->where(['idCiudadano' => $id])->one();
+       
+        echo Json::encode($id);
+    }
+
+
+
+
+
+
 
     /**
      * Updates an existing TarjControlvacs model.
