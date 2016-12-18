@@ -22,8 +22,6 @@ use Yii;
  */
 class TarjControlvacs extends \yii\db\ActiveRecord
 {
-
-
     public $apellidoCiudadano;
     public $nombreCiudadano;
     public $nacionalidadCiudadano;
@@ -39,11 +37,6 @@ class TarjControlvacs extends \yii\db\ActiveRecord
     public $distrito;
     public $provincia;
     public $canton;
-
-
-
-
-
 
     /**
      * @inheritdoc
@@ -77,7 +70,6 @@ class TarjControlvacs extends \yii\db\ActiveRecord
     {
         return [
             'CODTARCONTVAC' => 'Codtarcontvac',
-            
             'nombreCiudadano' => 'Nombres del Niño(a)',
             'apellidoCiudadano' => 'Apellidos del Niño(a)',
             'nacionalidadCiudadano' => 'Nacionalidad',

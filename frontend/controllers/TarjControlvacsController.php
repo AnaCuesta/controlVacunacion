@@ -14,10 +14,15 @@ use frontend\models\Canton;
 use frontend\models\Distrito;
 use frontend\models\Provincia;
 use frontend\models\Ciudadanos;
+use frontend\models\Calendariovacunacion;
+
 use yii\helpers\Json;
+use frontend\models\Vacuna;
+use frontend\models\Dosis;
 /**
  * TarjControlvacsController implements the CRUD actions for TarjControlvacs model.
  */
+
 class TarjControlvacsController extends Controller
 {
     /**
@@ -70,12 +75,15 @@ class TarjControlvacsController extends Controller
     public function actionCreate()
     {
         $model = new TarjControlvacs();
+        $modelVacunacion = [new Calendariovacunacion];
+  
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->CODTARCONTVAC]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'modelVacunacion' => (empty($modelVacunacion)) ? [new Calendariovacunacion] : $modelVacunacion
             ]);
         }
     }
@@ -128,10 +136,32 @@ class TarjControlvacsController extends Controller
     public function actionListadoCiudadano($id)
     {
         $id = Ciudadanos::find()->where(['idCiudadano' => $id])->one();
-       
+
         echo Json::encode($id);
     }
 
+
+   /**    
+     *  Lista las dosis
+     * @return mixed
+     */
+    public function actionListadoDosis($id)
+    {
+
+      $contarVacuna  = Vacuna::find()->where(['CODVACUNA'=> $id])->count();
+      $dosis = Dosis::find()->where(['CODDOSIS'=> $id])->all();
+
+
+      if($contarVacuna > 0){
+        echo "<option>Seleccione la opción..</option>";
+        foreach ($dosis  as  $value) {
+          echo "<option value='".$value->CODDOSIS."'>".$value->DOSIS."</option>";
+        }
+      }else {
+        echo "<option></option>";
+      }
+      
+    }
 
 
 

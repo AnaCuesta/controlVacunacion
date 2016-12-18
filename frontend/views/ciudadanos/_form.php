@@ -53,10 +53,6 @@ use frontend\models\Autoidetnica;
 
                               ]) ?-->
 
-
-
-
-
     <?= $form->field($model, 'AUTOIDETNICA')->widget(Select2::classname(), [
                'data' => ArrayHelper::map(Autoidetnica::find()->all(), 'CODAUTOIDETNICA', 'AUTOIDETNICA') ,
                'language' => 'de',
@@ -80,7 +76,8 @@ use frontend\models\Autoidetnica;
                    'pluginOptions' => [
                        'allowClear' => true
                ],
-    ]); ?>
+    ]); 
+    ?>
 
     <?= $form->field($model, 'CANTON')->widget(Select2::classname(), [
                               //'data' => ArrayHelper::map(CANTON::find()->all(), 'CODCANTON', 'CANTON'),
@@ -161,7 +158,6 @@ $('#idNacion').change(function(){
 //$('#ciudadanos-codprovincia' ).text( data.CODNACIONALIDAD);
 
 });
-
 
 JS;
 $this->registerJs($script);

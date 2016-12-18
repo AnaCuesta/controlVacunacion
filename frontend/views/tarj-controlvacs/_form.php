@@ -7,6 +7,8 @@ use yii\helpers\ArrayHelper;
 use frontend\models\Establecimiento;
 use kartik\select2\Select2;
 use frontend\models\Ciudadanos;
+use frontend\models\Vacuna;
+use wbraganca\dynamicform\DynamicFormWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\TarjControlvacs */
 /* @var $form yii\widgets\ActiveForm */
@@ -15,7 +17,7 @@ use frontend\models\Ciudadanos;
 
 <div class="tarj-controlvacs-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 
 
     <div class="row">
@@ -174,6 +176,135 @@ use frontend\models\Ciudadanos;
 
    
     
+
+
+<div class="row">
+      <div class="panel panel-default">
+        <div class="panel-heading hide"><h4><i class="glyphicon glyphicon-envelope"></i>Calendario de Vacunas</h4></div>
+        <div class="panel-body">
+             <?php DynamicFormWidget::begin([
+                'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                'widgetBody' => '.container-items', // required: css class selector
+                'widgetItem' => '.item', // required: css class
+                'limit' => 5, // the maximum times, an element can be cloned (default 999)
+                'min' => 1, // 0 or 1 (default 1)
+                'insertButton' => '.add-item', // css class
+                'deleteButton' => '.remove-item', // css class
+                'model' => $modelVacunacion[0],
+                'formId' => 'dynamic-form',
+                'formFields' => [
+                    'CODEDAD',
+                    'CODVACUNA',
+                    'idesquemavac',
+                    'CODDOSIS',
+                    'CODPROXIMAVACUNA',
+                    'CODPROXIMADOSIS',
+                ],
+            ]); ?>
+
+            <div class="container-items"><!-- widgetContainer -->
+            <?php foreach ($modelVacunacion as $i => $modelVacunacion): ?>
+                <div class="item panel panel-success"><!-- widgetBody -->
+                    <div class="panel-heading">
+                        <h3 class="panel-title pull-left">Calendario de Vacunación</h3>
+                        <div class="pull-right">
+                            <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
+                            <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="panel-body">
+                        <?php
+                            // necessary for update action.
+                            if (! $modelVacunacion->isNewRecord) {
+                                echo Html::activeHiddenInput($modelVacunacion , "[{$i}]id");
+                            }
+                        ?>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <?= $form->field($modelVacunacion, "[{$i}]CODEDAD")->textInput(['maxlength' => true]) ?>
+                            </div>
+                            <div class="col-sm-4">
+                                <?= $form->field($modelVacunacion, "[{$i}]idesquemavac")->textInput(['maxlength' => true]) ?>
+                            </div>
+                       
+                        <div class="col-sm-4">
+
+                        <?= $form->field($modelVacunacion, "[{$i}]CODVACUNA")->widget(Select2::classname(), [
+                                'data' => ArrayHelper::map(Vacuna::find()->all(), 'CODVACUNA', 'VACUNA'),
+                                'language' => 'de',
+                                'options' => [  'prompt'=>'Seleccione la opción...',
+                                'onchange'=>'$.post("index.php?r=tarj-controlvacs/listado-dosis&id='.'"+$(this).val(), function( data ){
+                                     $("select#calendariovacunacion-0-coddosis").html( data );
+                                   });',
+                                ],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                         ]); ?>
+
+                         </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-sm-4">
+                             
+
+                        <?= $form->field($modelVacunacion, "[{$i}]CODDOSIS")->widget(Select2::classname(), [
+                                'language' => 'de',
+                                'options' => [  'prompt'=>'Seleccione la opción...'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                         ]); 
+                         ?>
+                            </div>
+                            <div class="col-sm-4">
+                                <?= $form->field($modelVacunacion, "[{$i}]FECHAVACUNA")->textInput(['disabled'=>true, 'value' => date('d-m-Y')]) ?>
+                            </div>
+                           <div class="col-sm-4">
+                                <?= $form->field($modelVacunacion, "[{$i}]CODPROXIMAVACUNA")->textInput(['maxlength' => true]) ?>
+                            </div>
+                       
+ 
+                        </div>                   
+                          <div class="row">
+  
+                            <div class="col-sm-4">
+                                <?= $form->field($modelVacunacion, "[{$i}]CODPROXIMADOSIS")->textInput(['maxlength' => true]) ?>
+                            </div>
+
+                         <div class="col-sm-4">
+
+
+                            <?php 
+                            echo '<label>Fecha de nacimiento</label>';
+                            echo DatePicker::widget([
+                            'name' => $form->field($modelVacunacion, "[{$i}]FECHAPROXIMA"),
+                            'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                            'value' => '',
+                            'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'dd-M-yyyy'
+                            ]
+                            ]);
+                            ?> 
+ 
+                         </div>
+
+                        </div>
+                  </div>
+                    
+
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            </div>
+            <?php DynamicFormWidget::end(); ?>
+        </div>
+    </div>
+
+</div>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
@@ -181,7 +312,6 @@ use frontend\models\Ciudadanos;
     <?php ActiveForm::end(); ?>
 
 </div>
-
 <?php
 $script = <<< JS
 //here you right all you code javascript  stuff CODNACIONALIDAD
