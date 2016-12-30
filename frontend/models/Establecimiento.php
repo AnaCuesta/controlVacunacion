@@ -8,24 +8,22 @@ use Yii;
  * This is the model class for table "establecimiento".
  *
  * @property string $UNICODIGOES
+ * @property string $ZONA
+ * @property string $DISTRITO
  * @property string $NOMBREESTABLECIMIENTO
- * @property string $CODDISTRITO
  * @property integer $CODZONAUBIC
  * @property string $TIPOESTABLECIMIENTO
  * @property string $CODPARROQUIA
  * @property string $LOCALIDADEST
- * @property string $CODCANTON
- * @property string $CODPROVINCIA
- * @property integer $CODZONA
  *
  * @property Parroquia $cODPARROQUIA
- * @property Distrito $cODDISTRITO
- * @property ZonaUbic $cODZONAUBIC
- * @property Profesional[] $profesionals
  * @property Regdiario[] $regdiarios
+ * @property TarjControlvac[] $tarjControlvacs
  */
 class Establecimiento extends \yii\db\ActiveRecord
 {
+    public $canton;
+    public $provincia;
     /**
      * @inheritdoc
      */
@@ -40,13 +38,12 @@ class Establecimiento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['UNICODIGOES', 'NOMBREESTABLECIMIENTO', 'CODZONAUBIC', 'TIPOESTABLECIMIENTO', 'LOCALIDADEST', 'CODCANTON', 'CODPROVINCIA', 'CODZONA'], 'required'],
-            [['CODZONAUBIC', 'CODZONA'], 'integer'],
-            [['UNICODIGOES',  'CODPARROQUIA', 'CODPROVINCIA'], 'string', 'max' => 11],
-            [['NOMBREESTABLECIMIENTO', 'TIPOESTABLECIMIENTO', 'LOCALIDADEST', 'CODCANTON'], 'string', 'max' => 30],
+            [['UNICODIGOES', 'ZONA', 'DISTRITO', 'NOMBREESTABLECIMIENTO', 'CODZONAUBIC', 'TIPOESTABLECIMIENTO', 'CODPARROQUIA', 'LOCALIDADEST'], 'required'],
+            [['CODZONAUBIC'], 'integer'],
+            [['UNICODIGOES', 'CODPARROQUIA'], 'string', 'max' => 11],
+            [['ZONA', 'DISTRITO'], 'string', 'max' => 10],
+            [['NOMBREESTABLECIMIENTO', 'TIPOESTABLECIMIENTO', 'LOCALIDADEST'], 'string', 'max' => 30],
             [['CODPARROQUIA'], 'exist', 'skipOnError' => true, 'targetClass' => Parroquia::className(), 'targetAttribute' => ['CODPARROQUIA' => 'CODPARROQUIA']],
-            [['CODDISTRITO'], 'exist', 'skipOnError' => true, 'targetClass' => Distrito::className(), 'targetAttribute' => ['CODDISTRITO' => 'CODDISTRITO']],
-            [['CODZONAUBIC'], 'exist', 'skipOnError' => true, 'targetClass' => ZonaUbic::className(), 'targetAttribute' => ['CODZONAUBIC' => 'CODZONAUBIC']],
         ];
     }
 
@@ -56,16 +53,14 @@ class Establecimiento extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'UNICODIGOES' => 'Unicódigo E.S',
-            'NOMBREESTABLECIMIENTO' => 'Nombre del Establecimiento',
-            'CODDISTRITO' => 'Coddistrito',
-            'CODZONAUBIC' => 'Zona Ubicación:',
-            'TIPOESTABLECIMIENTO' => 'Tipo de Establecimiento',
-            'CODPARROQUIA' => 'Parroquia',
-            'LOCALIDADEST' => 'Nombre de la localidad o Institución',
-            'CODCANTON' => 'Cantón',
-            'CODPROVINCIA' => 'Provincia',
-            'CODZONA' => 'Zona',
+            'UNICODIGOES' => 'Unicodigoes',
+            'ZONA' => 'Zona',
+            'DISTRITO' => 'Distrito',
+            'NOMBREESTABLECIMIENTO' => 'Nombreestablecimiento',
+            'CODZONAUBIC' => 'Codzonaubic',
+            'TIPOESTABLECIMIENTO' => 'Tipoestablecimiento',
+            'CODPARROQUIA' => 'Codparroquia',
+            'LOCALIDADEST' => 'Localidadest',
         ];
     }
 
@@ -80,32 +75,16 @@ class Establecimiento extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCODDISTRITO()
-    {
-        return $this->hasOne(Distrito::className(), ['CODDISTRITO' => 'CODDISTRITO']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCODZONAUBIC()
-    {
-        return $this->hasOne(ZonaUbic::className(), ['CODZONAUBIC' => 'CODZONAUBIC']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProfesionals()
-    {
-        return $this->hasMany(Profesional::className(), ['UNICODIGOES' => 'UNICODIGOES']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getRegdiarios()
     {
         return $this->hasMany(Regdiario::className(), ['UNICODIGOES' => 'UNICODIGOES']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTarjControlvacs()
+    {
+        return $this->hasMany(TarjControlvac::className(), ['UNICODIGOES' => 'UNICODIGOES']);
     }
 }

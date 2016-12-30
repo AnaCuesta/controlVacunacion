@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel frontend\models\EstablecimientoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Establecimiento de Salud';
+$this->title = 'Establecimientos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="establecimiento-index">
@@ -25,15 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'UNICODIGOES',
+            'ZONA',
+            'DISTRITO',
             'NOMBREESTABLECIMIENTO',
-            'CODDISTRITO',
             'CODZONAUBIC',
-            'TIPOESTABLECIMIENTO',
+            // 'TIPOESTABLECIMIENTO',
             // 'CODPARROQUIA',
             // 'LOCALIDADEST',
-            // 'CODCANTON',
-            // 'CODPROVINCIA',
-            // 'CODZONA',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

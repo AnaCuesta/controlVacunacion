@@ -7,6 +7,10 @@ use frontend\models\Edad;
 use frontend\models\Nacionalidad;
 use frontend\models\Autoidetnica;
 use frontend\models\Lugarresidencia;
+use frontend\models\Provincia;
+use frontend\models\Canton;
+use frontend\models\Parroquia;
+use frontend\models\Localidad;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Ciudadano */
@@ -37,6 +41,12 @@ $nacionalidad = Nacionalidad::find()->where(['CODNACIONALIDAD'=> $model->CODNACI
 $etnia = Autoidetnica::find()->where(['CODAUTOIDETNICA'=> $model->CODAUTOIDETNICA])->one();
 $reside = Lugarresidencia::find()->where(['CODLUGARRESIDE'=> $model->CODLUGARRESIDE])->one();
 
+$localidad = Localidad::find()->where(['CODLOCREC' => $reside->CODLOCREC])->one();
+$parroquia = Parroquia::find()->where(['CODPARROQUIA' => $localidad->CODPARROQUIA])->one();
+$canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
+$provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();
+
+
 
 
 echo  DetailView::widget([
@@ -44,34 +54,56 @@ echo  DetailView::widget([
         'attributes' => [
             'N_HISTCLINIC',
             'CEDULA',
-            'APELLIDOS',
-            'NOMBRES',
             [                      // the owner name of the model
-              'label' => 'CODSEXO',
+              'label' => 'Apellidos y Nombres',
+              'value' => $model->APELLIDOS.' '.$model->NOMBRES,
+            ],
+            [                      // the owner name of the model
+              'label' => 'Sexo',
               'value' => $sexo->SEXO,
             ],
             [                      // the owner name of the model
-              'label' => 'CODEDAD',
+              'label' => 'Edad',
               'value' => $edad->EDADRMA,
             ],
             [                      // the owner name of the model
-              'label' => 'CODNACIONALIDAD',
+              'label' => 'Nacionalidad',
               'value' => $nacionalidad->NACIONALIDAD,
             ],
             [                      // the owner name of the model
-              'label' => 'CODAUTOIDETNICA',
+              'label' => 'Autoidentificacion  étnica',
               'value' => $etnia->AUTOIDETNICA,
             ],
-            [                      // the owner name of the model
-              'label' => 'CODLUGARRESIDE',
+            [// the owner name of the model
+              'label' => 'Lugar de residencia',
               'value' => $reside->LUGARRESIDENCIA,
+            ],
+            [// the owner name of the model
+              'label' => 'Localidad',
+              'value' => $localidad->LOCALREC,
+            ],
+            [                      // the owner name of the model
+              'label' => 'Parroquia',
+              'value' => $parroquia->PARROQUIA,
+            ],
+            [                      // the owner name of the model
+              'label' => 'Canton',
+              'value' => $canton->CANTON,
+            ],
+            [                      // the owner name of the model
+              'label' => 'Provincia',
+              'value' => $provincia->PROVINCIA,
             ],
             'DIRCIUD',
             'LONGITUD',
             'LAT',
             'TELFCIUD',
             'CORREOCIUD',
-            'SNPERTENECEUO',
+            [                      // the owner name of the model
+              'label' => 'Pertenece al Establecimiento de Salud',
+              'value' => $model->SNPERTENECEUO,
+            ],
+
         ],
       ]);
     ?>

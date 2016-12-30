@@ -4,13 +4,13 @@ namespace frontend\controllers;
 
 use Yii;
 use frontend\models\Establecimiento;
+use frontend\models\Canton;
+use frontend\models\Provincia;
 use frontend\models\EstablecimientoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use frontend\models\Zona;
-use frontend\models\Distrito;
-use frontend\models\Nombreestablecimiento;
+use yii\helpers\Json;
 
 /**
  * EstablecimientoController implements the CRUD actions for Establecimiento model.
@@ -31,7 +31,18 @@ class EstablecimientoController extends Controller
             ],
         ];
     }
+    public function actionCanton($id)
+    {
+      $canton = Canton::find()->where(['CODCANTON' => $id])->one();
+      echo Json::encode($canton->CANTON);
+    }
 
+    public function actionProvincia($id)
+    {
+      $canton = Canton::find()->where(['CODCANTON' => $id])->one();
+      $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();
+      echo Json::encode($provincia->PROVINCIA);
+    }
     /**
      * Lists all Establecimiento models.
      * @return mixed
@@ -57,49 +68,6 @@ class EstablecimientoController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
-    }
-    /**
-     * Devuelve todas las zonas
-     *
-     * @return mixed
-     */
-    public function actionListaDistritos($id)
-    {
-
-      $contarZonas  = ZONA::find()->where(['CODZONA'=> $id])->count();
-      $distrito = Distrito::find()->where(['CODZONA'=> $id])->all();
-
-      if($contarZonas > 0){
-        echo "<option>Seleccione la opción..</option>";
-        foreach ($distrito  as  $value) {
-          echo "<option value='".$value->CODDISTRITO."'>".$value->DISTRITO."</option>";
-        }
-      }else {
-        echo "<option></option>";
-      }
-
-    }
-    /**
-     * Devuelve todas los nombres de los establecimientos
-     *
-     * @return mixed
-     */
-    public function actionListaNombreEstablecimiento($id)
-    {
-
-
-      $contarNombreEstablecimiento  = Distrito::find()->where(['CODDISTRITO'=> $id])->count();
-      $Nombreestablecimiento = Nombreestablecimiento::find()->where(['idDistrito'=> $id])->all();
-
-      if($contarNombreEstablecimiento  > 0){
-
-        foreach ($Nombreestablecimiento  as  $value) {
-          echo "<option value='".$value->nombreEstalecimiento."'>".$value->nombreEstalecimiento."</option>";
-        }
-      }else {
-          echo "<option>Seleccione la opción..</option>";
-      }
-
     }
 
     /**
