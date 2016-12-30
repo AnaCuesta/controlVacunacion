@@ -15,6 +15,7 @@ use bookin\aws\checkbox\AwesomeCheckbox;
 use kartik\select2\Select2;
 use frontend\models\Autoidetnica;
 
+
 use yii\helpers\Json;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Ciudadano */
