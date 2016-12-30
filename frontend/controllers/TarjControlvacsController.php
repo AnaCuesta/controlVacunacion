@@ -149,7 +149,7 @@ class TarjControlvacsController extends Controller
     {
 
       $contarVacuna  = Vacuna::find()->where(['CODVACUNA'=> $id])->count();
-      $dosis = Dosis::find()->where(['CODDOSIS'=> $id])->all();
+      $dosis = Dosis::find()->where(['CODVACUNA'=> $id])->all();
 
 
       if($contarVacuna > 0){

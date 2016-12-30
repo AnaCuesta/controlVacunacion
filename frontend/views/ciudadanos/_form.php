@@ -8,6 +8,7 @@ use frontend\models\Edades;
 use frontend\models\Nacionalidad;
 use frontend\models\Provincia;
 use frontend\models\Canton;
+use frontend\models\Ciudadano;
 use frontend\models\Parroquia;
 use bookin\aws\checkbox\AwesomeCheckbox;
 use kartik\select2\Select2;
@@ -76,7 +77,7 @@ use frontend\models\Autoidetnica;
                    'pluginOptions' => [
                        'allowClear' => true
                ],
-    ]); 
+    ]);
     ?>
 
     <?= $form->field($model, 'CANTON')->widget(Select2::classname(), [

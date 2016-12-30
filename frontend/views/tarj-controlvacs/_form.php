@@ -8,6 +8,8 @@ use frontend\models\Establecimiento;
 use kartik\select2\Select2;
 use frontend\models\Ciudadanos;
 use frontend\models\Vacuna;
+use frontend\models\Edades;
+use frontend\models\Esquemavac;
 use wbraganca\dynamicform\DynamicFormWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\TarjControlvacs */
@@ -222,10 +224,33 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         ?>
                         <div class="row">
                             <div class="col-sm-4">
-                                <?= $form->field($modelVacunacion, "[{$i}]CODEDAD")->textInput(['maxlength' => true]) ?>
+                                                <?= $form->field($modelVacunacion, "[{$i}]CODEDAD")->widget(Select2::classname(), [
+                                'data' => ArrayHelper::map(Edades::find()->all(), 'CODEDAD', 'EDADRMA'),
+                                'language' => 'de',
+                                'options' => [  'prompt'=>'Seleccione la opción...',
+                                'onchange'=>'$.post("index.php?r=tarj-controlvacs/listado-dosis&id='.'"+$(this).val(), function( data ){
+                                     $("select#calendariovacunacion-0-coddosis").html( data );
+                                   });',
+                                ],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                         ]); ?>
+
+                          
                             </div>
                             <div class="col-sm-4">
-                                <?= $form->field($modelVacunacion, "[{$i}]idesquemavac")->textInput(['maxlength' => true]) ?>
+                                
+                                 <?= $form->field($modelVacunacion, "[{$i}]idesquemavac")->widget(Select2::classname(), [
+                                'data' => ArrayHelper::map(Esquemavac::find()->all(), 'idesquemavac', 'esquemavac'),
+                                'language' => 'de',
+                                'options' => [  'prompt'=>'Seleccione la opción...',
+                              
+                                ],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                         ]); ?>
                             </div>
                        
                         <div class="col-sm-4">
@@ -262,7 +287,19 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                 <?= $form->field($modelVacunacion, "[{$i}]FECHAVACUNA")->textInput(['disabled'=>true, 'value' => date('d-m-Y')]) ?>
                             </div>
                            <div class="col-sm-4">
-                                <?= $form->field($modelVacunacion, "[{$i}]CODPROXIMAVACUNA")->textInput(['maxlength' => true]) ?>
+
+                                    <?= $form->field($modelVacunacion, "[{$i}]CODPROXIMAVACUNA")->widget(Select2::classname(), [
+                                'data' => ArrayHelper::map(Vacuna::find()->all(), 'CODVACUNA', 'VACUNA'),
+                                'language' => 'de',
+                                'options' => [  'prompt'=>'Seleccione la opción...',
+                                'onchange'=>'$.post("index.php?r=tarj-controlvacs/listado-dosis&id='.'"+$(this).val(), function( data ){
+                                     $("select#calendariovacunacion-0-codproximadosis").html( data );
+                                   });',
+                                ],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                         ]); ?>
                             </div>
                        
  
@@ -270,7 +307,14 @@ use wbraganca\dynamicform\DynamicFormWidget;
                           <div class="row">
   
                             <div class="col-sm-4">
-                                <?= $form->field($modelVacunacion, "[{$i}]CODPROXIMADOSIS")->textInput(['maxlength' => true]) ?>
+                                                 <?= $form->field($modelVacunacion, "[{$i}]CODPROXIMADOSIS")->widget(Select2::classname(), [
+                                'language' => 'de',
+                                'options' => [  'prompt'=>'Seleccione la opción...'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                         ]); 
+                         ?>
                             </div>
 
                          <div class="col-sm-4">

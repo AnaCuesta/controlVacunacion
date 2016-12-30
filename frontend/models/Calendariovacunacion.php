@@ -48,7 +48,7 @@ class Calendariovacunacion extends \yii\db\ActiveRecord
         return [
             'idCalendario' => 'Id Calendario',
             'CODEDAD' => 'Edad',
-            'idesquemavac' => 'Idesquemavac',
+            'idesquemavac' => 'Esquema de Vacunación',
             'CODVACUNA' => 'Vacuna',
             'CODDOSIS' => 'Dosis',
             'FECHAPROXIMA' => 'Fecha de Aplicacion Proxima Vacuna',
