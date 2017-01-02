@@ -33,6 +33,14 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'CODLUGARRESIDE') ?>
 
+    <?php // echo $form->field($model, 'CODPROVINCIA') ?>
+
+    <?php // echo $form->field($model, 'CODCANTON') ?>
+
+    <?php // echo $form->field($model, 'CODPARROQUIA') ?>
+
+    <?php // echo $form->field($model, 'CODLOCALIDAD') ?>
+
     <?php // echo $form->field($model, 'DIRCIUD') ?>
 
     <?php // echo $form->field($model, 'LONGITUD') ?>

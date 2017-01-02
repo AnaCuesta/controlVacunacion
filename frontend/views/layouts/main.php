@@ -50,7 +50,7 @@ AppAsset::register($this);
 
             [
 
-            'label' => 'Ciudadano',   'url' => ['/ciudadanos/index'],
+            'label' => 'Ciudadano',   'url' => ['/ciudadano/index'],
             //'options' => ['class'=>'text-strong']
             ],
 
@@ -58,7 +58,7 @@ AppAsset::register($this);
               'label' => 'Establecimiento',   'url' => ['/establecimiento/index'],
             ],
 
-            ['label' => 'Tarjeta de Control de Vacunación',  'url' => ['tarj-controlvacs/index']],
+            ['label' => 'Tarjeta de Control de Vacunación',  'url' => ['tarj-controlvac/index']],
 
 
             ['label' => 'Registros',  'url' => ['regdiarios/index']],

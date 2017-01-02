@@ -53,14 +53,14 @@ class Establecimiento extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'UNICODIGOES' => 'Unicodigoes',
-            'ZONA' => 'Zona',
-            'DISTRITO' => 'Distrito',
-            'NOMBREESTABLECIMIENTO' => 'Nombreestablecimiento',
-            'CODZONAUBIC' => 'Codzonaubic',
-            'TIPOESTABLECIMIENTO' => 'Tipoestablecimiento',
-            'CODPARROQUIA' => 'Codparroquia',
-            'LOCALIDADEST' => 'Localidadest',
+          'UNICODIGOES' => 'Unicódigo E.S',
+          'NOMBREESTABLECIMIENTO' => 'Nombre del Establecimiento',
+          'CODDISTRITO' => 'Coddistrito',
+          'CODZONAUBIC' => 'Zona Ubicación:',
+          'TIPOESTABLECIMIENTO' => 'Tipo de Establecimiento',
+          'CODPARROQUIA' => 'Parroquia',
+          'LOCALIDADEST' => 'Nombre de la localidad o Institución',
+          'CODZONA' => 'Zona',
         ];
     }
 

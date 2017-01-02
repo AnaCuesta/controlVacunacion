@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\Establecimiento;
 use frontend\models\Canton;
+use frontend\models\Parroquia;
 use frontend\models\Provincia;
 use frontend\models\EstablecimientoSearch;
 use yii\web\Controller;
@@ -33,13 +34,15 @@ class EstablecimientoController extends Controller
     }
     public function actionCanton($id)
     {
-      $canton = Canton::find()->where(['CODCANTON' => $id])->one();
+      $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $id])->one();
+      $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
       echo Json::encode($canton->CANTON);
     }
 
     public function actionProvincia($id)
     {
-      $canton = Canton::find()->where(['CODCANTON' => $id])->one();
+      $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $id])->one();
+      $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
       $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();
       echo Json::encode($provincia->PROVINCIA);
     }

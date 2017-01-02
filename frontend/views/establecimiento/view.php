@@ -2,6 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use frontend\models\ZonaUbic;
+use frontend\models\Provincia;
+use frontend\models\Canton;
+use frontend\models\Parroquia;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Establecimiento */
@@ -25,18 +29,45 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
+
+<?php
+    $nombre = ZonaUbic::find()->where(['CODZONAUBIC' => $model->CODZONAUBIC])->one();
+    $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $model->CODPARROQUIA])->one();
+    $nombreCanton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
+    $nombreProvincia = Provincia::find()->where(['CODPROVINCIA' =>   $nombreCanton->CODPROVINCIA])->one();
+
+    echo DetailView::widget([
         'model' => $model,
         'attributes' => [
             'UNICODIGOES',
-            'ZONA',
-            'DISTRITO',
-            'NOMBREESTABLECIMIENTO',
-            'CODZONAUBIC',
+              [
+                'label' => 'Zona Ubicación',
+                'value' =>  $nombre->ZONAUBICACION,
+              ],
+              [
+                'label' => 'Distrito',
+                'value' =>  $model->DISTRITO,
+              ],
+              [
+                'label' => 'Provincia',
+                'value' =>$nombreProvincia->PROVINCIA,
+              ],
+              [
+                'label' => 'Cantón',
+                'value' => $nombreCanton->CANTON,
+              ],
+              [
+                'label' => 'Parroquia',
+                'value' =>$parroquia->PARROQUIA
+              ],
+              [
+                'label' => 'Zona',
+                'value' =>$model->ZONA
+              ],
             'TIPOESTABLECIMIENTO',
-            'CODPARROQUIA',
             'LOCALIDADEST',
         ],
-    ]) ?>
+    ]);
+ ?>
 
 </div>
