@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel frontend\models\RegdiariosSearch */
+/* @var $searchModel frontend\models\CalendariovacunacionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Regdiarios';
+$this->title = 'Calendariovacunacions';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="regdiarios-index">
+<div class="calendariovacunacion-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Regdiarios', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Calendariovacunacion', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,13 +24,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'CODREGISTRODIARIO',
-            'UNICODIGOES',
-            'CODTIPODOC',
-            'NUMORDENR',
-            'DIASVACMES',
-            // 'TOTALRD',
-            // 'NOMBREVACUNADOR',
+            'IDCALENDARIO',
+            'CODTARCONTVAC',
+            'CODDOSIS',
+            'CODEDAD',
+            'FECHAVACUNA',
+            // 'ESTADO',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

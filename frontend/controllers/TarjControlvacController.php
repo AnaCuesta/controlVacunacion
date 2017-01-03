@@ -18,6 +18,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
+use frontend\models\Calendariovacunacion;
+use frontend\models\Vacuna;
+use frontend\models\Dosis;
 /**
  * TarjControlvacController implements the CRUD actions for TarjControlvac model.
  */
@@ -37,6 +40,29 @@ class TarjControlvacController extends Controller
             ],
         ];
     }
+
+    /**
+      *  Lista las dosis
+      * @return mixed
+      */
+     public function actionListadoDosis($id)
+     {
+
+
+       $contarVacuna  = Vacuna::find()->where(['CODVACUNA'=> $id])->count();
+       $dosis = Dosis::find()->where(['CODVACUNA'=> $id])->all();
+
+
+       if($contarVacuna > 0){
+         echo "<option>Seleccione la opción..</option>";
+         foreach ($dosis  as  $value) {
+           echo "<option value='".$value->CODDOSIS."'>".$value->DOSIS."</option>";
+         }
+       }else {
+         echo "<option></option>";
+       }
+
+     }
 
     /*Establecimiento*/
 
@@ -347,13 +373,20 @@ class TarjControlvacController extends Controller
     {
         $model = new TarjControlvac();
 
+        $modelVacunacion = [new Calendariovacunacion];
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->CODTARCONTVAC]);
+
+        return $this->redirect(['view', 'id' => $model->CODTARCONTVAC]);
+
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        return $this->render('create', [
+            'model' => $model,
+            'modelVacunacion' => (empty($modelVacunacion)) ? [new Calendariovacunacion] : $modelVacunacion
+        ]);
         }
+
+
     }
 
     /**

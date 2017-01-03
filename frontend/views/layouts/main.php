@@ -61,7 +61,7 @@ AppAsset::register($this);
             ['label' => 'Tarjeta de Control de Vacunación',  'url' => ['tarj-controlvac/index']],
 
 
-            ['label' => 'Registros',  'url' => ['regdiarios/index']],
+            ['label' => 'Registros',  'url' => ['regdiario/index']],
 
 
 

@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\RegdiariosSearch */
+/* @var $model frontend\models\RegdiarioSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="regdiarios-search">
+<div class="regdiario-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -21,11 +21,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'CODTIPODOC') ?>
 
-    <?= $form->field($model, 'NUMORDENR') ?>
+    <?= $form->field($model, 'CODLUGARVACUNACION') ?>
 
-    <?= $form->field($model, 'DIASVACMES') ?>
+    <?= $form->field($model, 'DESCRIPCIONESCENARIOVAC') ?>
 
-    <?php // echo $form->field($model, 'TOTALRD') ?>
+    <?php // echo $form->field($model, 'FECHAREGISTROVAC') ?>
+
+    <?php // echo $form->field($model, 'N_HISTCLINIC') ?>
+
+    <?php // echo $form->field($model, 'CODEDAD') ?>
 
     <?php // echo $form->field($model, 'NOMBREVACUNADOR') ?>
 

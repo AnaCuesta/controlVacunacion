@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Regdiarios */
+/* @var $model frontend\models\Regdiario */
 
 $this->title = $model->CODREGISTRODIARIO;
 $this->params['breadcrumbs'][] = ['label' => 'Regdiarios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="regdiarios-view">
+<div class="regdiario-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -31,9 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'CODREGISTRODIARIO',
             'UNICODIGOES',
             'CODTIPODOC',
-            'NUMORDENR',
-            'DIASVACMES',
-            'TOTALRD',
+            'CODLUGARVACUNACION',
+            'DESCRIPCIONESCENARIOVAC',
+            'FECHAREGISTROVAC',
+            'N_HISTCLINIC',
+            'CODEDAD',
             'NOMBREVACUNADOR',
         ],
     ]) ?>

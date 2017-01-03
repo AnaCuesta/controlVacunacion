@@ -7,19 +7,21 @@ use Yii;
 /**
  * This is the model class for table "calendariovacunacion".
  *
- * @property integer $idCalendario
- * @property integer $CODEDAD
- * @property integer $idesquemavac
- * @property integer $CODVACUNA
- * @property integer $CODDOSIS
- * @property string $FECHAPROXIMA
- * @property integer $CODPROXIMAVACUNA
- * @property integer $CODPROXIMADOSIS
+ * @property integer $IDCALENDARIO
  * @property integer $CODTARCONTVAC
+ * @property integer $CODDOSIS
+ * @property integer $CODEDAD
  * @property string $FECHAVACUNA
+ * @property string $ESTADO
+ *
+ * @property Dosis $cODDOSIS
+ * @property Edad $cODEDAD
+ * @property TarjControlvac $cODTARCONTVAC
  */
-class Calendariovacunacion extends \yii\db\ActiveRecord
+class calendariovacunacion extends \yii\db\ActiveRecord
 {
+    public $vacuna;
+    public $rangoEdad;
     /**
      * @inheritdoc
      */
@@ -34,9 +36,13 @@ class Calendariovacunacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['CODEDAD', 'idesquemavac', 'CODVACUNA', 'CODDOSIS', 'FECHAPROXIMA', 'CODPROXIMAVACUNA', 'CODPROXIMADOSIS', 'CODTARCONTVAC', 'FECHAVACUNA'], 'required'],
-            [['CODEDAD', 'idesquemavac', 'CODVACUNA', 'CODDOSIS', 'CODPROXIMAVACUNA', 'CODPROXIMADOSIS', 'CODTARCONTVAC'], 'integer'],
-            [['FECHAPROXIMA', 'FECHAVACUNA'], 'safe'],
+            [['CODTARCONTVAC', 'CODDOSIS', 'CODEDAD', 'FECHAVACUNA', 'ESTADO'], 'required'],
+            [['CODTARCONTVAC', 'CODDOSIS', 'CODEDAD'], 'integer'],
+            [['FECHAVACUNA'], 'safe'],
+            [['ESTADO'], 'string', 'max' => 20],
+            [['CODDOSIS'], 'exist', 'skipOnError' => true, 'targetClass' => Dosis::className(), 'targetAttribute' => ['CODDOSIS' => 'CODDOSIS']],
+            [['CODEDAD'], 'exist', 'skipOnError' => true, 'targetClass' => Edad::className(), 'targetAttribute' => ['CODEDAD' => 'CODEDAD']],
+            [['CODTARCONTVAC'], 'exist', 'skipOnError' => true, 'targetClass' => TarjControlvac::className(), 'targetAttribute' => ['CODTARCONTVAC' => 'CODTARCONTVAC']],
         ];
     }
 
@@ -46,16 +52,37 @@ class Calendariovacunacion extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idCalendario' => 'Id Calendario',
-            'CODEDAD' => 'Edad',
-            'idesquemavac' => 'Esquema de Vacunación',
-            'CODVACUNA' => 'Vacuna',
+            'IDCALENDARIO' => 'Idcalendario',
+            'CODTARCONTVAC' => 'Codtarcontvac',
             'CODDOSIS' => 'Dosis',
-            'FECHAPROXIMA' => 'Fecha de Aplicacion Proxima Vacuna',
-            'CODPROXIMAVACUNA' => 'Proxima Vacuna',
-            'CODPROXIMADOSIS' => 'Proxima Dosis',
-            //'CODTARCONTVAC' => 'Codtarcontvac',
-            'FECHAVACUNA' => 'Fecha de Aplicación Vacuna',
+            'CODEDAD' => 'Edad',
+            'FECHAVACUNA' => 'Fecha de aplicación',
+            'ESTADO' => 'Estado',
+            'rangoEdad' => 'Edad Recomendada de Aplicación',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCODDOSIS()
+    {
+        return $this->hasOne(Dosis::className(), ['CODDOSIS' => 'CODDOSIS']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCODEDAD()
+    {
+        return $this->hasOne(Edad::className(), ['CODEDAD' => 'CODEDAD']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCODTARCONTVAC()
+    {
+        return $this->hasOne(TarjControlvac::className(), ['CODTARCONTVAC' => 'CODTARCONTVAC']);
     }
 }

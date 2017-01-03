@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Regdiarios */
+/* @var $model frontend\models\Regdiario */
 
-$this->title = 'Create Regdiarios';
+$this->title = 'Create Regdiario';
 $this->params['breadcrumbs'][] = ['label' => 'Regdiarios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="regdiarios-create">
+<div class="regdiario-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
