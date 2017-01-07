@@ -4,6 +4,7 @@ use Yii;
 use frontend\models\Ciudadano;
 use frontend\models\Localidad;
 use frontend\models\Parroquia;
+use frontend\models\Lugarresidencia;
 use frontend\models\Canton;
 use frontend\models\Provincia;
 use frontend\models\CiudadanoSearch;
@@ -106,7 +107,8 @@ class CiudadanoController extends Controller
      */
     public function actionLugarResidencia($id)
     {
-      $localidad = Localidad::find()->where(['CODLOCREC' => $id])->one();
+      $lugar = Lugarresidencia::find()->where(['CODLUGARRESIDE' => $id])->one();
+      $localidad = Localidad::find()->where(['CODLOCREC' => $lugar->CODLOCREC])->one();
       echo Json::encode($localidad->LOCALREC);
     }
     /**
@@ -117,7 +119,8 @@ class CiudadanoController extends Controller
      */
     public function actionParroquia($id)
     {
-      $localidad = Localidad::find()->where(['CODLOCREC' => $id])->one();
+      $lugar = Lugarresidencia::find()->where(['CODLUGARRESIDE' => $id])->one();
+      $localidad = Localidad::find()->where(['CODLOCREC' =>$lugar->CODLOCREC])->one();
       $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $localidad->CODPARROQUIA])->one();
       echo Json::encode($parroquia->PARROQUIA);
     }
@@ -129,7 +132,8 @@ class CiudadanoController extends Controller
      */
     public function actionCanton($id)
     {
-      $localidad = Localidad::find()->where(['CODLOCREC' => $id])->one();
+      $lugar = Lugarresidencia::find()->where(['CODLUGARRESIDE' => $id])->one();
+      $localidad = Localidad::find()->where(['CODLOCREC' =>$lugar->CODLOCREC])->one();
       $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $localidad->CODPARROQUIA])->one();
       $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
       echo Json::encode($canton->CANTON);
@@ -142,7 +146,8 @@ class CiudadanoController extends Controller
      */
     public function actionProvincia($id)
     {
-      $localidad = Localidad::find()->where(['CODLOCREC' => $id])->one();
+      $lugar = Lugarresidencia::find()->where(['CODLUGARRESIDE' => $id])->one();
+      $localidad = Localidad::find()->where(['CODLOCREC' => $lugar->CODLOCREC])->one();
       $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $localidad->CODPARROQUIA])->one();
       $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
       $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();

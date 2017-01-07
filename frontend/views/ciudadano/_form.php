@@ -68,6 +68,7 @@ use yii\helpers\Json;
     ]);?>
 
 
+
     <?= $form->field($model, 'CODLUGARRESIDE')->widget(Select2::classname(), [
                'data' => ArrayHelper::map(Lugarresidencia::find()->all(), 'CODLUGARRESIDE', 'LUGARRESIDENCIA'),
                'language' => 'de',
