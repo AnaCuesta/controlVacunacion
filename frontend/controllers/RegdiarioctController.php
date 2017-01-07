@@ -17,7 +17,7 @@ use frontend\models\Parroquia;
 /**
  * RegdiarioController implements the CRUD actions for Regdiario model.
  */
-class RegdiarioController extends Controller
+class RegdiarioctController extends Controller
 {
     /**
      * @inheritdoc

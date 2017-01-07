@@ -20,9 +20,6 @@ use yii\helpers\ArrayHelper;
 
                 <?= $form->field($model, 'CODREGISTRODIARIO')->textInput() ?>
 
-
-
-
                 <?php
                 echo '<label>Ingrese la  fecha de la vacunación</label>';
 

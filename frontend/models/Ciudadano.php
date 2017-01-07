@@ -1,9 +1,6 @@
 <?php
-
 namespace frontend\models;
-
 use Yii;
-
 /**
  * This is the model class for table "ciudadano".
  *
@@ -37,12 +34,10 @@ class Ciudadano extends \yii\db\ActiveRecord
     public $parroquia;
     public $canton;
     public $provincia;
-
     public static function tableName()
     {
         return 'ciudadano';
     }
-
     /**
      * @inheritdoc
      */
@@ -64,36 +59,34 @@ class Ciudadano extends \yii\db\ActiveRecord
             [['CODNACIONALIDAD'], 'exist', 'skipOnError' => true, 'targetClass' => Nacionalidad::className(), 'targetAttribute' => ['CODNACIONALIDAD' => 'CODNACIONALIDAD']],
         ];
     }
-
     /**
      * @inheritdoc
      */
     public function attributeLabels()
     {
         return [
-              'N_HISTCLINIC' => 'N° Historia Clínica',
-              'CEDULA' => 'Cédula',
-              'APELLIDOS' => 'Apellidos',
-              'NOMBRES' => 'Nombres',
-              'CODSEXO' => 'Sexo',
-              'CODEDAD' => 'Edad',
-              'CODNACIONALIDAD' => 'Nacionalidad',
-              'CODAUTOIDETNICA' => 'Autoidentificación étnica',
-              'CODLUGARRESIDE' => 'Lugar de Residencia',
-              'PROVINCIA' => 'Provincia',
-              'CANTON' => 'Cantón',
-              'PARROQUIA' => 'Parroquia',
-              'CODLOCALIDAD' => 'Localidad',
-              'DIRCIUD' => 'Dirección',
-              'LONGITUD' => 'Longitud',
-              'LAT' => 'Latitud',
-              'TELFCIUD' => 'Teléfono',
-              'CORREOCIUD' => 'Correo Electrónico',
-              'SNPERTENECEUO' => 'SELECCIONE:',
-              'idCiudadano' => 'Id Ciudadano',
+                  'N_HISTCLINIC' => 'N° Historia Clínica',
+                  'CEDULA' => 'Cédula',
+                  'APELLIDOS' => 'Apellidos',
+                  'NOMBRES' => 'Nombres',
+                  'CODSEXO' => 'Sexo',
+                  'CODEDAD' => 'Edad',
+                  'CODNACIONALIDAD' => 'Nacionalidad',
+                  'CODAUTOIDETNICA' => 'Autoidentificación étnica',
+                  'CODLUGARRESIDE' => 'Lugar de Residencia',
+                  'PROVINCIA' => 'Provincia',
+                  'CANTON' => 'Cantón',
+                  'PARROQUIA' => 'Parroquia',
+                  'CODLOCALIDAD' => 'Localidad',
+                  'DIRCIUD' => 'Dirección',
+                  'LONGITUD' => 'Longitud',
+                  'LAT' => 'Latitud',
+                  'TELFCIUD' => 'Teléfono',
+                  'CORREOCIUD' => 'Correo Electrónico',
+                  'SNPERTENECEUO' => 'SELECCIONE:',
+                  'idCiudadano' => 'Id Ciudadano',
         ];
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -101,7 +94,6 @@ class Ciudadano extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Autoidetnica::className(), ['CODAUTOIDETNICA' => 'CODAUTOIDETNICA']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -109,7 +101,6 @@ class Ciudadano extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Genero::className(), ['CODSEXO' => 'CODSEXO']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -117,7 +108,6 @@ class Ciudadano extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Lugarresidencia::className(), ['CODLUGARRESIDE' => 'CODLUGARRESIDE']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -125,7 +115,6 @@ class Ciudadano extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Edad::className(), ['CODEDAD' => 'CODEDAD']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -133,7 +122,6 @@ class Ciudadano extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Nacionalidad::className(), ['CODNACIONALIDAD' => 'CODNACIONALIDAD']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -141,7 +129,6 @@ class Ciudadano extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Ciudadanoregd::className(), ['N_HISTCLINIC' => 'N_HISTCLINIC']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */

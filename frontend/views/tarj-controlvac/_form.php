@@ -16,6 +16,8 @@ use frontend\models\REdadVac;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\TarjControlvac */
 /* @var $form yii\widgets\ActiveForm */
+
+
 ?>
 
 <div class="tarj-controlvac-form">
@@ -180,7 +182,7 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                     'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                     'widgetBody' => '.container-items', // required: css class selector
                     'widgetItem' => '.item', // required: css class
-                    'limit' => 5, // the maximum times, an element can be cloned (default 999)
+                    'limit' => 20, // the maximum times, an element can be cloned (default 999)
                     'min' => 1, // 0 or 1 (default 1)
                     'insertButton' => '.add-item', // css class
                     'deleteButton' => '.remove-item', // css class
@@ -198,9 +200,9 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                 <div class="container-items"><!-- widgetContainer -->
 
                 <?php  foreach ($modelVacunacion as $i => $modelVacunacion):  ?>
-                    <div class="item panel panel-success"><!-- widgetBody -->
-                        <div class="panel-heading">
-                            <h3 class="panel-title pull-left">Calendario de Vacunación</h3>
+                    <div class="item panel panel-success"><!-- widgetBody  -->
+                        <div class="panel-heading" id="cblist">
+                            <h3 class="panel-title pull-left"><input type="checkbox" id="check"  class="check" value="0">0</h3>
                             <div class="pull-right">
                                 <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
                                 <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
@@ -215,7 +217,7 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                                 }
                             ?>
                            <div class="row">
-                                <div class="col-sm-4">
+                              <div class="col-sm-4">
 
                               <?php
 
@@ -254,20 +256,48 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
 
                                 <div class="col-sm-4">
 
+
+
+                                  <?php
+                                  $vacuna = Vacuna::find()->where("
+
+                                  VACUNA = 'BCG' or VACUNA = 'HB' OR
+                                  VACUNA  = 'Rotavirus' OR
+                                  VACUNA  = 'Pentavalente' OR
+                                  VACUNA  = 'OPV' OR
+                                  VACUNA  = 'Neumococo conjugada' OR
+                                  VACUNA  = 'SR' OR
+                                  VACUNA  = 'SRP' OR
+                                  VACUNA  = 'Varicela' OR
+                                  VACUNA  = 'Varicela' OR
+                                  VACUNA  = 'FA' OR
+                                  VACUNA  = 'DPT' OR
+                                  VACUNA  = 'Influenza estacional'
+
+                                  ")->all();
+
+                                   ?>
+
+
                                 <?= $form->field($modelVacunacion, "[{$i}]vacuna")->dropDownList(
-                                  ArrayHelper::map(Vacuna::find()->all(), 'CODVACUNA', 'VACUNA'),
+                                  ArrayHelper::map($vacuna, 'CODVACUNA', 'VACUNA'),
                                   [
                                     'prompt'=>'Seleccione...',
-                                    'onchange'=>'$.post("index.php?r=tarj-controlvac/listado-dosis&id='.'"+$(this).val(), function( data ){
-                                      var x = document.getElementById("valor").innerHTML;
+                                    'onchange'=>'
+                                    $.post("index.php?r=tarj-controlvac/listado-rango-edad&id='.'"+$(this).val(), function( data ){
 
-                                      $("select#calendariovacunacion-"+x+"-coddosis").html( data );
+                                    //$("select#calendariovacunacion-0-rangoedad").html( data );
+
+                                     //$("select#"+cadenaId+"coddosis").html( data );
+
                                     });',
                                   ]
                                ); ?>
                                 </div>
 
                                 <div class="col-sm-4">
+
+
                                   <?= $form->field($modelVacunacion, "[{$i}]CODDOSIS")->dropDownList(
                                     [
                                       'prompt'=>'Seleccione la opcion...',
@@ -281,18 +311,8 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
 
                               <div class="col-sm-4">
 
-                                  <?php
-                                      echo '<label>Fecha de Aplicación</label>';
-                                      echo DatePicker::widget([
-                                      'name' => $form->field($modelVacunacion, "[{$i}]FECHAVACUNA"),
-                                      'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                                      'value' => '',
-                                      'pluginOptions' => [
-                                      'autoclose'=>true,
-                                      'format' => 'dd-M-yyyy'
-                                      ]
-                                      ]);
-                                  ?>
+                                <?= $form->field($modelVacunacion, "[{$i}]FECHAVACUNA")->textInput(['type' => 'date']) ?>
+
                               </div>
 
                             <div class="col-sm-4">
@@ -301,9 +321,7 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                                 ArrayHelper::map(REdadVac::find()->all(), 'CODRANGOEDAD', 'RANGOEDAD'),
                                 [
                                   'prompt'=>'Seleccione...',
-                                  'onchange'=>'$.post("index.php?r=tarj-controlvac/listado-dosis&id='.'"+$(this).val(), function( data ){
-                                  $("select#calendariovacunacion-0-coddosis").html( data );
-                                  });',
+
                                 ]
                              ); ?>
 
@@ -337,22 +355,105 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
 
     <?php ActiveForm::end(); ?>
 
-<p id="valor" class="hide">0</p>
 </div>
 <?php
 $script = <<< JS
 
 var x = 0;
+
 $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
- x=x-1;
- document.getElementById("valor").innerHTML = x ;
+ //x=x-1;
+ //document.getElementById("valor").innerHTML = x ;
+
+ $(".dynamicform_wrapper .panel-title").each(function(i) {
+
+   $(this).html('<input type="checkbox" id="check'+i+'"  class="check" value='+i+'>'+(i));
+
+});
+
 });
 
 
-$(".dynamicform_wrapper").on("beforeInsert", function(e, item) {
-x=x+1;
-document.getElementById("valor").innerHTML = x ;
+$(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+
+
+    $(".dynamicform_wrapper .panel-title").each(function(i) {
+       $(this).html('<input type="checkbox" id="check'+i+'"  class="check" value='+i+'>'+(i));
+
+      $(document).ready(function(){
+
+        $("select#calendariovacunacion-"+1+"-codedad").prop("disabled", true);
+        $("select#calendariovacunacion-"+1+"-vacuna").prop("disabled", true);
+        $("select#calendariovacunacion-"+1+"-coddosis").prop("disabled", true);
+        $("#calendariovacunacion-"+1+"-fechavacuna").prop("disabled", true);
+        $("#calendariovacunacion-"+1+"-estado").prop("disabled", true);
+        $("#calendariovacunacion-"+1+"-rangoedad").prop("disabled", true);
+
+        $("select#calendariovacunacion-"+2+"-codedad").prop("disabled", true);
+        $("select#calendariovacunacion-"+2+"-vacuna").prop("disabled", true);
+        $("select#calendariovacunacion-"+2+"-coddosis").prop("disabled", true);
+        $("#calendariovacunacion-"+2+"-fechavacuna").prop("disabled", true);
+        $("#calendariovacunacion-"+2+"-estado").prop("disabled", true);
+        $("#calendariovacunacion-"+2+"-rangoedad").prop("disabled", true);
+
+
+          $("input").bind("click", function(){
+            if ($("#check1").is(":checked"))
+            {
+              $("select#calendariovacunacion-"+1+"-codedad").prop("disabled", false);
+              $("select#calendariovacunacion-"+1+"-vacuna").prop("disabled", false);
+              $("select#calendariovacunacion-"+1+"-coddosis").prop("disabled", false);
+              $("#calendariovacunacion-"+1+"-fechavacuna").prop("disabled", false);
+              $("#calendariovacunacion-"+1+"-estado").prop("disabled", false);
+              $("#calendariovacunacion-"+1+"-rangoedad").prop("disabled", false);
+
+              $("#calendariovacunacion-"+1+"-vacuna").change(function(){
+
+                $.post("index.php?r=tarj-controlvac/listado-dosis&id="+$(this).val(), function( data ){
+                  $("select#calendariovacunacion-"+1+"-coddosis").html( data );
+                });
+                  $.post("index.php?r=tarj-controlvac/listado-rango-edad&id="+$(this).val(), function( data ){
+                  $("select#calendariovacunacion-"+1+"-rangoedad").html( data );
+                });
+              });
+
+            }else{
+              $("select#calendariovacunacion-"+1+"-codedad").prop("disabled", true);
+              $("select#calendariovacunacion-"+1+"-vacuna").prop("disabled", true);
+              $("select#calendariovacunacion-"+1+"-coddosis").prop("disabled", true);
+              $("#calendariovacunacion-"+1+"-fechavacuna").prop("disabled", true);
+              $("#calendariovacunacion-"+1+"-estado").prop("disabled", true);
+              $("#calendariovacunacion-"+1+"-rangoedad").prop("disabled", true);
+            }
+
+            if ($("#check2").is(":checked"))
+            {
+              $("select#calendariovacunacion-"+2+"-codedad").prop("disabled", false);
+              $("select#calendariovacunacion-"+2+"-vacuna").prop("disabled", false);
+              $("select#calendariovacunacion-"+2+"-coddosis").prop("disabled", false);
+              $("#calendariovacunacion-"+2+"-fechavacuna").prop("disabled", false);
+              $("#calendariovacunacion-"+2+"-estado").prop("disabled", false);
+              $("#calendariovacunacion-"+2+"-rangoedad").prop("disabled", false);
+
+            }else{
+              $("select#calendariovacunacion-"+2+"-codedad").prop("disabled", true);
+              $("select#calendariovacunacion-"+2+"-vacuna").prop("disabled", true);
+              $("select#calendariovacunacion-"+2+"-coddosis").prop("disabled", true);
+              $("#calendariovacunacion-"+2+"-fechavacuna").prop("disabled", true);
+              $("#calendariovacunacion-"+2+"-estado").prop("disabled", true);
+              $("#calendariovacunacion-"+2+"-rangoedad").prop("disabled", true);
+            }
+
+
+          });
+      });
+
+
+
 });
+
+});
+
 
 $('#idEstablecimiento').change(function(){
 

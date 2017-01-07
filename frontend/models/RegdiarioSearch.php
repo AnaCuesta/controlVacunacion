@@ -19,7 +19,7 @@ class RegdiarioSearch extends Regdiario
     {
         return [
             [['CODREGISTRODIARIO', 'CODTIPODOC', 'CODLUGARVACUNACION', 'CODEDAD'], 'integer'],
-            [['UNICODIGOES', 'DESCRIPCIONESCENARIOVAC', 'FECHAREGISTROVAC', 'N_HISTCLINIC', 'NOMBREVACUNADOR'], 'safe'],
+            [['UNICODIGOES', 'DESCRIPCIONESCENARIOVAC', 'FECHAREGISTROVAC', 'N_HISTCLINIC', 'NOMBREVACUNADOR', 'ESTADO'], 'safe'],
         ];
     }
 
@@ -69,7 +69,8 @@ class RegdiarioSearch extends Regdiario
         $query->andFilterWhere(['like', 'UNICODIGOES', $this->UNICODIGOES])
             ->andFilterWhere(['like', 'DESCRIPCIONESCENARIOVAC', $this->DESCRIPCIONESCENARIOVAC])
             ->andFilterWhere(['like', 'N_HISTCLINIC', $this->N_HISTCLINIC])
-            ->andFilterWhere(['like', 'NOMBREVACUNADOR', $this->NOMBREVACUNADOR]);
+            ->andFilterWhere(['like', 'NOMBREVACUNADOR', $this->NOMBREVACUNADOR])
+            ->andFilterWhere(['like', 'ESTADO', $this->ESTADO]);
 
         return $dataProvider;
     }

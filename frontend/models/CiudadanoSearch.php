@@ -19,7 +19,7 @@ class CiudadanoSearch extends Ciudadano
     {
         return [
             [['N_HISTCLINIC', 'CEDULA', 'APELLIDOS', 'NOMBRES', 'DIRCIUD', 'LONGITUD', 'LAT', 'TELFCIUD', 'CORREOCIUD', 'SNPERTENECEUO'], 'safe'],
-            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODLUGARRESIDE', 'CODPROVINCIA', 'CODCANTON', 'CODPARROQUIA', 'CODLOCALIDAD'], 'integer'],
+            [['CODSEXO', 'CODEDAD', 'CODNACIONALIDAD', 'CODAUTOIDETNICA', 'CODLUGARRESIDE'], 'integer'],
         ];
     }
 
@@ -64,10 +64,6 @@ class CiudadanoSearch extends Ciudadano
             'CODNACIONALIDAD' => $this->CODNACIONALIDAD,
             'CODAUTOIDETNICA' => $this->CODAUTOIDETNICA,
             'CODLUGARRESIDE' => $this->CODLUGARRESIDE,
-            'CODPROVINCIA' => $this->CODPROVINCIA,
-            'CODCANTON' => $this->CODCANTON,
-            'CODPARROQUIA' => $this->CODPARROQUIA,
-            'CODLOCALIDAD' => $this->CODLOCALIDAD,
         ]);
 
         $query->andFilterWhere(['like', 'N_HISTCLINIC', $this->N_HISTCLINIC])

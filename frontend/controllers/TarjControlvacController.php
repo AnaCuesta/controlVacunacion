@@ -21,6 +21,7 @@ use yii\helpers\Json;
 use frontend\models\Calendariovacunacion;
 use frontend\models\Vacuna;
 use frontend\models\Dosis;
+use frontend\models\REdadVac;
 /**
  * TarjControlvacController implements the CRUD actions for TarjControlvac model.
  */
@@ -63,6 +64,27 @@ class TarjControlvacController extends Controller
        }
 
      }
+     /**
+       *  Lista las dosis
+       * @return mixed
+       */
+      public function actionListadoRangoEdad($id)
+      {
+
+
+        $contarVacuna  = Vacuna::find()->where(['CODVACUNA'=> $id])->count();
+        $edad = REdadVac::find()->where(['CODVACUNA'=> $id])->all();
+
+        if($contarVacuna > 0){
+          echo "<option>Seleccione la opción..</option>";
+          foreach ($edad  as  $value) {
+            echo "<option value='".$value->CODRANGOEDAD."'>".$value->RANGOEDAD."</option>";
+          }
+        }else {
+          echo "<option></option>";
+        }
+
+      }
 
     /*Establecimiento*/
 

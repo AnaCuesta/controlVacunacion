@@ -26,6 +26,34 @@ use Yii;
  */
 class Regdiario extends \yii\db\ActiveRecord
 {
+  /*Establecimiento*/
+   public $provincia;
+   public $canton;
+   public $zona;
+   public $parroquia;
+   public $distrito;
+   public $zonaUbicacion;
+   public $uniCodigo;
+   public $tipoEstablecimiento;
+   public $localidad;
+    /*Establecimiento*/
+
+    /*ciudadano*/
+     public $nombresCiudadano;
+     public $apellidosCiudadano;
+     public $nacionalidadCiudadano;
+     public $etniaCiudadano;
+     public $lugarResidenciaCiudadano;
+     public $provinciaCiudadano;
+     public $cantonCiudadano;
+     public $parroquiaCiudadano;
+     public $localidadCiudadano;
+     public $cedulaCiudadano;
+     public $sexoCiudadano;
+     public $perteneceEstablecimientoCiudadano;
+
+
+      /*ciudadano*/
     /**
      * @inheritdoc
      */
@@ -60,15 +88,31 @@ class Regdiario extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'CODREGISTRODIARIO' => 'Codregistrodiario',
-            'UNICODIGOES' => 'Unicodigoes',
-            'CODTIPODOC' => 'Codtipodoc',
-            'CODLUGARVACUNACION' => 'Codlugarvacunacion',
-            'DESCRIPCIONESCENARIOVAC' => 'Descripcionescenariovac',
+            'UNICODIGOES' => 'Nombre del Establecimiento',
+            'uniCodigo' => 'Unicódigo E.S',
+            'CODTIPODOC' => 'Tipo de registro',
+            'canton' => 'Cantón',
+            'CODLUGARVACUNACION' => 'Escenario de la Vacunación',
+            'DESCRIPCIONESCENARIOVAC' => 'Descripción del Escenario de Vacunación',
             'FECHAREGISTROVAC' => 'Fecharegistrovac',
-            'N_HISTCLINIC' => 'N  Histclinic',
-            'CODEDAD' => 'Codedad',
-            'NOMBREVACUNADOR' => 'Nombrevacunador',
+            'N_HISTCLINIC' => 'N°  Historia Clínica',
+            'CODEDAD' => 'Edad',
+            'NOMBREVACUNADOR' => 'Nombre del Vacunador',
+            'lugarResidenciaCiudadano' => 'Lugar Residencia',
+            'perteneceEstablecimientoCiudadano' => 'Pertenence al E.S',
+            'zonaUbicacion' => 'Zona Ubicación ',
+            'localidad' => 'Localidad o Institución',
+            'nombresCiudadano' => 'Nombres',
+            'apellidosCiudadano' => 'Apellidos',
+            'nacionalidadCiudadano' => 'Nacionalidad',
+            'etniaCiudadano' => 'Autoidentificación étnica',
+            'lugarResidenciaCiudadano' => 'Lugar de residencia habitual',
+            'provinciaCiudadano' => 'Provincia',
+            'cantonCiudadano' => 'Cantón',
+            'parroquiaCiudadano' => 'Parroquia',
+            'localidadCiudadano' => 'Localidad',
+            'cedulaCiudadano' => 'Cédula de Ciudadanía',
+            'sexoCiudadano' => 'Sexo'
         ];
     }
 

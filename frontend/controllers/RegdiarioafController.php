@@ -14,10 +14,11 @@ use frontend\models\Canton;
 use frontend\models\Provincia;
 use frontend\models\ZonaUbic;
 use frontend\models\Parroquia;
+
 /**
  * RegdiarioController implements the CRUD actions for Regdiario model.
  */
-class RegdiarioController extends Controller
+class RegdiarioafController extends Controller
 {
     /**
      * @inheritdoc
