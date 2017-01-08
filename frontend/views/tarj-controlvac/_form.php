@@ -208,7 +208,7 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                 <?php  foreach ($modelVacunacion as $i => $modelVacunacion):  ?>
                     <div class="item panel panel-success"><!-- widgetBody  -->
                         <div class="panel-heading" id="cblist">
-                            <h3 class="panel-title pull-left"><input type="checkbox" id="check0"  class="check" value="0">0</h3>
+                            <h3 class="panel-title pull-left"><input type="checkbox" id="check0"  class="check" value="0"><?= $i ?></h3>
                             <div class="pull-right">
                                 <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
                                 <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
@@ -312,6 +312,8 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
 
                               <?php
 
+
+
                               $dosis = Dosis::find()->where(['CODDOSIS' =>  $modelVacunacion->CODDOSIS])->one();
 
                                     if( count($dosis) > 0){
@@ -322,7 +324,7 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                                       echo $form->field($modelVacunacion, "[{$i}]vacuna")->dropDownList(
                                             ArrayHelper::map($vacuna, 'CODVACUNA', 'VACUNA'),
                                             [
-                                              'placeholder'=>$vacunaActualizacion->VACUNA,
+                                              'prompt'=>$vacunaActualizacion->VACUNA,
 
 
                                             ]
@@ -377,7 +379,7 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
 
 
                                         }
-                            
+
 
                                    ?>
 

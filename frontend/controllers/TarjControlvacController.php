@@ -556,8 +556,8 @@ class TarjControlvacController extends Controller
         $oldIDs = ArrayHelper::map($modelVacunacion, 'IDCALENDARIO', 'IDCALENDARIO');
 
         Calendariovacunacion::deleteAll(['IDCALENDARIO' => $oldIDs]);
-        $this->findModel($id)->delete();
 
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
