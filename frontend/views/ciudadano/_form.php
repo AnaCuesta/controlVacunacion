@@ -133,6 +133,20 @@ $script = <<< JS
 //here you right all you code javascript  stuff CODNACIONALIDAD
 $('#idLugarReside').change(function(){
   var idLocalidad = $(this).val();
+  ciudadano(idLocalidad);
+});
+
+$('#idLugarReside').ready(function(){
+
+  var idLocalidad = $('#idLugarReside').val();
+  ciudadano(idLocalidad);
+  
+});
+
+
+
+function ciudadano(idLocalidad){
+
   $.get('index.php?r=ciudadano/lugar-residencia', {id : idLocalidad }, function(data){
       var data = $.parseJSON(data);
       $('#ciudadano-localidad').attr('value', data);
@@ -149,7 +163,12 @@ $('#idLugarReside').change(function(){
       var data = $.parseJSON(data);
       $('#ciudadano-provincia').attr('value', data);
   });
-});
+
+}
+
+
+
+
 JS;
 $this->registerJs($script);
  ?>

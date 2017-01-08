@@ -454,11 +454,8 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                                           ]
                                        );
 
-
-
                                       }
                                      ?>
-
 
                                   </div>
                           </div>
@@ -488,7 +485,78 @@ $script = <<< JS
 var x = 0;
   $(document).ready(function(){
 
+  var idEstablecimiento = $('#idEstablecimiento').val();
 
+  $.get('index.php?r=tarj-controlvac/zona', {id : idEstablecimiento}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-zona').attr('value', data);
+  });
+  $.get('index.php?r=tarj-controlvac/distrito', {id : idEstablecimiento}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-distrito').attr('value', data);
+  });
+  $.get('index.php?r=tarj-controlvac/canton', {id : idEstablecimiento}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-canton').attr('value', data);
+  });
+  $.get('index.php?r=tarj-controlvac/provincia', {id : idEstablecimiento}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-provincia').attr('value', data);
+  });
+
+  var idCiudadano = $('#idCiudadano').val();
+
+  $.get('index.php?r=tarj-controlvac/nombre-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-nombresciudadano').attr('value', data);
+  });
+  $.get('index.php?r=tarj-controlvac/apellido-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-apellidosciudadano').attr('value', data);
+  });
+  $.get('index.php?r=tarj-controlvac/nacionalidad-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-nacionalidadciudadano').attr('value', data);
+  });
+
+  $.get('index.php?r=tarj-controlvac/etnia-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-etniaciudadano').attr('value', data);
+  });
+  $.get('index.php?r=tarj-controlvac/lugar-residencia-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-lugarresidenciaciudadano').attr('value', data);
+  });
+  $.get('index.php?r=tarj-controlvac/provincia-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-provinciaciudadano').attr('value', data);
+  });
+  $.get('index.php?r=tarj-controlvac/canton-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-cantonciudadano').attr('value', data);
+  });
+  $.get('index.php?r=tarj-controlvac/parroquia-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-parroquiaciudadano').attr('value', data);
+  });
+  $.get('index.php?r=tarj-controlvac/localidad-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-localidadciudadano').attr('value', data);
+  });
+
+  $.get('index.php?r=tarj-controlvac/direccion-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-direccionciudadano').attr('value', data);
+  });
+
+  $.get('index.php?r=tarj-controlvac/telefono-ciudadano', {id : idCiudadano}, function(data){
+      var data = $.parseJSON(data);
+      $('#tarjcontrolvac-telefonociudadano').attr('value', data);
+  });
+
+
+
+});
     $("input").bind("click", function(){
       if ($("#check0").is(":checked"))
       {
@@ -505,8 +573,8 @@ var x = 0;
       }
 
 
-    });
 });
+
 
 
 $(".dynamicform_wrapper").on("afterDelete", function(e, item) {

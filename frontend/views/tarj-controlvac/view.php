@@ -2,6 +2,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use frontend\models\Calendariovacunacion;
+use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
+use frontend\models\Vacuna;
+use frontend\models\REdadVac;
+use frontend\models\Dosis;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\TarjControlvac */
@@ -43,5 +49,57 @@ $this->params['breadcrumbs'][] = $this->title;
             'OBSERV:ntext',
         ],
     ]) ?>
+
+
+    <?php
+;
+$dataProvider = new ActiveDataProvider([
+      'query' => Calendariovacunacion::find()->where(['CODTARCONTVAC'=>$model->CODTARCONTVAC]),
+      'pagination' => [
+          'pageSize' => 5,
+      ],
+]);
+
+$data = Calendariovacunacion::find()->where(['CODTARCONTVAC'=>$model->CODTARCONTVAC])->all();
+
+?>
+<table class="table table-striped table-bordered">
+  <th class='info'>ID</th>
+  <th class='info'>Dscripcion</th>
+  <th class='info'>Dscripcion 1</th>
+  <th class='info'>Dscripcion 2</th>
+
+    <?php
+    foreach ($data as $i => $value) {
+      echo '<tr>';
+      echo '<td>'.$i.'</td>';
+      echo '<td>'.$value->CODDOSIS.'</td>';
+      echo '<td>'.$value->FECHAVACUNA.'</td>';
+      echo '<td>'.$value->ESTADO.'</td>';
+      echo '</tr>';
+
+    }
+    ?>
+
+</table>
+
+
+<?php
+echo  GridView::widget([
+    'dataProvider' => $dataProvider,
+
+    //'filterModel' => $searchModel,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+
+        'CODDOSIS',
+        'CODEDAD',
+        'FECHAVACUNA',
+        'ESTADO',
+
+
+    ],
+]);
+?>
 
 </div>

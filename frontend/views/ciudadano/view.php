@@ -2,6 +2,11 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use frontend\models\Genero;
+use frontend\models\Edad;
+use frontend\models\Nacionalidad;
+use frontend\models\Autoidetnica;
+use frontend\models\Lugarresidencia;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Ciudadano */
@@ -25,6 +30,17 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
+    <?php
+
+    $sexo = Genero::find()->where(['CODSEXO' => $model->CODSEXO])->one();
+    $edad = Edad::find()->where(['CODEDAD' => $model->CODEDAD])->one();
+    $nacionalidad = Nacionalidad::find()->where(['CODNACIONALIDAD' => $model->CODNACIONALIDAD])->one();
+    $etnia = Autoidetnica::find()->where(['CODAUTOIDETNICA' => $model->CODAUTOIDETNICA])->one();
+    $lugar = Lugarresidencia::find()->where(['CODLUGARRESIDE' => $model->CODLUGARRESIDE])->one();
+
+     ?>
+
+
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -32,17 +48,37 @@ $this->params['breadcrumbs'][] = $this->title;
             'CEDULA',
             'APELLIDOS',
             'NOMBRES',
-            'CODSEXO',
-            'CODEDAD',
-            'CODNACIONALIDAD',
-            'CODAUTOIDETNICA',
-            'CODLUGARRESIDE',
+            [
+              'label' => 'Sexo',
+              'value' =>  $sexo->SEXO,
+            ],
+            [
+              'label' => 'Edad',
+              'value' =>  $edad->EDADRMA,
+            ],
+            [
+              'label' => 'Nacionalidad',
+              'value' =>  $nacionalidad->NACIONALIDAD,
+            ],
+
+            [
+              'label' => 'Autoidentificación Étnica',
+              'value' =>  $etnia->AUTOIDETNICA,
+            ],
+            [
+              'label' => 'Lugar de Residencia',
+              'value' =>  $lugar->LUGARRESIDENCIA,
+            ],
+
             'DIRCIUD',
             'LONGITUD',
             'LAT',
             'TELFCIUD',
             'CORREOCIUD',
-            'SNPERTENECEUO',
+            [
+              'label' => 'Pertenece al E.S.',
+              'value' => $model->SNPERTENECEUO
+            ],
         ],
     ]) ?>
 

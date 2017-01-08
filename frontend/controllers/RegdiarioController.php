@@ -233,4 +233,3 @@ class RegdiarioController extends Controller
         }
     }
 }
-\
