@@ -36,13 +36,9 @@ class calendariovacunacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['CODTARCONTVAC', 'CODDOSIS', 'CODEDAD', 'FECHAVACUNA', 'ESTADO'], 'required'],
-            [['CODTARCONTVAC', 'CODDOSIS', 'CODEDAD'], 'integer'],
-            [['FECHAVACUNA'], 'safe'],
-            [['ESTADO'], 'string', 'max' => 20],
-            [['CODDOSIS'], 'exist', 'skipOnError' => true, 'targetClass' => Dosis::className(), 'targetAttribute' => ['CODDOSIS' => 'CODDOSIS']],
-            [['CODEDAD'], 'exist', 'skipOnError' => true, 'targetClass' => Edad::className(), 'targetAttribute' => ['CODEDAD' => 'CODEDAD']],
-            [['CODTARCONTVAC'], 'exist', 'skipOnError' => true, 'targetClass' => TarjControlvac::className(), 'targetAttribute' => ['CODTARCONTVAC' => 'CODTARCONTVAC']],
+            [[ 'FECHAVACUNA', 'CODDOSIS','ESTADO','vacuna','rangoEdad'], 'required'],
+            //[[ 'CODDOSIS'], 'integer'],
+            [[ 'CODEDAD'], 'integer']
         ];
     }
 

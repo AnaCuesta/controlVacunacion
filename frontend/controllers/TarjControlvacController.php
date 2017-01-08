@@ -13,6 +13,7 @@ use frontend\models\Nacionalidad;
 use frontend\models\Autoidetnica;
 use frontend\models\Lugarresidencia;
 use frontend\models\Localidad;
+use yii\helpers\ArrayHelper;
 use frontend\models\TarjControlvacSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -22,6 +23,7 @@ use frontend\models\Calendariovacunacion;
 use frontend\models\Vacuna;
 use frontend\models\Dosis;
 use frontend\models\REdadVac;
+use common\models\Model;
 /**
  * TarjControlvacController implements the CRUD actions for TarjControlvac model.
  */
@@ -70,7 +72,6 @@ class TarjControlvacController extends Controller
        */
       public function actionListadoRangoEdad($id)
       {
-
 
         $contarVacuna  = Vacuna::find()->where(['CODVACUNA'=> $id])->count();
         $edad = REdadVac::find()->where(['CODVACUNA'=> $id])->all();
@@ -397,15 +398,64 @@ class TarjControlvacController extends Controller
 
         $modelVacunacion = [new Calendariovacunacion];
 
+        $idTarjeta = TarjControlvac::find()->max('CODTARCONTVAC');
+
+
+
+        $model->CODTARCONTVAC = ($idTarjeta+1);
+
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-        return $this->redirect(['view', 'id' => $model->CODTARCONTVAC]);
+        // get Payment data from POST
+         $modelVacunacion = Model::createMultiple(Calendariovacunacion::classname());
+         Model::loadMultiple($modelVacunacion, Yii::$app->request->post());
+
+
+
+
+
+
+
+         $valid = $model->validate();
+
+         $valid = Model::validateMultiple($modelVacunacion) && $valid;
+
+         // save deposit data
+         if ($valid) {
+
+                  $transaction = \Yii::$app->db->beginTransaction();
+                      try {
+                          if ($flag = $model->save(false)) {
+                                foreach ($modelVacunacion as $modelVacunacion) {
+
+                                   $modelVacunacion->CODTARCONTVAC = $model->CODTARCONTVAC;
+                                   $modelVacunacion->CODDOSIS = $modelVacunacion->CODDOSIS;
+
+                                    if (! ($flag =$modelVacunacion->save(false))) {
+                                        $transaction->rollBack();
+                                        break;
+                                    }
+                                }
+                            }
+                            if ($flag) {
+                                $transaction->commit();
+                                return $this->redirect(['view', 'id' => $model->CODTARCONTVAC]);
+                            }
+                        } catch (Exception $e) {
+                            $transaction->rollBack();
+                  }
+            }
+
+
 
         } else {
+
         return $this->render('create', [
             'model' => $model,
             'modelVacunacion' => (empty($modelVacunacion)) ? [new Calendariovacunacion] : $modelVacunacion
         ]);
+
         }
 
 
@@ -421,11 +471,74 @@ class TarjControlvacController extends Controller
     {
         $model = $this->findModel($id);
 
+        $modelVacunacion =  Calendariovacunacion::find()->where(['CODTARCONTVAC' => $id])->all();// get values by actual Id
+        //$modelVacunacion =  $model->Calendariovacunacion;
+
+
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->CODTARCONTVAC]);
+
+          $oldIDs = ArrayHelper::map($modelVacunacion, 'IDCALENDARIO', 'IDCALENDARIO');
+          $dosisOldIDs = Calendariovacunacion::find()->where(['CODTARCONTVAC' => $id])->one() ;
+
+          $modelVacunacion = Model::createMultipleUpdate(Calendariovacunacion::classname(), $modelVacunacion,'IDCALENDARIO');
+
+          Model::loadMultiple($modelVacunacion, Yii::$app->request->post());
+
+          $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelVacunacion, 'IDCALENDARIO', 'IDCALENDARIO')));
+
+          //validaciones
+
+          $valid = $model->validate();
+
+          $valid = Model::validateMultiple($modelVacunacion) && $valid;
+
+          if ($valid) {
+          $transaction = \Yii::$app->db->beginTransaction();
+
+          try {
+            if ($flag = $model->save(false)) {
+
+            if (! empty($deletedIDs)) {
+
+              Calendariovacunacion::deleteAll(['IDCALENDARIO' => $deletedIDs]);
+
+            }
+
+
+
+            foreach ($modelVacunacion as $modelVacunacion) {
+
+
+
+                $modelVacunacion->CODTARCONTVAC = $model->CODTARCONTVAC;
+
+                $modelVacunacion->CODDOSIS = $dosisOldIDs->CODDOSIS;
+
+
+
+                if (! ($flag = $modelVacunacion->save(false))) {
+                    $transaction->rollBack();
+                    break;
+                }
+              }
+
+            }
+
+        if ($flag) {
+                $transaction->commit();
+                return $this->redirect(['view', 'id' => $model->CODTARCONTVAC]);
+                 }
+            } catch (Exception $e) {
+                $transaction->rollBack();
+            }
+          }
+
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'modelVacunacion' => (empty($modelVacunacion)) ? [new Calendariovacunacion] : $modelVacunacion
+
             ]);
         }
     }
@@ -438,7 +551,13 @@ class TarjControlvacController extends Controller
      */
     public function actionDelete($id)
     {
+        $modelVacunacion =  Calendariovacunacion::find()->where(['CODTARCONTVAC' => $id])->all();
+
+        $oldIDs = ArrayHelper::map($modelVacunacion, 'IDCALENDARIO', 'IDCALENDARIO');
+
+        Calendariovacunacion::deleteAll(['IDCALENDARIO' => $oldIDs]);
         $this->findModel($id)->delete();
+
 
         return $this->redirect(['index']);
     }

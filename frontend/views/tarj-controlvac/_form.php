@@ -12,6 +12,9 @@ use bookin\aws\checkbox\AwesomeCheckbox;
 use wbraganca\dynamicform\DynamicFormWidget;
 use frontend\models\Vacuna;
 use frontend\models\Edad;
+use frontend\models\Dosis;
+
+
 use frontend\models\REdadVac;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\TarjControlvac */
@@ -24,7 +27,7 @@ use frontend\models\REdadVac;
 
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 
-    <?= $form->field($model, 'CODTARCONTVAC')->textInput() ?>
+
 
     <?= $form->field($model, 'UNICODIGOES')->widget(Select2::classname(), [
                        'data' => ArrayHelper::map(Establecimiento::find()->all(), 'UNICODIGOES', 'NOMBREESTABLECIMIENTO'),
@@ -91,12 +94,14 @@ use frontend\models\REdadVac;
     <?php
      echo '<label>Fecha de nacimiento</label>';
      echo DatePicker::widget([
-     'name' => $form->field($model, 'FECHNAC'),
+     'name' =>  'FECHNAC',
+     'model' => $model,
+     'attribute' => 'FECHNAC',
      'type' => DatePicker::TYPE_COMPONENT_APPEND,
      'value' => '',
      'pluginOptions' => [
      'autoclose'=>true,
-     'format' => 'dd-M-yyyy'
+     'format' => 'yyyy-mm-dd'
      ]
      ]);
      ?>
@@ -129,6 +134,7 @@ use frontend\models\REdadVac;
 <div class="row">
   <div class="col-sm-12">
     <?= $form->field($model,'lugarResidenciaCiudadano')->textInput(['disabled' => true]) ?>
+
   </div>
 
 </div>
@@ -213,7 +219,7 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                             <?php
                                 // necessary for update action.
                                 if (! $modelVacunacion->isNewRecord) {
-                                    echo Html::activeHiddenInput($modelVacunacion , "[{$i}]id");
+                                    echo Html::activeHiddenInput($modelVacunacion , "[{$i}]CODTARCONTVAC");
                                 }
                             ?>
                            <div class="row">
@@ -249,14 +255,40 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
 
                               ")->all();
 
-                              echo $form->field($modelVacunacion, "[{$i}]CODEDAD")->dropDownList(
-                              ArrayHelper::map($data, 'CODEDAD', 'EDADRMA'));
                               ?>
+
+                              <?php
+
+                              $Edad = Edad::find()->where(['CODEDAD' =>  $modelVacunacion->CODEDAD])->one();
+
+                                    if( count($Edad) > 0){
+
+
+                                      echo $form->field($modelVacunacion, "[{$i}]CODEDAD")->dropDownList(
+                                      ArrayHelper::map($data, 'CODEDAD', 'EDADRMA'),
+                                            [
+                                              'placeholder'=>$Edad->EDADRMA,
+                                              'value'=>$Edad->CODEDAD
+
+                                            ]
+                                         );
+
+
+                                    }else{
+
+                                       echo $form->field($modelVacunacion, "[{$i}]CODEDAD")->dropDownList(
+                                       ArrayHelper::map($data, 'CODEDAD', 'EDADRMA'));
+
+
+                                    }
+                               ?>
+
+
+
+
                                 </div>
 
                                 <div class="col-sm-4">
-
-
 
                                   <?php
                                   $vacuna = Vacuna::find()->where("
@@ -278,76 +310,168 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
 
                                    ?>
 
+                              <?php
 
-                                <?= $form->field($modelVacunacion, "[{$i}]vacuna")->dropDownList(
-                                  ArrayHelper::map($vacuna, 'CODVACUNA', 'VACUNA'),
-                                  [
-                                    'prompt'=>'Seleccione...',
-                                    'onchange'=>'
-                                    $.post("index.php?r=tarj-controlvac/listado-rango-edad&id='.'"+$(this).val(), function( data ){
+                              $dosis = Dosis::find()->where(['CODDOSIS' =>  $modelVacunacion->CODDOSIS])->one();
 
-                                    //$("select#calendariovacunacion-0-rangoedad").html( data );
+                                    if( count($dosis) > 0){
 
-                                     //$("select#"+cadenaId+"coddosis").html( data );
+                                      $vacunaActualizacion = Vacuna::find()->where(['CODVACUNA' =>  $dosis->CODVACUNA])->one();
 
-                                    });',
-                                  ]
-                               ); ?>
+
+                                      echo $form->field($modelVacunacion, "[{$i}]vacuna")->dropDownList(
+                                            ArrayHelper::map($vacuna, 'CODVACUNA', 'VACUNA'),
+                                            [
+                                              'placeholder'=>$vacunaActualizacion->VACUNA,
+
+
+                                            ]
+                                         );
+
+
+                                    }else{
+
+                                      echo $form->field($modelVacunacion, "[{$i}]vacuna")->dropDownList(
+                                            ArrayHelper::map($vacuna, 'CODVACUNA', 'VACUNA'),
+                                            [
+                                              'prompt'=>'Seleccione...',
+
+                                            ]
+                                         );
+
+
+                                    }
+                               ?>
+
+
+
+
                                 </div>
 
                                 <div class="col-sm-4">
 
 
-                                  <?= $form->field($modelVacunacion, "[{$i}]CODDOSIS")->dropDownList(
-                                    [
-                                      'prompt'=>'Seleccione la opcion...',
-                                    ]
-                                 ); ?>
+                                  <?php
+
+                                  $dosis = Dosis::find()->where(['CODDOSIS' =>  $modelVacunacion->CODDOSIS])->one();
+
+                                        if( count($dosis) > 0){
+
+
+                                          echo $form->field($modelVacunacion, "[{$i}]CODDOSIS")->dropDownList(
+                                                [
+                                                  'placeholder' => $dosis->DOSIS,
+
+
+                                                ]
+                                             );
+
+
+                                        }else{
+
+                                          echo $form->field($modelVacunacion, "[{$i}]CODDOSIS")->dropDownList(
+                                              [
+                                                'prompt'=>'Seleccione la opcion...',
+                                              ]
+                                           );
+
+
+                                        }
+                            
+
+                                   ?>
+
+
                                 </div>
 
                           </div>
 
                           <div class="row">
 
-                              <div class="col-sm-4">
+                                  <div class="col-sm-4">
+                                      <?= $form->field($modelVacunacion, "[{$i}]FECHAVACUNA")->textInput(['type' => 'date']) ?>
+                                  </div>
 
-                                <?= $form->field($modelVacunacion, "[{$i}]FECHAVACUNA")->textInput(['type' => 'date']) ?>
-
-                              </div>
-
-                            <div class="col-sm-4">
-
-                              <?= $form->field($modelVacunacion, "[{$i}]rangoEdad")->dropDownList(
-                                ArrayHelper::map(REdadVac::find()->all(), 'CODRANGOEDAD', 'RANGOEDAD'),
-                                [
-                                  'prompt'=>'Seleccione...',
-
-                                ]
-                             ); ?>
+                                  <div class="col-sm-4">
 
 
-                            </div>
-                            <div class="col-sm-4">
-                              <?= $form->field($modelVacunacion, "[{$i}]ESTADO")->dropDownList(
-                                ['ADMINISTRADA'=> 'Administrada','NO ADMINISTRADA'=> 'No Administrada'],
-                                [
-                                  'prompt'=>'Seleccione...',
+                                    <?php
+                                     $dosis = Dosis::find()->where(['CODDOSIS' =>  $modelVacunacion->CODDOSIS])->one();
 
-                                ]
-                             ); ?>
-                            </div>
+                                     if( count($dosis) > 0){
+
+                                     $vacuna = Vacuna::find()->where(['CODVACUNA' =>  $dosis->CODVACUNA])->one();
+                                     $rangoEdad = REdadVac::find()->where(['CODVACUNA' =>  $vacuna->CODVACUNA])->one();
+
+                                            echo $form->field($modelVacunacion, "[{$i}]rangoEdad")->dropDownList(
+                                                  [
+                                                    'value'=>$rangoEdad->RANGOEDAD,
+                                                  ]
+                                               );
+                                      }else{
+
+                                            echo  $form->field($modelVacunacion, "[{$i}]rangoEdad")->dropDownList(
+                                              //ArrayHelper::map(REdadVac::find()->all(), 'CODRANGOEDAD', 'RANGOEDAD'),
+                                              [
+                                                'prompt'=>'Seleccione...',
+
+                                              ]
+                                           );
+
+
+
+                                      }
+                                     ?>
+
+
+
+
+
+
+                                  </div>
+                                  <div class="col-sm-4">
+
+                                    <?php
+
+                                     if( !empty($modelVacunacion->ESTADO) ){
+
+                                       echo $form->field($modelVacunacion, "[{$i}]ESTADO")->dropDownList(
+                                         [
+                                           $modelVacunacion->ESTADO=>$modelVacunacion->ESTADO,
+
+                                         ]
+                                      );
+
+                                      }else{
+
+                                        echo $form->field($modelVacunacion, "[{$i}]ESTADO")->dropDownList(
+                                          ['ADMINISTRADA'=> 'Administrada','NO-ADMINISTRADA'=> 'No Administrada'],
+                                          [
+                                            'prompt'=>'Seleccione...',
+
+                                          ]
+                                       );
+
+
+
+                                      }
+                                     ?>
+
+
+                                  </div>
                           </div>
 
                       </div>
 
-                        </div>
+                  </div>
 
-                    </div>
+            </div>
                 <?php endforeach; ?>
                 </div>
                 <?php DynamicFormWidget::end(); ?>
             </div>
     </div>
+
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -362,23 +486,10 @@ $script = <<< JS
 var x = 0;
   $(document).ready(function(){
 
-    $("select#calendariovacunacion-"+0+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+0+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+0+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+0+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+0+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+0+"-rangoedad").prop("disabled", true);
 
     $("input").bind("click", function(){
       if ($("#check0").is(":checked"))
       {
-        $("select#calendariovacunacion-"+0+"-codedad").prop("disabled", false);
-        $("select#calendariovacunacion-"+0+"-vacuna").prop("disabled", false);
-        $("select#calendariovacunacion-"+0+"-coddosis").prop("disabled", false);
-        $("#calendariovacunacion-"+0+"-fechavacuna").prop("disabled", false);
-        $("#calendariovacunacion-"+0+"-estado").prop("disabled", false);
-        $("#calendariovacunacion-"+0+"-rangoedad").prop("disabled", false);
-
         $("#calendariovacunacion-"+0+"-vacuna").change(function(){
 
           $.post("index.php?r=tarj-controlvac/listado-dosis&id="+$(this).val(), function( data ){
@@ -389,15 +500,7 @@ var x = 0;
           });
         });
 
-      }else{
-        $("select#calendariovacunacion-"+0+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+0+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+0+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+0+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+0+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+0+"-rangoedad").prop("disabled", true);
       }
-
 
 
     });
@@ -414,157 +517,16 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
 
   $(document).ready(function(){
 
-    $("select#calendariovacunacion-"+1+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+1+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+1+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+1+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+1+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+1+"-rangoedad").prop("disabled", true);
 
-    $("select#calendariovacunacion-"+2+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+2+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+2+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+2+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+2+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+2+"-rangoedad").prop("disabled", true);
 
-    $("select#calendariovacunacion-"+3+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+3+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+3+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+3+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+3+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+3+"-rangoedad").prop("disabled", true);
 
-    $("select#calendariovacunacion-"+4+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+4+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+4+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+4+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+4+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+4+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+5+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+5+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+5+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+5+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+5+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+5+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+6+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+6+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+6+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+6+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+6+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+6+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+7+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+7+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+7+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+7+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+7+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+7+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+8+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+8+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+8+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+8+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+8+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+8+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+9+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+9+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+9+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+9+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+9+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+9+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+10+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+10+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+10+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+10+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+10+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+10+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+11+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+11+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+11+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+11+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+11+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+11+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+12+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+12+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+12+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+12+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+12+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+12+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+13+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+13+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+13+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+13+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+13+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+13+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+14+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+14+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+14+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+14+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+14+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+14+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+15+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+15+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+15+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+15+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+15+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+15+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+16+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+16+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+16+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+16+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+16+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+16+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+17+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+17+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+17+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+17+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+17+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+17+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+18+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+18+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+18+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+18+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+18+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+18+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+19+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+19+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+19+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+19+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+19+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+19+"-rangoedad").prop("disabled", true);
-
-    $("select#calendariovacunacion-"+20+"-codedad").prop("disabled", true);
-    $("select#calendariovacunacion-"+20+"-vacuna").prop("disabled", true);
-    $("select#calendariovacunacion-"+20+"-coddosis").prop("disabled", true);
-    $("#calendariovacunacion-"+20+"-fechavacuna").prop("disabled", true);
-    $("#calendariovacunacion-"+20+"-estado").prop("disabled", true);
-    $("#calendariovacunacion-"+20+"-rangoedad").prop("disabled", true);
 
 
       $("input").bind("click", function(){
 
         if ($("#check0").is(":checked"))
         {
-          $("select#calendariovacunacion-"+0+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+0+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+0+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+0+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+0+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+0+"-rangoedad").prop("disabled", false);
+
 
           $("#calendariovacunacion-"+0+"-vacuna").change(function(){
 
@@ -576,23 +538,11 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+0+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+0+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+0+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+0+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+0+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+0+"-rangoedad").prop("disabled", true);
         }
 
         if ($("#check1").is(":checked"))
         {
-          $("select#calendariovacunacion-"+1+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+1+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+1+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+1+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+1+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+1+"-rangoedad").prop("disabled", false);
+
 
           $("#calendariovacunacion-"+1+"-vacuna").change(function(){
 
@@ -604,23 +554,11 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+1+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+1+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+1+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+1+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+1+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+1+"-rangoedad").prop("disabled", true);
         }
 
         if ($("#check2").is(":checked"))
         {
-          $("select#calendariovacunacion-"+2+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+2+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+2+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+2+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+2+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+2+"-rangoedad").prop("disabled", false);
+
 
           $("#calendariovacunacion-"+2+"-vacuna").change(function(){
 
@@ -632,23 +570,10 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+2+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+2+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+2+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+2+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+2+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+2+"-rangoedad").prop("disabled", true);
         }
 
         if ($("#check3").is(":checked"))
         {
-          $("select#calendariovacunacion-"+3+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+3+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+3+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+3+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+3+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+3+"-rangoedad").prop("disabled", false);
 
 
           $("#calendariovacunacion-"+3+"-vacuna").change(function(){
@@ -661,24 +586,10 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+3+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+3+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+3+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+3+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+3+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+3+"-rangoedad").prop("disabled", true);
         }
 
         if ($("#check4").is(":checked"))
         {
-          $("select#calendariovacunacion-"+4+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+4+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+4+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+4+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+4+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+4+"-rangoedad").prop("disabled", false);
-
 
           $("#calendariovacunacion-"+4+"-vacuna").change(function(){
 
@@ -690,24 +601,9 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+4+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+4+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+4+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+4+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+4+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+4+"-rangoedad").prop("disabled", true);
         }
-
         if ($("#check5").is(":checked"))
         {
-          $("select#calendariovacunacion-"+5+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+5+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+5+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+5+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+5+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+5+"-rangoedad").prop("disabled", false);
-
 
 
           $("#calendariovacunacion-"+5+"-vacuna").change(function(){
@@ -720,23 +616,10 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+5+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+5+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+5+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+5+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+5+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+5+"-rangoedad").prop("disabled", true);
         }
 
         if ($("#check6").is(":checked"))
         {
-          $("select#calendariovacunacion-"+6+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+6+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+6+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+6+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+6+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+6+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+6+"-vacuna").change(function(){
 
@@ -748,23 +631,10 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+6+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+6+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+6+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+6+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+6+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+6+"-rangoedad").prop("disabled", true);
         }
 
         if ($("#check7").is(":checked"))
         {
-          $("select#calendariovacunacion-"+7+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+7+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+7+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+7+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+7+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+7+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+7+"-vacuna").change(function(){
 
@@ -776,23 +646,10 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+7+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+7+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+7+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+7+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+7+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+7+"-rangoedad").prop("disabled", true);
         }
 
         if ($("#check8").is(":checked"))
         {
-          $("select#calendariovacunacion-"+8+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+8+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+8+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+8+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+8+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+8+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+8+"-vacuna").change(function(){
 
@@ -804,23 +661,9 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+8+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+8+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+8+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+8+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+8+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+8+"-rangoedad").prop("disabled", true);
         }
-
         if ($("#check9").is(":checked"))
         {
-          $("select#calendariovacunacion-"+9+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+9+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+9+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+9+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+9+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+9+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+9+"-vacuna").change(function(){
 
@@ -832,23 +675,10 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+9+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+9+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+9+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+9+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+9+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+9+"-rangoedad").prop("disabled", true);
         }
 
         if ($("#check10").is(":checked"))
         {
-          $("select#calendariovacunacion-"+10+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+10+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+10+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+10+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+10+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+10+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+10+"-vacuna").change(function(){
 
@@ -860,23 +690,10 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+10+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+10+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+10+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+10+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+10+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+10+"-rangoedad").prop("disabled", true);
         }
 
         if ($("#check11").is(":checked"))
         {
-          $("select#calendariovacunacion-"+11+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+11+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+11+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+11+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+11+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+11+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+11+"-vacuna").change(function(){
 
@@ -888,23 +705,10 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+11+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+11+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+11+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+11+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+11+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+11+"-rangoedad").prop("disabled", true);
         }
 
         if ($("#check12").is(":checked"))
         {
-          $("select#calendariovacunacion-"+12+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+12+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+12+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+12+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+12+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+12+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+12+"-vacuna").change(function(){
 
@@ -916,23 +720,11 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+12+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+12+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+12+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+12+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+12+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+12+"-rangoedad").prop("disabled", true);
         }
+
+
         if ($("#check13").is(":checked"))
         {
-          $("select#calendariovacunacion-"+13+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+13+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+13+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+13+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+13+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+13+"-rangoedad").prop("disabled", false);
-
           $("#calendariovacunacion-"+13+"-vacuna").change(function(){
 
             $.post("index.php?r=tarj-controlvac/listado-dosis&id="+$(this).val(), function( data ){
@@ -943,22 +735,9 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+13+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+13+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+13+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+13+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+13+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+13+"-rangoedad").prop("disabled", true);
         }
         if ($("#check14").is(":checked"))
         {
-          $("select#calendariovacunacion-"+14+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+14+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+14+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+14+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+14+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+14+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+14+"-vacuna").change(function(){
 
@@ -970,22 +749,10 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+14+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+14+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+14+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+14+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+14+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+14+"-rangoedad").prop("disabled", true);
         }
+
         if ($("#check15").is(":checked"))
         {
-          $("select#calendariovacunacion-"+15+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+15+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+15+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+15+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+15+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+15+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+15+"-vacuna").change(function(){
 
@@ -997,22 +764,9 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+15+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+15+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+15+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+15+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+15+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+15+"-rangoedad").prop("disabled", true);
         }
         if ($("#check16").is(":checked"))
         {
-          $("select#calendariovacunacion-"+16+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+16+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+16+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+16+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+16+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+16+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+16+"-vacuna").change(function(){
 
@@ -1024,22 +778,9 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+16+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+16+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+16+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+16+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+16+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+16+"-rangoedad").prop("disabled", true);
         }
         if ($("#check17").is(":checked"))
         {
-          $("select#calendariovacunacion-"+17+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+17+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+17+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+17+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+17+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+17+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+17+"-vacuna").change(function(){
 
@@ -1051,22 +792,9 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+17+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+17+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+17+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+17+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+17+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+17+"-rangoedad").prop("disabled", true);
         }
         if ($("#check18").is(":checked"))
         {
-          $("select#calendariovacunacion-"+18+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+18+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+18+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+18+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+18+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+18+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+18+"-vacuna").change(function(){
 
@@ -1078,22 +806,9 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+18+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+18+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+18+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+18+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+18+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+18+"-rangoedad").prop("disabled", true);
         }
         if ($("#check19").is(":checked"))
         {
-          $("select#calendariovacunacion-"+19+"-codedad").prop("disabled", false);
-          $("select#calendariovacunacion-"+19+"-vacuna").prop("disabled", false);
-          $("select#calendariovacunacion-"+19+"-coddosis").prop("disabled", false);
-          $("#calendariovacunacion-"+19+"-fechavacuna").prop("disabled", false);
-          $("#calendariovacunacion-"+19+"-estado").prop("disabled", false);
-          $("#calendariovacunacion-"+19+"-rangoedad").prop("disabled", false);
 
           $("#calendariovacunacion-"+19+"-vacuna").change(function(){
 
@@ -1105,13 +820,6 @@ $(".dynamicform_wrapper").on("afterDelete", function(e, item) {
             });
           });
 
-        }else{
-          $("select#calendariovacunacion-"+19+"-codedad").prop("disabled", true);
-          $("select#calendariovacunacion-"+19+"-vacuna").prop("disabled", true);
-          $("select#calendariovacunacion-"+19+"-coddosis").prop("disabled", true);
-          $("#calendariovacunacion-"+19+"-fechavacuna").prop("disabled", true);
-          $("#calendariovacunacion-"+19+"-estado").prop("disabled", true);
-          $("#calendariovacunacion-"+19+"-rangoedad").prop("disabled", true);
         }
 
 
@@ -1134,157 +842,12 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
 
       $(document).ready(function(){
 
-        $("select#calendariovacunacion-"+1+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+1+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+1+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+1+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+1+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+1+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+2+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+2+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+2+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+2+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+2+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+2+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+3+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+3+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+3+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+3+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+3+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+3+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+4+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+4+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+4+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+4+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+4+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+4+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+5+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+5+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+5+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+5+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+5+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+5+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+6+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+6+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+6+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+6+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+6+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+6+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+7+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+7+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+7+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+7+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+7+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+7+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+8+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+8+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+8+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+8+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+8+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+8+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+9+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+9+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+9+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+9+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+9+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+9+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+10+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+10+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+10+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+10+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+10+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+10+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+11+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+11+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+11+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+11+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+11+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+11+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+12+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+12+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+12+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+12+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+12+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+12+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+13+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+13+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+13+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+13+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+13+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+13+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+14+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+14+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+14+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+14+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+14+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+14+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+15+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+15+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+15+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+15+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+15+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+15+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+16+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+16+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+16+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+16+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+16+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+16+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+17+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+17+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+17+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+17+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+17+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+17+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+18+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+18+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+18+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+18+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+18+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+18+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+19+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+19+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+19+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+19+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+19+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+19+"-rangoedad").prop("disabled", true);
-
-        $("select#calendariovacunacion-"+20+"-codedad").prop("disabled", true);
-        $("select#calendariovacunacion-"+20+"-vacuna").prop("disabled", true);
-        $("select#calendariovacunacion-"+20+"-coddosis").prop("disabled", true);
-        $("#calendariovacunacion-"+20+"-fechavacuna").prop("disabled", true);
-        $("#calendariovacunacion-"+20+"-estado").prop("disabled", true);
-        $("#calendariovacunacion-"+20+"-rangoedad").prop("disabled", true);
-
 
           $("input").bind("click", function(){
 
             if ($("#check0").is(":checked"))
             {
-              $("select#calendariovacunacion-"+0+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+0+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+0+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+0+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+0+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+0+"-rangoedad").prop("disabled", false);
+
 
               $("#calendariovacunacion-"+0+"-vacuna").change(function(){
 
@@ -1296,23 +859,9 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+0+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+0+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+0+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+0+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+0+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+0+"-rangoedad").prop("disabled", true);
             }
-
             if ($("#check1").is(":checked"))
             {
-              $("select#calendariovacunacion-"+1+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+1+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+1+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+1+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+1+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+1+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+1+"-vacuna").change(function(){
 
@@ -1324,23 +873,11 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+1+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+1+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+1+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+1+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+1+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+1+"-rangoedad").prop("disabled", true);
             }
 
             if ($("#check2").is(":checked"))
             {
-              $("select#calendariovacunacion-"+2+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+2+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+2+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+2+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+2+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+2+"-rangoedad").prop("disabled", false);
+
 
               $("#calendariovacunacion-"+2+"-vacuna").change(function(){
 
@@ -1352,24 +889,9 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+2+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+2+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+2+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+2+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+2+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+2+"-rangoedad").prop("disabled", true);
             }
-
             if ($("#check3").is(":checked"))
             {
-              $("select#calendariovacunacion-"+3+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+3+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+3+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+3+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+3+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+3+"-rangoedad").prop("disabled", false);
-
 
               $("#calendariovacunacion-"+3+"-vacuna").change(function(){
 
@@ -1381,24 +903,9 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+3+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+3+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+3+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+3+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+3+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+3+"-rangoedad").prop("disabled", true);
             }
-
             if ($("#check4").is(":checked"))
             {
-              $("select#calendariovacunacion-"+4+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+4+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+4+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+4+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+4+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+4+"-rangoedad").prop("disabled", false);
-
 
               $("#calendariovacunacion-"+4+"-vacuna").change(function(){
 
@@ -1410,23 +917,10 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+4+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+4+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+4+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+4+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+4+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+4+"-rangoedad").prop("disabled", true);
             }
 
             if ($("#check5").is(":checked"))
             {
-              $("select#calendariovacunacion-"+5+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+5+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+5+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+5+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+5+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+5+"-rangoedad").prop("disabled", false);
 
 
 
@@ -1440,23 +934,10 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+5+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+5+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+5+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+5+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+5+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+5+"-rangoedad").prop("disabled", true);
             }
 
             if ($("#check6").is(":checked"))
             {
-              $("select#calendariovacunacion-"+6+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+6+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+6+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+6+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+6+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+6+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+6+"-vacuna").change(function(){
 
@@ -1468,23 +949,10 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+6+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+6+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+6+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+6+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+6+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+6+"-rangoedad").prop("disabled", true);
             }
 
             if ($("#check7").is(":checked"))
             {
-              $("select#calendariovacunacion-"+7+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+7+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+7+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+7+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+7+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+7+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+7+"-vacuna").change(function(){
 
@@ -1496,23 +964,10 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+7+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+7+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+7+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+7+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+7+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+7+"-rangoedad").prop("disabled", true);
             }
 
             if ($("#check8").is(":checked"))
             {
-              $("select#calendariovacunacion-"+8+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+8+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+8+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+8+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+8+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+8+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+8+"-vacuna").change(function(){
 
@@ -1524,23 +979,10 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+8+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+8+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+8+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+8+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+8+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+8+"-rangoedad").prop("disabled", true);
             }
 
             if ($("#check9").is(":checked"))
             {
-              $("select#calendariovacunacion-"+9+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+9+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+9+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+9+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+9+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+9+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+9+"-vacuna").change(function(){
 
@@ -1552,24 +994,11 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+9+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+9+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+9+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+9+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+9+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+9+"-rangoedad").prop("disabled", true);
             }
+
 
             if ($("#check10").is(":checked"))
             {
-              $("select#calendariovacunacion-"+10+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+10+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+10+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+10+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+10+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+10+"-rangoedad").prop("disabled", false);
-
               $("#calendariovacunacion-"+10+"-vacuna").change(function(){
 
                 $.post("index.php?r=tarj-controlvac/listado-dosis&id="+$(this).val(), function( data ){
@@ -1580,23 +1009,9 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+10+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+10+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+10+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+10+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+10+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+10+"-rangoedad").prop("disabled", true);
             }
-
             if ($("#check11").is(":checked"))
             {
-              $("select#calendariovacunacion-"+11+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+11+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+11+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+11+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+11+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+11+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+11+"-vacuna").change(function(){
 
@@ -1608,23 +1023,10 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+11+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+11+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+11+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+11+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+11+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+11+"-rangoedad").prop("disabled", true);
             }
 
             if ($("#check12").is(":checked"))
             {
-              $("select#calendariovacunacion-"+12+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+12+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+12+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+12+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+12+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+12+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+12+"-vacuna").change(function(){
 
@@ -1636,22 +1038,9 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+12+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+12+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+12+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+12+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+12+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+12+"-rangoedad").prop("disabled", true);
             }
             if ($("#check13").is(":checked"))
             {
-              $("select#calendariovacunacion-"+13+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+13+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+13+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+13+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+13+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+13+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+13+"-vacuna").change(function(){
 
@@ -1663,22 +1052,10 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+13+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+13+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+13+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+13+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+13+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+13+"-rangoedad").prop("disabled", true);
             }
             if ($("#check14").is(":checked"))
             {
-              $("select#calendariovacunacion-"+14+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+14+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+14+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+14+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+14+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+14+"-rangoedad").prop("disabled", false);
+
 
               $("#calendariovacunacion-"+14+"-vacuna").change(function(){
 
@@ -1690,22 +1067,9 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+14+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+14+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+14+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+14+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+14+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+14+"-rangoedad").prop("disabled", true);
             }
             if ($("#check15").is(":checked"))
             {
-              $("select#calendariovacunacion-"+15+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+15+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+15+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+15+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+15+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+15+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+15+"-vacuna").change(function(){
 
@@ -1717,22 +1081,9 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+15+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+15+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+15+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+15+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+15+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+15+"-rangoedad").prop("disabled", true);
             }
             if ($("#check16").is(":checked"))
             {
-              $("select#calendariovacunacion-"+16+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+16+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+16+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+16+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+16+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+16+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+16+"-vacuna").change(function(){
 
@@ -1744,22 +1095,10 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+16+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+16+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+16+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+16+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+16+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+16+"-rangoedad").prop("disabled", true);
             }
+
             if ($("#check17").is(":checked"))
             {
-              $("select#calendariovacunacion-"+17+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+17+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+17+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+17+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+17+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+17+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+17+"-vacuna").change(function(){
 
@@ -1771,22 +1110,9 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+17+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+17+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+17+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+17+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+17+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+17+"-rangoedad").prop("disabled", true);
             }
             if ($("#check18").is(":checked"))
             {
-              $("select#calendariovacunacion-"+18+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+18+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+18+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+18+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+18+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+18+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+18+"-vacuna").change(function(){
 
@@ -1798,22 +1124,10 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+18+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+18+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+18+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+18+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+18+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+18+"-rangoedad").prop("disabled", true);
             }
+
             if ($("#check19").is(":checked"))
             {
-              $("select#calendariovacunacion-"+19+"-codedad").prop("disabled", false);
-              $("select#calendariovacunacion-"+19+"-vacuna").prop("disabled", false);
-              $("select#calendariovacunacion-"+19+"-coddosis").prop("disabled", false);
-              $("#calendariovacunacion-"+19+"-fechavacuna").prop("disabled", false);
-              $("#calendariovacunacion-"+19+"-estado").prop("disabled", false);
-              $("#calendariovacunacion-"+19+"-rangoedad").prop("disabled", false);
 
               $("#calendariovacunacion-"+19+"-vacuna").change(function(){
 
@@ -1825,15 +1139,7 @@ $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
                 });
               });
 
-            }else{
-              $("select#calendariovacunacion-"+19+"-codedad").prop("disabled", true);
-              $("select#calendariovacunacion-"+19+"-vacuna").prop("disabled", true);
-              $("select#calendariovacunacion-"+19+"-coddosis").prop("disabled", true);
-              $("#calendariovacunacion-"+19+"-fechavacuna").prop("disabled", true);
-              $("#calendariovacunacion-"+19+"-estado").prop("disabled", true);
-              $("#calendariovacunacion-"+19+"-rangoedad").prop("disabled", true);
             }
-
 
           });
       });

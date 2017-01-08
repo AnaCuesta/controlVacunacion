@@ -10,6 +10,7 @@ use Yii;
  * @property integer $CODTARCONTVAC
  * @property string $N_HISTCLINIC
  * @property string $UNICODIGOES
+ * @property string $perteneceUO
  * @property string $NUMORDENTAR
  * @property string $FECHNAC
  * @property string $LUGARNAC
@@ -26,28 +27,28 @@ use Yii;
  */
 class TarjControlvac extends \yii\db\ActiveRecord
 {
-   /*Establecimiento*/
-    public $provincia;
-    public $canton;
-    public $zona;
-    public $distrito;
-     /*Establecimiento*/
 
-   /*ciudadano*/
-    public $nombresCiudadano;
-    public $apellidosCiudadano;
-    public $nacionalidadCiudadano;
-    public $etniaCiudadano;
-    public $lugarResidenciaCiudadano;
-    public $provinciaCiudadano;
-    public $cantonCiudadano;
-    public $parroquiaCiudadano;
-    public $localidadCiudadano;
-    public $direccionCiudadano;
-    public $telefonoCiudadano;
+  /*Establecimiento*/
+   public $provincia;
+   public $canton;
+   public $zona;
+   public $distrito;
+    /*Establecimiento*/
 
-     /*ciudadano*/
+  /*ciudadano*/
+   public $nombresCiudadano;
+   public $apellidosCiudadano;
+   public $nacionalidadCiudadano;
+   public $etniaCiudadano;
+   public $lugarResidenciaCiudadano;
+   public $provinciaCiudadano;
+   public $cantonCiudadano;
+   public $parroquiaCiudadano;
+   public $localidadCiudadano;
+   public $direccionCiudadano;
+   public $telefonoCiudadano;
 
+    /*ciudadano*/
 
     /**
      * @inheritdoc
@@ -63,17 +64,15 @@ class TarjControlvac extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['CODTARCONTVAC', 'NUMORDENTAR', 'FECHNAC', 'LUGARNAC', 'LUGARINSCRIPCION', 'EDADINGRESO', 'APELLIDOSNOMBRESMADRE', 'APELLIDOSNOMBRESPADRE'], 'required'],
+            [['CODTARCONTVAC', 'perteneceUO', 'NUMORDENTAR', 'FECHNAC', 'LUGARNAC', 'LUGARINSCRIPCION', 'EDADINGRESO', 'APELLIDOSNOMBRESMADRE', 'APELLIDOSNOMBRESPADRE'], 'required'],
             [['CODTARCONTVAC'], 'integer'],
             [['FECHNAC'], 'safe'],
             [['OBSERV'], 'string'],
             [['N_HISTCLINIC', 'NUMORDENTAR'], 'string', 'max' => 10],
             [['UNICODIGOES'], 'string', 'max' => 11],
+            [[ 'LUGARINSCRIPCION'], 'string', 'max' => 30],
             [['LUGARNAC', 'APELLIDOSNOMBRESMADRE', 'APELLIDOSNOMBRESPADRE', 'APELLIDOSNOMBRESTUTOR'], 'string', 'max' => 50],
-            [['LUGARINSCRIPCION'], 'string', 'max' => 30],
             [['EDADINGRESO'], 'string', 'max' => 15],
-            [['UNICODIGOES'], 'exist', 'skipOnError' => true, 'targetClass' => Establecimiento::className(), 'targetAttribute' => ['UNICODIGOES' => 'UNICODIGOES']],
-            [['N_HISTCLINIC'], 'exist', 'skipOnError' => true, 'targetClass' => Ciudadano::className(), 'targetAttribute' => ['N_HISTCLINIC' => 'N_HISTCLINIC']],
         ];
     }
 
@@ -83,29 +82,30 @@ class TarjControlvac extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'CODTARCONTVAC' => 'Codtarcontvac',
-            'N_HISTCLINIC' => 'N° Historia Clínica',
-            'UNICODIGOES' => 'Establecimiento',
-            'NUMORDENTAR' => 'Numero de Orden',
-            'FECHNAC' => 'Fecha de nacimiento',
-            'LUGARNAC' => 'Lugar de nacimiento',
-            'LUGARINSCRIPCION' => 'Lugar de Inscripción',
-            'EDADINGRESO' => 'Edad al Ingreso',
-            'APELLIDOSNOMBRESMADRE' => 'Apellidos y Nombres de la Madre',
-            'APELLIDOSNOMBRESPADRE' => 'Apellidos y Nombres del Padre',
-            'APELLIDOSNOMBRESTUTOR' => 'Apellidos y Nombres del Tutor',
-            'OBSERV' => 'Observaciones',
-            'nombresCiudadano' => 'Nombres del Niño(a)',
-            'apellidosCiudadano' => 'Apellidos del Niño(a)',
-            'nacionalidadCiudadano' => 'Nacionalidad',
-            'etniaCiudadano' => 'Grupo Étnico',
-            'lugarResidenciaCiudadano' => 'Lugar de Residencia',
-            'provinciaCiudadano' => 'Provincia',
-            'cantonCiudadano' => 'Cantón',
-            'parroquiaCiudadano' => 'Parroquia',
-            'localidadCiudadano' => 'Localidad o Recinto',
-            'direccionCiudadano' => 'Dirección (Punto de referencia)',
-            'telefonoCiudadano' => 'Teléfono',
+          'CODTARCONTVAC' => 'Codtarcontvac',
+
+                     'nombreCiudadano' => 'Nombres del Niño(a)',
+                     'apellidoCiudadano' => 'Apellidos del Niño(a)',
+                     'nacionalidadCiudadano' => 'Nacionalidad',
+                     'etniaCiudadano' => 'Grupo Étnico',
+                     'cantonCiudadano' => 'Cantón',
+                     'provinciaCiudadano' => 'Provincia',
+                     'localidadCiudadano' => 'Localidad',
+                     'direccionCiudadano' => 'Dirección',
+                     'telefonoCiudadano' => 'Teléfono',
+                     'parroquiaCiudadano' => 'Parroquia',
+                     'NUMORDENTAR' => 'Numero de Orden',
+                     'FECHNAC' => 'Fecha de nacimiento',
+                     'LUGARNAC' => 'Lugar de nacimiento',
+                     'LUGARINSCRIPCION' => 'Lugar de Inscripción',
+                     'EDADINGRESO' => 'Edad al Ingreso',
+                     'APELLIDOSNOMBRESMADRE' => 'Apellidos y Nombres de la Madre',
+                     'APELLIDOSNOMBRESPADRE' => 'Apellidos y Nombres del Padre',
+                     'APELLIDOSNOMBRESTUTOR' => 'Apellidos y Nombres del Tutor',
+                     'OBSERV' => 'Observaciones',
+                     'id_ciudadano' => 'N° Historia Clinica',
+                     'residenciaCiudadano' => 'Lugar de Residencia',
+                     'idEstablecimiento' => 'Nombre Establecimeinto',
         ];
     }
 
