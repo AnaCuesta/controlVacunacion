@@ -10,6 +10,7 @@ use Yii;
  * @property integer $IDCALENDARIO
  * @property integer $CODTARCONTVAC
  * @property integer $CODDOSIS
+ * @property integer $CODRANGOEDAD
  * @property integer $CODEDAD
  * @property string $FECHAVACUNA
  * @property string $ESTADO
@@ -18,10 +19,9 @@ use Yii;
  * @property Edad $cODEDAD
  * @property TarjControlvac $cODTARCONTVAC
  */
-class calendariovacunacion extends \yii\db\ActiveRecord
+class Calendariovacunacion extends \yii\db\ActiveRecord
 {
-    public $vacuna;
-    public $rangoEdad;
+  public $vacuna;
     /**
      * @inheritdoc
      */
@@ -36,10 +36,10 @@ class calendariovacunacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[ 'FECHAVACUNA', 'CODDOSIS','ESTADO','vacuna','rangoEdad'], 'required'],
-            //[[ 'CODDOSIS'], 'integer'],
-            [[ 'CODEDAD'], 'integer']
+            [['CODTARCONTVAC', 'CODDOSIS', 'CODRANGOEDAD', 'CODEDAD', 'FECHAVACUNA', 'ESTADO'], 'required'],
+            //[['CODRANGOEDAD'], 'integer'],
         ];
+
     }
 
     /**
@@ -50,11 +50,11 @@ class calendariovacunacion extends \yii\db\ActiveRecord
         return [
             'IDCALENDARIO' => 'Idcalendario',
             'CODTARCONTVAC' => 'Codtarcontvac',
-            'CODDOSIS' => 'Dosis',
-            'CODEDAD' => 'Edad',
-            'FECHAVACUNA' => 'Fecha de aplicación',
+            'CODDOSIS' => 'Coddosis',
+            'CODRANGOEDAD' => 'Codrangoedad',
+            'CODEDAD' => 'Codedad',
+            'FECHAVACUNA' => 'Fechavacuna',
             'ESTADO' => 'Estado',
-            'rangoEdad' => 'Edad Recomendada de Aplicación',
         ];
     }
 

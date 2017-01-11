@@ -57,7 +57,7 @@ class TarjControlvacController extends Controller
 
 
        if($contarVacuna > 0){
-         echo "<option>Seleccione la opción..</option>";
+         //echo "<option>Seleccione la opción..</option>";
          foreach ($dosis  as  $value) {
            echo "<option value='".$value->CODDOSIS."'>".$value->DOSIS."</option>";
          }
@@ -77,7 +77,7 @@ class TarjControlvacController extends Controller
         $edad = REdadVac::find()->where(['CODVACUNA'=> $id])->all();
 
         if($contarVacuna > 0){
-          echo "<option>Seleccione la opción..</option>";
+          //echo "<option>Seleccione la opción..</option>";
           foreach ($edad  as  $value) {
             echo "<option value='".$value->CODRANGOEDAD."'>".$value->RANGOEDAD."</option>";
           }
@@ -95,8 +95,13 @@ class TarjControlvacController extends Controller
        */
       public function actionZona($id)
       {
+        if(!empty($id)){
           $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
           echo Json::encode($establecimiento->ZONA);
+        }else{
+          echo Json::encode('');
+        }
+
       }
       /**
          *  Obtiene el nombre de la zona
@@ -104,8 +109,15 @@ class TarjControlvacController extends Controller
          */
         public function actionDistrito($id)
         {
-            $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
-            echo Json::encode($establecimiento->DISTRITO);
+
+
+            if(!empty($id)){
+              $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+              echo Json::encode($establecimiento->DISTRITO);
+            }else{
+              echo Json::encode('');
+
+            }
         }
         /**
          *  Obtiene el nombre de la zona
@@ -113,10 +125,15 @@ class TarjControlvacController extends Controller
          */
         public function actionCanton($id)
         {
-            $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
-            $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
-            $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
-            echo Json::encode($canton->CANTON);
+            if(!empty($id)){
+              $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+              $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
+              $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
+              echo Json::encode($canton->CANTON);
+            }else{
+              echo Json::encode('');
+
+            }
         }
       /**
          *  Obtiene el nombre de la zona
@@ -124,11 +141,17 @@ class TarjControlvacController extends Controller
          */
         public function actionProvincia($id)
         {
-          $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
-          $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
-          $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
-          $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();
-          echo Json::encode($provincia->PROVINCIA);
+
+          if(!empty($id)){
+            $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+            $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
+            $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
+            $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();
+            echo Json::encode($provincia->PROVINCIA);
+          }else{
+            echo Json::encode('');
+
+          }
         }
         /*Establecimiento*/
 
@@ -203,7 +226,6 @@ class TarjControlvacController extends Controller
 
                 $ciudadano = Ciudadano::find()->where(['N_HISTCLINIC' => $id])->one();
                 $etnia = Autoidetnica::find()->where(['CODAUTOIDETNICA' =>$ciudadano->CODAUTOIDETNICA])->one();
-
                 echo Json::encode($etnia->AUTOIDETNICA);
 
              }else {
@@ -262,7 +284,7 @@ class TarjControlvacController extends Controller
            public function actionCantonCiudadano($id)
            {
 
-             if(!empty($id)){
+                if(!empty($id)){
 
                 $ciudadano = Ciudadano::find()->where(['N_HISTCLINIC' => $id])->one();
                 $localidad = Localidad::find()->where(['CODLOCREC' => $ciudadano->CODLUGARRESIDE])->one();
@@ -384,6 +406,7 @@ class TarjControlvacController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+
         ]);
     }
 
@@ -400,10 +423,7 @@ class TarjControlvacController extends Controller
 
         $idTarjeta = TarjControlvac::find()->max('CODTARCONTVAC');
 
-
-
         $model->CODTARCONTVAC = ($idTarjeta+1);
-
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
@@ -411,15 +431,9 @@ class TarjControlvacController extends Controller
          $modelVacunacion = Model::createMultiple(Calendariovacunacion::classname());
          Model::loadMultiple($modelVacunacion, Yii::$app->request->post());
 
-
-
-
-
-
-
          $valid = $model->validate();
 
-         $valid = Model::validateMultiple($modelVacunacion) && $valid;
+         //$valid = Model::validateMultiple($modelVacunacion) && $valid;
 
          // save deposit data
          if ($valid) {
@@ -429,8 +443,9 @@ class TarjControlvacController extends Controller
                           if ($flag = $model->save(false)) {
                                 foreach ($modelVacunacion as $modelVacunacion) {
 
+
                                    $modelVacunacion->CODTARCONTVAC = $model->CODTARCONTVAC;
-                                   $modelVacunacion->CODDOSIS = $modelVacunacion->CODDOSIS;
+
 
                                     if (! ($flag =$modelVacunacion->save(false))) {
                                         $transaction->rollBack();
@@ -471,17 +486,24 @@ class TarjControlvacController extends Controller
     {
         $model = $this->findModel($id);
 
+        //$modelVacunacion = [new Calendariovacunacion];
+
         $modelVacunacion =  Calendariovacunacion::find()->where(['CODTARCONTVAC' => $id])->all();// get values by actual Id
+        // get values by actual Id
+
+
+
         //$modelVacunacion =  $model->Calendariovacunacion;
-
-
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
           $oldIDs = ArrayHelper::map($modelVacunacion, 'IDCALENDARIO', 'IDCALENDARIO');
+
           $dosisOldIDs = Calendariovacunacion::find()->where(['CODTARCONTVAC' => $id])->one() ;
 
           $modelVacunacion = Model::createMultipleUpdate(Calendariovacunacion::classname(), $modelVacunacion,'IDCALENDARIO');
+
+
 
           Model::loadMultiple($modelVacunacion, Yii::$app->request->post());
 
@@ -491,7 +513,7 @@ class TarjControlvacController extends Controller
 
           $valid = $model->validate();
 
-          $valid = Model::validateMultiple($modelVacunacion) && $valid;
+          //$valid = Model::validateMultiple($modelVacunacion) && $valid;
 
           if ($valid) {
           $transaction = \Yii::$app->db->beginTransaction();
@@ -503,25 +525,32 @@ class TarjControlvacController extends Controller
 
               Calendariovacunacion::deleteAll(['IDCALENDARIO' => $deletedIDs]);
 
+
+
             }
 
 
+            $dosis = ArrayHelper::getColumn($modelVacunacion, 'CODDOSIS');
+            $rangoEdad = ArrayHelper::getColumn($modelVacunacion, 'CODRANGOEDAD');
 
-            foreach ($modelVacunacion as $modelVacunacion) {
 
 
+            foreach ($modelVacunacion as $i => $modelVacunacion) {
 
                 $modelVacunacion->CODTARCONTVAC = $model->CODTARCONTVAC;
 
-                $modelVacunacion->CODDOSIS = $dosisOldIDs->CODDOSIS;
+                $modelVacunacion->CODDOSIS = $dosis[$i];
 
+                $modelVacunacion->CODRANGOEDAD = $rangoEdad[$i];
 
+                //print_r($dosis[$i]);
 
                 if (! ($flag = $modelVacunacion->save(false))) {
                     $transaction->rollBack();
                     break;
                 }
               }
+
 
             }
 

@@ -8,6 +8,7 @@ use yii\grid\GridView;
 use frontend\models\Vacuna;
 use frontend\models\REdadVac;
 use frontend\models\Dosis;
+use frontend\models\Edad;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\TarjControlvac */
@@ -51,55 +52,95 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 
-    <?php
-;
-$dataProvider = new ActiveDataProvider([
-      'query' => Calendariovacunacion::find()->where(['CODTARCONTVAC'=>$model->CODTARCONTVAC]),
-      'pagination' => [
-          'pageSize' => 5,
-      ],
-]);
-
-$data = Calendariovacunacion::find()->where(['CODTARCONTVAC'=>$model->CODTARCONTVAC])->all();
-
-?>
 <table class="table table-striped table-bordered">
   <th class='info'>ID</th>
-  <th class='info'>Dscripcion</th>
-  <th class='info'>Dscripcion 1</th>
-  <th class='info'>Dscripcion 2</th>
+  <th class='info'>Fecha</th>
+  <th class='info'>Estado</th>
+  <th class='info'>Vacuna</th>
+  <th class='info'>Dosis</th>
+  <th class='info'>Edad recomendada de aplicación</th>
+  <th class='info'>Edad</th>
 
     <?php
-    foreach ($data as $i => $value) {
+    $data = Calendariovacunacion::find()->where(['CODTARCONTVAC'=>$model->CODTARCONTVAC])->all();
+
+
+    $conDosis = 0;
+    $con = 0;
+    $conRango = 0;
+    foreach ($data as $w => $valueDosis) {
+
       echo '<tr>';
-      echo '<td>'.$i.'</td>';
-      echo '<td>'.$value->CODDOSIS.'</td>';
-      echo '<td>'.$value->FECHAVACUNA.'</td>';
-      echo '<td>'.$value->ESTADO.'</td>';
+      echo '<td>'.($w+1).'</td>';
+      echo '<td>'.$valueDosis->FECHAVACUNA.'</td>';
+      echo '<td>'.$valueDosis->ESTADO.'</td>';
+
+      $dosis = Dosis::find()->where(['CODDOSIS'=> $valueDosis->CODDOSIS])->all();
+
+      foreach ($dosis as $x => $value) {
+
+        if ($w == $con)
+        {
+          $va = Vacuna::find()->where(['CODVACUNA'=>$value->CODVACUNA])->all();
+
+          foreach ($va as $i => $val) {
+
+            if ($w == $con)
+            {
+              echo '<td>'.$val->VACUNA.'</td>';
+
+
+            }
+
+          }
+          echo '<td>'.$value->DOSIS.'</td>';
+
+        }
+
+        $vacuna =  Vacuna::find()->where(['CODVACUNA'=>$value->CODVACUNA])->all();
+        foreach ($vacuna as $y => $value) {
+
+
+          $rangoEdad =  REdadVac::find()->where(['CODVACUNA'=>$value->CODVACUNA])->all();
+
+          foreach ($rangoEdad as $z => $edad) {
+
+            if ($w == $con && $conRango < count($valueDosis))
+            {
+              echo '<td>'.$edad->RANGOEDAD.'</td>';
+
+            }
+            $conRango++;
+          }
+          $conRango=0;
+
+        }
+
+        $e =  Edad::find()->where(['CODEDAD' => $valueDosis->CODEDAD])->all();
+
+        foreach ($e as  $val) {
+          if ($w == $con )
+          {
+            echo '<td>'.$val->EDADRMA.'</td>';
+          }
+
+        }
+
+      }
+
       echo '</tr>';
+      $con++;
 
     }
+
+
+
+
     ?>
 
 </table>
 
 
-<?php
-echo  GridView::widget([
-    'dataProvider' => $dataProvider,
 
-    //'filterModel' => $searchModel,
-    'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-
-        'CODDOSIS',
-        'CODEDAD',
-        'FECHAVACUNA',
-        'ESTADO',
-
-
-    ],
-]);
-?>
 
 </div>

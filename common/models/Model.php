@@ -33,8 +33,7 @@ class Model extends \yii\base\Model
         unset($model, $formName, $post);
         return $models;
     }
-
-    public static function createMultipleUpdate($modelClass, $multipleModels = [],$id)
+    public static function createMultipleUpdate($modelClass, $multipleModels = [], $id)
     {
         $model    = new $modelClass;
         $formName = $model->formName();
