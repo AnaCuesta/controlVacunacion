@@ -189,7 +189,7 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
             'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
             'widgetBody' => '.container-items', // required: css class selector
             'widgetItem' => '.item', // required: css class
-            'limit' => 4, // the maximum times, an element can be cloned (default 999)
+            'limit' => 20, // the maximum times, an element can be cloned (default 999)
             'min' => 1, // 0 or 1 (default 1)
             'insertButton' => '.add-item', // css class
             'deleteButton' => '.remove-item', // css class
@@ -261,23 +261,33 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                         <!-- Dosis -->
                         <div class="col-sm-4">
                           <?php
+                          if(!empty($modelVacunacion->CODDOSIS)){
                           $dosis = Dosis::find()->where(['CODDOSIS'=>$modelVacunacion->CODDOSIS])->one();
                           $vacunaActualizacion = Vacuna::find()->where(['CODVACUNA'=>$dosis->CODVACUNA])->one();
                           echo $form->field($modelVacunacion, "[{$i}]CODDOSIS")->dropDownList(
-                            ArrayHelper::map(Dosis::find()->where(['CODVACUNA'=>$vacunaActualizacion->CODVACUNA])->all(), 'CODDOSIS', 'DOSIS'),
-
+                          ArrayHelper::map(Dosis::find()->where(['CODVACUNA'=> $vacunaActualizacion->CODVACUNA])->all(), 'CODDOSIS', 'DOSIS'),
                             [
                               'value' => $modelVacunacion->CODDOSIS
 
                             ]
                           );
+                        }else{
+                          echo $form->field($modelVacunacion, "[{$i}]CODDOSIS")->dropDownList(
+                          [
+
+
+                          ]
+                          );
+
+                        }
+
                            ?>
 
                         </div>
                         <!-- Dosis -->
                         <!-- Estado -->
                         <div class="col-sm-4">
-                            <?= $form->field($modelVacunacion, "[{$i}]ESTADO")->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($modelVacunacion, "[{$i}]ESTADO")->dropDownList(['ADMINISTRADA'=>'ADMINISTRADA', 'NO-ADMINISTRADA'=>'NO ADMINISTRADA']) ?>
                         </div>
                         <!-- Estado -->
                     </div>
@@ -286,6 +296,7 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                       <!-- Rango de Edad -->
                         <div class="col-sm-4">
                           <?php
+                          if(!empty($modelVacunacion->CODRANGOEDAD)){
                           $rango = REdadVac::find()->where(['CODRANGOEDAD'=>$modelVacunacion->CODRANGOEDAD])->one();
                           $vacunaActualizacion = Vacuna::find()->where(['CODVACUNA'=>$rango->CODVACUNA])->one();
                             echo  $form->field($modelVacunacion, "[{$i}]CODRANGOEDAD")->dropDownList(
@@ -293,13 +304,20 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
                             [
                               'value' => $modelVacunacion->CODRANGOEDAD
                             ]);
+                          }else{
+
+                            echo  $form->field($modelVacunacion, "[{$i}]CODRANGOEDAD")->dropDownList(
+                            [
+                            ]);
+
+                          }
                            ?>
                         </div>
                      <!-- Rango de Edad -->
 
                      <!-- Fecha de la vacuna -->
                         <div class="col-sm-4">
-                            <?= $form->field($modelVacunacion, "[{$i}]FECHAVACUNA")->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($modelVacunacion, "[{$i}]FECHAVACUNA")->textInput(['type' => 'date']) ?>
                         </div>
                     <!-- Fecha de la vacuna -->
 

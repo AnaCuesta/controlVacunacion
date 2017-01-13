@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
         foreach ($vacuna as $y => $value) {
 
 
-          $rangoEdad =  REdadVac::find()->where(['CODVACUNA'=>$value->CODVACUNA])->all();
+          $rangoEdad =  REdadVac::find()->where(['CODRANGOEDAD'=>$valueDosis->CODRANGOEDAD])->all();
 
           foreach ($rangoEdad as $z => $edad) {
 

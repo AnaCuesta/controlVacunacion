@@ -54,6 +54,8 @@ class Regdiario extends \yii\db\ActiveRecord
 
 
       /*ciudadano*/
+      /*Vacuna*/
+      public $vacuna;
     /**
      * @inheritdoc
      */
@@ -68,7 +70,7 @@ class Regdiario extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['CODREGISTRODIARIO', 'UNICODIGOES', 'CODTIPODOC', 'CODLUGARVACUNACION', 'DESCRIPCIONESCENARIOVAC', 'FECHAREGISTROVAC', 'N_HISTCLINIC', 'NOMBREVACUNADOR'], 'required'],
+            [['CODREGISTRODIARIO','ESTADO','CODEDAD', 'UNICODIGOES', 'CODTIPODOC', 'CODLUGARVACUNACION', 'DESCRIPCIONESCENARIOVAC', 'FECHAREGISTROVAC', 'N_HISTCLINIC', 'NOMBREVACUNADOR'], 'required'],
             [['CODREGISTRODIARIO', 'CODTIPODOC', 'CODLUGARVACUNACION', 'CODEDAD'], 'integer'],
             [['FECHAREGISTROVAC'], 'safe'],
             [['UNICODIGOES'], 'string', 'max' => 11],
