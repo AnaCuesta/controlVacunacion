@@ -16,6 +16,9 @@ use frontend\models\Genero;
 use frontend\models\Autoidetnica;
 use frontend\models\Nacionalidad;
 use frontend\models\Vacunacionregistrodiario;
+use frontend\models\Escenariovac;
+use frontend\models\Establecimiento;
+use frontend\models\ZonaUbic;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 /* @var $this yii\web\View */
@@ -40,56 +43,116 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 <?php
-
+/*Ciudadano*/
 $ciudadano = Ciudadano::find()->where(['N_HISTCLINIC' => $model->N_HISTCLINIC])->one();
 $etnia = Autoidetnica::find()->where(['CODAUTOIDETNICA' => $ciudadano->CODAUTOIDETNICA])->one();
 $nacionalidad = Nacionalidad::find()->where(['CODNACIONALIDAD' => $ciudadano->CODNACIONALIDAD])->one();
 $sexo = Genero::find()->where(['CODSEXO' => $ciudadano->CODSEXO])->one();
 $edad = Edad::find()->where(['CODEDAD' => $ciudadano->CODEDAD])->one();
-
+$escenario =  Escenariovac::find()->where(['CODLUGARVACUNACION' => $model->CODLUGARVACUNACION])->one();
 $lugar = Lugarresidencia::find()->where(['CODLUGARRESIDE' => $ciudadano->CODLUGARRESIDE])->one();
 $localidad = Localidad::find()->where(['CODLOCREC' =>$lugar->CODLOCREC])->one();
 $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $localidad->CODPARROQUIA])->one();
 $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
 $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();
+/*Ciudadano*/
+/*Establecimiento*/
+$establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $model->UNICODIGOES])->one();
+$parroquiaEstablecimiento = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
+$cantonEstablecimiento = Canton::find()->where(['CODCANTON' => $parroquiaEstablecimiento->CODCANTON])->one();
+$provinciaEstablecimiento = Provincia::find()->where(['CODPROVINCIA' => $cantonEstablecimiento->CODPROVINCIA])->one();
+$zonaUbicacion = ZonaUbic::find()->where(['CODZONAUBIC' => $establecimiento->CODZONAUBIC])->one();
+/*Establecimiento*/
+
+
+
 
  ?>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'CODREGISTRODIARIO',
-            'UNICODIGOES',
-            'CODTIPODOC',
-            'CODLUGARVACUNACION',
-            'DESCRIPCIONESCENARIOVAC',
-            'FECHAREGISTROVAC',
-            'N_HISTCLINIC',
+            //'CODREGISTRODIARIO',
             [
-              'label' => 'Nombre Vacunador',
-              'value' =>  $model->NOMBREVACUNADOR,
+              'label' => 'Fecha de la Vacunación ',
+              'value' =>  $model->FECHAREGISTROVAC,
             ],
             [
-              'label' => 'Apellidos Ciudadanos',
+              'label' => 'Nombre del Establecimeinto',
+              'value' =>  $establecimiento->NOMBREESTABLECIMIENTO,
+            ],
+            [
+              'label' => 'Zona',
+              'value' =>  $establecimiento->ZONA,
+            ],
+            [
+              'label' => 'Provincia',
+              'value' =>  $provinciaEstablecimiento->PROVINCIA,
+            ],
+            [
+              'label' => 'Cantón',
+              'value' =>  $cantonEstablecimiento->CANTON,
+            ],
+            [
+              'label' => 'Parroquia',
+              'value' =>  $parroquiaEstablecimiento->PARROQUIA,
+            ],
+            [
+              'label' => 'Distrito',
+              'value' =>  $establecimiento->DISTRITO,
+            ],
+            [
+              'label' => 'Zona Ubicación',
+              'value' =>  $zonaUbicacion->ZONAUBICACION	,
+            ],
+            [
+              'label' => 'Unicódigo E.S',
+              'value' =>  $establecimiento->UNICODIGOES	,
+            ],
+            [
+              'label' => 'Tipo de Establecimiento',
+              'value' =>  $establecimiento->TIPOESTABLECIMIENTO		,
+            ],
+            [
+              'label' => 'Nombre de Localidad o Institución',
+              'value' =>  $establecimiento->LOCALIDADEST		,
+            ],
+            [
+              'label' => 'Escenario De la Vacunación',
+              'value' =>  $escenario->LUGARVACUNACION,
+            ],
+            'DESCRIPCIONESCENARIOVAC',
+            'N_HISTCLINIC',
+            'CODTIPODOC',
+            [
+              'label' => 'Apellidos',
               'value' =>  $ciudadano->APELLIDOS,
             ],
             [
-              'label' => 'Nombres Ciudadanos',
+              'label' => 'Nombres',
               'value' =>  $ciudadano->NOMBRES,
             ],
             [
-              'label' => 'Etnia',
-              'value' =>  $etnia->AUTOIDETNICA,
+              'label' => 'Cedula de ciudadanía',
+              'value' =>  $ciudadano->CEDULA,
             ],
             [
-              'label' => 'Naciionalidad',
-              'value' =>  $nacionalidad->NACIONALIDAD,
+              'label' => 'Género',
+              'value' =>  $sexo->SEXO,
+            ],
+            [
+              'label' => 'Lugar de Residencia Habitual',
+              'value' =>  $lugar->LUGARRESIDENCIA,
+            ],
+            [
+              'label' => 'Pertenece al E.S',
+              'value' =>  $ciudadano->SNPERTENECEUO,
             ],
             [
               'label' => 'Provincia',
               'value' =>  $provincia->PROVINCIA,
             ],
             [
-              'label' => 'Canton',
+              'label' => 'Cantón',
               'value' =>  $canton->CANTON,
             ],
             [
@@ -101,14 +164,24 @@ $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])
               'value' =>  $localidad->LOCALREC,
             ],
             [
+              'label' => 'Nacionalidad',
+              'value' =>  $nacionalidad->NACIONALIDAD,
+              'class' => 'text-info'
+            ],
+            [
+              'label' => 'Autoidentifiación Étnica',
+              'value' =>  $etnia->AUTOIDETNICA,
+            ],
+            [
               'label' => 'Edad',
               'value' =>  $edad->EDADRMA,
             ],
             [
-              'label' => 'Genero',
-              'value' =>  $sexo->SEXO,
+              'label' => 'Nombre del Vacunador',
+              'value' =>  $model->NOMBREVACUNADOR,
             ],
             'ESTADO',
+
         ],
     ]) ?>
 

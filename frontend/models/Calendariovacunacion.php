@@ -11,12 +11,11 @@ use Yii;
  * @property integer $CODTARCONTVAC
  * @property integer $CODDOSIS
  * @property integer $CODRANGOEDAD
- * @property integer $CODEDAD
  * @property string $FECHAVACUNA
  * @property string $ESTADO
+ * @property string $EDAD
  *
  * @property Dosis $cODDOSIS
- * @property Edad $cODEDAD
  * @property TarjControlvac $cODTARCONTVAC
  */
 class Calendariovacunacion extends \yii\db\ActiveRecord
@@ -36,10 +35,14 @@ class Calendariovacunacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['CODTARCONTVAC', 'CODDOSIS', 'CODRANGOEDAD', 'CODEDAD', 'FECHAVACUNA', 'ESTADO'], 'required'],
-            //[['CODRANGOEDAD'], 'integer'],
+            [['CODTARCONTVAC', 'CODDOSIS', 'CODRANGOEDAD', 'FECHAVACUNA', 'ESTADO', 'EDAD'], 'required'],
+            [['CODTARCONTVAC', 'CODDOSIS', 'CODRANGOEDAD'], 'integer'],
+            [['FECHAVACUNA'], 'safe'],
+            [['ESTADO'], 'string', 'max' => 20],
+            [['EDAD'], 'string', 'max' => 50],
+            [['CODDOSIS'], 'exist', 'skipOnError' => true, 'targetClass' => Dosis::className(), 'targetAttribute' => ['CODDOSIS' => 'CODDOSIS']],
+            [['CODTARCONTVAC'], 'exist', 'skipOnError' => true, 'targetClass' => TarjControlvac::className(), 'targetAttribute' => ['CODTARCONTVAC' => 'CODTARCONTVAC']],
         ];
-
     }
 
     /**
@@ -52,9 +55,9 @@ class Calendariovacunacion extends \yii\db\ActiveRecord
             'CODTARCONTVAC' => 'Codtarcontvac',
             'CODDOSIS' => 'Coddosis',
             'CODRANGOEDAD' => 'Codrangoedad',
-            'CODEDAD' => 'Codedad',
             'FECHAVACUNA' => 'Fechavacuna',
             'ESTADO' => 'Estado',
+            'EDAD' => 'Edad',
         ];
     }
 
@@ -64,14 +67,6 @@ class Calendariovacunacion extends \yii\db\ActiveRecord
     public function getCODDOSIS()
     {
         return $this->hasOne(Dosis::className(), ['CODDOSIS' => 'CODDOSIS']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCODEDAD()
-    {
-        return $this->hasOne(Edad::className(), ['CODEDAD' => 'CODEDAD']);
     }
 
     /**

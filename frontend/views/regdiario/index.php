@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use wbraganca\dynamicform\DynamicFormWidget;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\RegdiarioSearch */

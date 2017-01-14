@@ -18,7 +18,7 @@ class CalendariovacunacionSearch extends Calendariovacunacion
     public function rules()
     {
         return [
-            [['IDCALENDARIO', 'CODTARCONTVAC', 'CODDOSIS', 'CODEDAD'], 'integer'],
+            [['IDCALENDARIO', 'CODTARCONTVAC', 'CODDOSIS', 'EDAD'], 'integer'],
             [['FECHAVACUNA', 'ESTADO'], 'safe'],
         ];
     }

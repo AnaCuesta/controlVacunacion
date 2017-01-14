@@ -13,6 +13,7 @@ use bookin\aws\checkbox\AwesomeCheckbox;
 use kartik\select2\Select2;
 use frontend\models\Autoidetnica;
 use yii\helpers\Json;
+use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Ciudadano */
 /* @var $form yii\widgets\ActiveForm */
@@ -30,6 +31,34 @@ use yii\helpers\Json;
 
     <?= $form->field($model, 'NOMBRES')->textInput(['maxlength' => true]) ?>
 
+
+    <?php
+    echo '<label>Ingrese la  fecha de Nacimiento</label>';
+
+    echo DatePicker::widget([
+    'attribute' => 'FECHANACIMIENTO',
+    'model' => $model,
+    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+    'value' => '',
+    'pluginOptions' => [
+    'autoclose'=>true,
+    'format' => 'yyyy-mm-dd'
+    ]
+    ]);
+    ?>
+
+    <div class="row">
+      <div class="col-sm-12">
+
+      <?php
+
+      print_r(DATE('m')+substr($model->FECHANACIMIENTO,5,2));
+      die();
+
+       ?>
+
+      </div>
+    </div>
    <?= $form->field($model, 'CODSEXO')->widget(Select2::classname(), [
                                   'data' => ArrayHelper::map(Genero::find()->all(), 'CODSEXO', 'SEXO'),
                                   'language' => 'de',
@@ -39,14 +68,7 @@ use yii\helpers\Json;
                                   ],
                               ]); ?>
 
-    <?= $form->field($model, 'CODEDAD')->widget(Select2::classname(), [
-                     'data' => ArrayHelper::map(Edad::find()->all(), 'CODEDAD', 'EDADRMA'),
-                     'language' => 'de',
-                     'options' => [  'prompt'=>'Seleccione la opción...'],
-                     'pluginOptions' => [
-                         'allowClear' => true
-                     ],
-                 ]); ?>
+
 
     <?= $form->field($model, 'CODNACIONALIDAD')->widget(Select2::classname(), [
                      'data' => ArrayHelper::map(Nacionalidad::find()->all(), 'CODNACIONALIDAD', 'NACIONALIDAD'),
@@ -140,7 +162,7 @@ $('#idLugarReside').ready(function(){
 
   var idLocalidad = $('#idLugarReside').val();
   ciudadano(idLocalidad);
-  
+
 });
 
 

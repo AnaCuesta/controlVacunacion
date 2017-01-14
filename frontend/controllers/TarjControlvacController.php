@@ -377,6 +377,59 @@ class TarjControlvacController extends Controller
 
 
                  }
+               /**
+                  *  Obtiene el nombre de la zona
+                  * @return mixed
+                  */
+                 public function actionCalcularEdad($id)
+                 {
+                   $ciudadano = Ciudadano::find()->where(['N_HISTCLINIC' => $id])->one();
+                   $mesActual = date('m');
+                   $mesNacimiento = substr($ciudadano->FECHANACIMIENTO,5,2);
+                   $anioActual = date('Y');
+                   $anioNacimiento = substr($ciudadano->FECHANACIMIENTO,0,4);
+                   $diaActual = date('d') ;
+                   $diaNacimiento = substr($ciudadano->FECHANACIMIENTO,8,4);
+                   $anio = 0;
+                   $mes = 0;
+
+
+                if($mesActual >= $mesNacimiento){
+                   $anio = ($anioActual - $anioNacimiento);
+                 }else{
+                  $anio = ($anioActual - $anioNacimiento)-1;
+                 }
+
+                 if($diaActual >= $diaNacimiento){
+
+                   if($mesActual >= $mesNacimiento){
+
+                      $mes = ($mesActual - $mesNacimiento);
+
+                   }else{
+                     $mes = ($mesActual - $mesNacimiento)+12;
+                     if($mes==12){
+                       $mes = 0;
+                     }
+                   }
+
+                  }else{
+
+                    if($mesActual >= $mesNacimiento){
+                       $mes = ($mesActual - $mesNacimiento)-1;
+                    }else{
+                      $mes = ($mesActual - $mesNacimiento)+11;
+                      if($mes==11){
+                        $mes = 0;
+                      }
+                    }
+
+                  }
+
+                  echo Json::encode($anio.' Años '.$mes.' Meses');
+
+
+                 }
 
 
 

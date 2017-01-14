@@ -24,7 +24,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 <?php $form = ActiveForm::begin(['id'=>'dynamic-form']); ?>
 
 
-
                 <?php
                 echo '<label>Ingrese la  fecha de la vacunación</label>';
 
@@ -314,6 +313,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                   </div>
 
                 </div>
+
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
