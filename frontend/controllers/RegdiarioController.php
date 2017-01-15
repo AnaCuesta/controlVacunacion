@@ -16,6 +16,7 @@ use frontend\models\Ciudadano;
 use frontend\models\ZonaUbic;
 use frontend\models\Parroquia;
 use frontend\models\Vacuna;
+use frontend\models\User;
 use frontend\models\REdadVac;
 use frontend\models\Dosis;
 use frontend\models\Autoidetnica;
@@ -24,8 +25,6 @@ use frontend\models\Localidad;
 use frontend\models\Genero;
 use frontend\models\Vacunacionregistrodiario;
 use frontend\models\Nacionalidad;
-
-
 use common\models\Model;
 use yii\helpers\ArrayHelper;
 /**
@@ -47,6 +46,37 @@ class RegdiarioController extends Controller
             ],
         ];
     }
+    /**
+       *  Obtiene el nombre de la zona
+       * @return mixed
+       */
+      public function actionListadoInstitucion($id)
+      {
+          if($id==1){
+          echo Json::encode('Unido Somos Mas');
+          }else{
+          echo Json::encode('');
+
+          }
+      }
+    /**
+       *  Obtiene el nombre de la zona
+       * @return mixed
+       */
+      public function actionListadoVacunador()
+      {
+            $user  = User::find()->all();
+            if(count($user) > 0){
+                foreach ($user  as  $value) {
+              echo "<option value='".$value->Nombre.' '.$value->Apellido."'>".$value->Nombre.' '.$value->Apellido."</option>";
+            }
+            }else{
+
+                echo "<option></option>";
+
+            }
+
+      }
 /*Dynamic Form*/
     /**
       *  Lista las dosis
@@ -515,7 +545,7 @@ class RegdiarioController extends Controller
     {
         $model = new Regdiario();
 
-
+        $model->CODTIPODOC = 1;
 
 
         $modelRegistro = [new Vacunacionregistrodiario];

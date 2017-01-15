@@ -9,17 +9,26 @@ use frontend\models\Vacuna;
 use frontend\models\REdadVac;
 use frontend\models\Dosis;
 use frontend\models\Edad;
-
+ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\TarjControlvac */
 
-$this->title = $model->CODTARCONTVAC;
+$this->title = 'Reporte de la tarjeta de Control de vacunación para niños/ menores de 2 años';
 $this->params['breadcrumbs'][] = ['label' => 'Tarj Controlvacs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tarj-controlvac-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+  <div class="row">
+    <div class="col-sm-10">
+      <h4><strong><?= Html::encode('Ministerio de Salud Pública') ?></strong></h4>
+      <h5><?= Html::encode('Programa Ampliado de Inmunizaciones') ?></h5>
+      <h3><strong><?= Html::encode($this->title) ?></strong></h3>
+    </div>
+    <div class="col-sm-2">
+      <?= Html::img(Url::to('/advanced/frontend/views/tarj-controlvac/logo/persona.jpg', false), ['alt' => 'My logo', 'width'=>'110', 'class'=>'pull-right img-responsive']) ?>
+    </div>
+  </div>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->CODTARCONTVAC], ['class' => 'btn btn-primary']) ?>

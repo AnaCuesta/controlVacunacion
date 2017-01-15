@@ -13,7 +13,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 use frontend\models\Vacuna;
 use frontend\models\Edad;
 use frontend\models\Dosis;
-
+ use yii\helpers\Url;
 
 
 use frontend\models\REdadVac;
@@ -25,6 +25,10 @@ use frontend\models\REdadVac;
 ?>
 
 <div class="tarj-controlvac-form">
+<div class="row">
+
+
+</div>
 
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 
@@ -283,7 +287,6 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
 
                            ?>
 
-
                         </div>
                         <!-- Dosis -->
                         <!-- Estado -->
@@ -325,9 +328,39 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
 
                         <!-- Edad -->
                         <div class="col-sm-4">
+                          <?php
+                          $data = Edad::find()->where("
 
+                          EDADRMA = '2do.mes' or EDADRMA = 'RN' OR
+                          EDADRMA  = '2do.mes' OR
+                          EDADRMA  = '3er.mes' OR
+                          EDADRMA  = '4to.mes' OR
+                          EDADRMA  = '5to.mes' OR
+                          EDADRMA  = '6to.mes' OR
+                          EDADRMA  = '7mo.mes' OR
+                          EDADRMA  = '8vo.mes'  OR
+                          EDADRMA  = '9no.mes'  OR
+                          EDADRMA  = '10mo.mes' OR
+                          EDADRMA  = '11vo.mes' OR
+                          EDADRMA  = '12 meses' OR
+                          EDADRMA  = '13 meses' OR
+                          EDADRMA  = '14 meses' OR
+                          EDADRMA  = '15 meses' OR
+                          EDADRMA  = '16 meses' OR
+                          EDADRMA  = '17 meses' OR
+                          EDADRMA  = '18 meses' OR
+                          EDADRMA  = '19 meses' OR
+                          EDADRMA  = '20 meses' OR
+                          EDADRMA  = '21 meses' OR
+                          EDADRMA  = '22 meses' OR
+                          EDADRMA  = '23 meses'
 
-                                 <?= $form->field($modelVacunacion, "[{$i}]EDAD")->textInput([]) ?>
+                          ")->all();
+                          ?>
+                          <?php
+                          echo $form->field($modelVacunacion, "[{$i}]CODEDAD")->dropDownList(
+                          ArrayHelper::map($data, 'CODEDAD', 'EDADRMA'));
+                           ?>
 
                         </div>
                         <!-- Edad -->
@@ -341,6 +374,13 @@ echo $form->field($model, 'perteneceUO')->widget(AwesomeCheckbox::classname(),[
     </div>
   </div>
 
+</div>
+
+<div class="row">
+
+
+    <?= Html::img(Url::to('/advanced/frontend/views/tarj-controlvac/logo/MSP.png', false), ['alt' => 'My logo', 'width'=>'250', 'class'=>'pull-right img-responsive']) ?>
+  
 </div>
 
 <div class="row">
@@ -385,15 +425,11 @@ $(".dynamicform_wrapper").on("afterDelete", function(e) {
 });
   //$(this).html('<input type="checkbox" id="check'+i+'"  class="check" value='+i+'>'+(i));
 */
-x=0;
 $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+$(".dynamicform_wrapper .panel-title").each(function(i) {
 
-  $(".dynamicform_wrapper .panel-title").each(function(i) {
-  x++;
   check();
   });
-
-alert(x);
 
 });
 
@@ -403,21 +439,12 @@ $('#idEstablecimiento').change(function(){
   var idEstablecimiento = $(this).val();
   establecimiento(idEstablecimiento);
 
-
 });
 
 $('#idCiudadano').change(function(){
 
   var idCiudadano = $(this).val();
   ciudadano(idCiudadano);
-
-  $.get('index.php?r=tarj-controlvac/calcular-edad', {id : idCiudadano}, function(data){
-
-      var data = $.parseJSON(data);
-
-      $('#calendariovacunacion-0-edad').attr('value', data);
-  });
-
 
 });
 

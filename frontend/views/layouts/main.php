@@ -61,7 +61,10 @@ AppAsset::register($this);
             ['label' => 'Tarjeta de Control de Vacunación',  'url' => ['tarj-controlvac/index']],
 
 
-            ['label' => 'Registros',  'url' => ['regdiario/index']],
+            ['label' => 'Captación Temprana',  'url' => ['regdiarioct/index']],
+            ['label' => 'Captación Tardia',  'url' => ['regdiariocd/index']],
+            ['label' => 'Grupo de Riesgo',  'url' => ['regdiariogr/index']],
+            ['label' => 'Anafiláctico',  'url' => ['regdiarioaf/index']],
 
 
 

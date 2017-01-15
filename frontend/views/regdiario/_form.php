@@ -10,6 +10,7 @@ use frontend\models\Ciudadano;
 use frontend\models\Vacuna;
 use frontend\models\Edad;
 use frontend\models\Dosis;
+use frontend\models\User;
 use frontend\models\REdadVac;
 use yii\helpers\ArrayHelper;
 
@@ -43,7 +44,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
                 <?= $form->field($model, 'UNICODIGOES')->widget(Select2::classname(), [
                        'data' => ArrayHelper::map(Establecimiento::find()->all(), 'UNICODIGOES', 'NOMBREESTABLECIMIENTO'),
-                       'language' => 'de',
+                       'language' => 'es',
                        'options' => ['prompt'=> 'Seleccione la opción...', 'id' => 'idEstablecimiento'],
                        'pluginOptions' => [
                            'allowClear' => true
@@ -85,7 +86,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 </div>
                 </div>
 
-                <?= $form->field($model, 'CODTIPODOC')->textInput() ?>
 
 
 
@@ -94,7 +94,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
                 <?= $form->field($model, 'CODLUGARVACUNACION')->widget(Select2::classname(), [
                        'data' => ArrayHelper::map(Escenariovac::find()->all(), 'CODLUGARVACUNACION', 'LUGARVACUNACION'),
-                       'language' => 'de',
+                       'language' => 'es',
                        'options' => ['prompt'=> 'Seleccione la opción...'],
                        'pluginOptions' => [
                            'allowClear' => true
@@ -111,7 +111,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
                 <?= $form->field($model, 'N_HISTCLINIC')->widget(Select2::classname(), [
                        'data' => ArrayHelper::map(Ciudadano::find()->all(), 'N_HISTCLINIC', 'N_HISTCLINIC'),
-                       'language' => 'de',
+                       'language' => 'es',
                        'options' => ['prompt'=> 'Seleccione la opción...'],
                        'pluginOptions' => [
                            'allowClear' => true
@@ -164,7 +164,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
                 <?= $form->field($model, 'CODEDAD')->widget(Select2::classname(), [
                          'data' => ArrayHelper::map(Edad::find()->all(), 'CODEDAD', 'EDADRMA'),
-                         'language' => 'de',
+                         'language' => 'es',
                          'options' => ['prompt'=> 'Seleccione la opción...'],
                          'pluginOptions' => [
                              'allowClear' => true
@@ -172,10 +172,23 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 ]); ?>
 
 
+                <?= $form->field($model, 'NOMBREVACUNADOR')->widget(Select2::classname(), [
 
-                <?= $form->field($model, 'NOMBREVACUNADOR')->textInput(['maxlength' => true]) ?>
+                         'language' => 'es',
+                         'options' => ['prompt'=> 'Seleccione la opción...'],
+                         'pluginOptions' => [
+                             'allowClear' => true
+                         ],
+                ]); ?>
 
-                <?= $form->field($model, 'ESTADO')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'ESTADO')->widget(Select2::classname(), [
+                         'data' => ['ASISTIÓ' =>'Asistió', 'NO-ASISTIÓ' => 'No asistió'],
+                         'language' => 'es',
+                         'options' => ['prompt'=> 'Seleccione la opción...'],
+                         'pluginOptions' => [
+                             'allowClear' => true
+                         ],
+                ]); ?>
 
                 <div class="row">
                   <div class="panel panel-default">
@@ -334,7 +347,15 @@ var idCiudadano = $('#regdiario-n_histclinic').val()
 ciudadano(idCiudadano);
 
 
+$.get('index.php?r=regdiario/listado-vacunador', function(data){
+
+
+    $('select#regdiario-nombrevacunador').html(data);
+});
+
 check();
+
+
 
 });
 
@@ -343,6 +364,14 @@ $('#idEstablecimiento').change(function(){
 
   var idEstablecimiento = $(this).val();
   establecimiento(idEstablecimiento);
+
+});
+$('#regdiario-codlugarvacunacion').change(function(){
+  var idEstablecimiento = $(this).val();
+  $.get('index.php?r=regdiario/listado-institucion', {id : idEstablecimiento}, function(data){
+      var data = $.parseJSON(data);
+      $('#regdiario-descripcionescenariovac').attr('value', data);
+  });
 
 });
 

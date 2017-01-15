@@ -472,6 +472,8 @@ class TarjControlvacController extends Controller
     {
         $model = new TarjControlvac();
 
+
+
         $modelVacunacion = [new Calendariovacunacion];
 
         $idTarjeta = TarjControlvac::find()->max('CODTARCONTVAC');

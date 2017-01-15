@@ -30,7 +30,7 @@ use yii\helpers\ArrayHelper;
 /**
  * RegdiarioController implements the CRUD actions for Regdiario model.
  */
-class RegdiarioafController extends Controller
+class RegdiariocdController extends Controller
 {
     /**
      * @inheritdoc
@@ -103,7 +103,7 @@ class RegdiarioafController extends Controller
        */
       public function actionListadoRangoEdad($id)
       {
-
+        if(! empty($id)){
         $contarVacuna  = Vacuna::find()->where(['CODVACUNA'=> $id])->count();
         $edad = REdadVac::find()->where(['CODVACUNA'=> $id])->all();
 
@@ -115,6 +115,7 @@ class RegdiarioafController extends Controller
         }else {
           echo "<option></option>";
         }
+      }
 
       }
 /*Dynamic Form*/
@@ -303,7 +304,7 @@ class RegdiarioafController extends Controller
 
                    }
 
-                   /**
+                    /**
                       *  Obtiene el nombre de la zona
                       * @return mixed
                       */
@@ -367,7 +368,7 @@ class RegdiarioafController extends Controller
                        $ciudadano = Ciudadano::find()->where(['N_HISTCLINIC' => $id])->one();
 
                        if( count($ciudadano) > 0){
-                           $genero = Genero::find()->where(['CODSEXO' => $ciudadano->CODSEXO])->one();
+                         $genero = Genero::find()->where(['CODSEXO' => $ciudadano->CODSEXO])->one();
 
                            echo Json::encode($genero->SEXO);
 
@@ -465,14 +466,14 @@ class RegdiarioafController extends Controller
         public function actionProvincia($id)
         {
           if(!empty($id)){
-          $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
-          $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
-          $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
-          $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();
-          echo Json::encode($provincia->PROVINCIA);
-        }else{
-          echo Json::encode('');
-        }
+            $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+            $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
+            $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
+            $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();
+            echo Json::encode($provincia->PROVINCIA);
+          }else{
+            echo Json::encode('');
+          }
         }
 
        /**
@@ -481,13 +482,14 @@ class RegdiarioafController extends Controller
          */
         public function actionParroquia($id)
         {
+
           if(!empty($id)){
-          $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
-          $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
-          echo Json::encode($parroquia->PARROQUIA);
-        }else{
-          echo Json::encode('');
-        }
+            $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+            $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
+            echo Json::encode($parroquia->PARROQUIA);
+          }else{
+            echo Json::encode('');
+          }
         }
 
         /**
@@ -497,10 +499,11 @@ class RegdiarioafController extends Controller
           public function actionTipoEstablecimiento($id)
           {
             if(!empty($id)){
-            $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
-            echo Json::encode($establecimiento->TIPOESTABLECIMIENTO);
+              $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+              echo Json::encode($establecimiento->TIPOESTABLECIMIENTO);
             }else{
               echo Json::encode('');
+
             }
           }
         /**
@@ -515,6 +518,7 @@ class RegdiarioafController extends Controller
             echo Json::encode($zona->ZONAUBICACION);
           }else{
             echo Json::encode('');
+
           }
           }
         /**
@@ -526,10 +530,10 @@ class RegdiarioafController extends Controller
             if(!empty($id)){
             $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
             echo Json::encode($establecimiento->LOCALIDADEST);
-            }else{
-              echo Json::encode('');
+          }else{
+            echo Json::encode('');
 
-            }
+          }
           }
         /**
            *  Obtiene el nombre de la zona
@@ -537,13 +541,13 @@ class RegdiarioafController extends Controller
            */
           public function actionUniCodigo($id)
           {
-            if(!empty($id)){
-              $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
-              echo Json::encode($establecimiento->UNICODIGOES);
-            }else{
-              echo Json::encode('');
+          if(!empty($id)){
+            $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+            echo Json::encode($establecimiento->UNICODIGOES);
+          }else{
+            echo Json::encode('');
 
-            }
+          }
           }
 
 
@@ -583,7 +587,8 @@ class RegdiarioafController extends Controller
     {
         $model = new Regdiario();
 
-        $model->CODTIPODOC = 4;
+        $model->CODTIPODOC = 2;
+
 
         $modelRegistro = [new Vacunacionregistrodiario];
 

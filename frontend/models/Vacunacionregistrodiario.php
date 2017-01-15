@@ -46,8 +46,8 @@ class Vacunacionregistrodiario extends \yii\db\ActiveRecord
         return [
             'IDVAUNACIONREGDIARIO' => 'Idvaunacionregdiario',
             'CODREGISTRODIARIO' => 'Codregistrodiario',
-            'CODDOSIS' => 'Coddosis',
-            'CODRANGOEDAD' => 'Codrangoedad',
+            'CODDOSIS' => 'Dosis',
+            'CODRANGOEDAD' => 'Edad Recomendada de Aplicación',
         ];
     }
 

@@ -15,10 +15,11 @@ use frontend\models\Provincia;
 use frontend\models\Genero;
 use frontend\models\Autoidetnica;
 use frontend\models\Nacionalidad;
-use frontend\models\Vacunacionregistrodiario;
+use frontend\models\Vacunacionregdiariogr;
 use frontend\models\Escenariovac;
 use frontend\models\Establecimiento;
 use frontend\models\ZonaUbic;
+use frontend\models\Grupoderiesgo;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -31,14 +32,15 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="regdiario-view">
 
-   <div class="row">
-        <div class="col-sm-6">
-          <?= Html::img(Url::to('/advanced/frontend/views/tarj-controlvac/logo/MSP.png', false), ['alt' => 'My logo', 'width'=>'250', 'class'=>'pull-lft img-responsive']) ?>
-        </div>
-        <div class="col-sm-6">
-          <?= Html::img(Url::to('/advanced/frontend/views/tarj-controlvac/logo/persona.jpg', false), ['alt' => 'My logo', 'width'=>'110', 'class'=>'pull-right img-responsive']) ?>
-        </div>
-      </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <?= Html::img(Url::to('/advanced/frontend/views/tarj-controlvac/logo/MSP.png', false), ['alt' => 'My logo', 'width'=>'250', 'class'=>'pull-lft img-responsive']) ?>
+    </div>
+    <div class="col-sm-6">
+      <?= Html::img(Url::to('/advanced/frontend/views/tarj-controlvac/logo/persona.jpg', false), ['alt' => 'My logo', 'width'=>'110', 'class'=>'pull-right img-responsive']) ?>
+    </div>
+  </div>
+
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->CODREGISTRODIARIO], ['class' => 'btn btn-primary']) ?>
@@ -239,9 +241,11 @@ $zonaUbicacion = ZonaUbic::find()->where(['CODZONAUBIC' => $establecimiento->COD
       <th class='info'>Vacuna</th>
       <th class='info'>Dosis</th>
       <th class='info'>Edad Recomendada de Aplicación</th>
+      <th class='info'>Grupo de Riesgo</th>
 
         <?php
-        $data = Vacunacionregistrodiario::find()->where(['CODREGISTRODIARIO'=>$model->CODREGISTRODIARIO])->all();
+        $data = Vacunacionregdiariogr::find()->where(['CODREGISTRODIARIO'=>$model->CODREGISTRODIARIO])->all();
+
 
         $conDosis = 0;
         $con = 0;
@@ -285,6 +289,14 @@ $zonaUbicacion = ZonaUbic::find()->where(['CODZONAUBIC' => $establecimiento->COD
 
           }
 
+          $grupoRiesgo = Grupoderiesgo::find()->where(['CODGRUPORIESGO'=> $valueDosis->CODGRUPORIESGO])->all();
+
+          foreach ($grupoRiesgo as $key => $value) {
+            if ($w == $con )
+            {
+              echo '<td>'.$value->GRUPORIESGO.'</td>';
+            }
+          }
           echo '</tr>';
           $con++;
 

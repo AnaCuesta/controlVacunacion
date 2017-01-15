@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use wbraganca\dynamicform\DynamicFormWidget;
-use frontend\models\Regdiario;
 use yii\db\Query;
 use yii\data\ActiveDataProvider;
 
@@ -23,27 +22,19 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Regdiario', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-
     <?php
 
 
     $query = new Query();
     $dataProvider = new ActiveDataProvider([
-        'query' => $query->select('*')->where(['CODTIPODOC'=>4])->from('regdiario'),
+        'query' => $query->select('*')->where(['CODTIPODOC'=>3])->from('regdiario'),
         'pagination' => [
-            'pageSize' => 20,
+            'pageSize' => 10,
         ],
 
     ]);
 
-
-
-
-
-
      ?>
-
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

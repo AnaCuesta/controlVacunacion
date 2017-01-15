@@ -11,9 +11,9 @@ use frontend\models\Vacuna;
 use frontend\models\Edad;
 use frontend\models\Dosis;
 use frontend\models\User;
+use frontend\models\Grupoderiesgo;
 use frontend\models\REdadVac;
 use yii\helpers\ArrayHelper;
-
 use wbraganca\dynamicform\DynamicFormWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Regdiario */
@@ -226,7 +226,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                     <?php
                                         // necessary for update action.
                                         if (! $modelRegistro->isNewRecord) {
-                                            echo Html::activeHiddenInput($modelRegistro , "[{$i}]IDVAUNACIONREGDIARIO");
+                                            echo Html::activeHiddenInput($modelRegistro , "[{$i}]CODGRUPORIESGO");
                                         }
                                     ?>
                                     <div class="row">
@@ -234,23 +234,16 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                         <?php
                                         $vacuna = Vacuna::find()->where("
 
-                                        VACUNA = 'BCG' or
-                                        VACUNA = 'Rotavirus' or
-                                        VACUNA = 'Neumococo conjugada' or
-                                        VACUNA = 'Pentavalente' or
+                                        VACUNA = 'HB' or
+                                        VACUNA = 'Meningocócica B-C' or
                                         VACUNA = 'SRP' or
-                                        VACUNA = 'FA' or
-                                        VACUNA = 'Varicela' or
-                                        VACUNA = 'DPT' or
-                                        VACUNA = 'DT(Pediátrico)' or
-                                        VACUNA = 'HPV' or
-                                        VACUNA = 'dT(Adulto)'
-
+                                        VACUNA = 'SR' or
+                                        VACUNA = 'FA'
 
                                         ")->all();
 
                                         ?>
-                                      <div class="col-sm-4">
+                                      <div class="col-sm-3">
                                           <?php
                                           if(!empty($modelRegistro->CODDOSIS)){
                                             $dosis = Dosis::find()->where(['CODDOSIS'=>$modelRegistro->CODDOSIS])->one();
@@ -268,7 +261,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                         </div>
                                         <!-- Vacuna -->
                                         <!-- Dosis -->
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-3">
                                           <?php
                                           if(!empty($modelRegistro->CODDOSIS)){
                                           $dosis = Dosis::find()->where(['CODDOSIS'=>$modelRegistro->CODDOSIS])->one();
@@ -295,7 +288,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                         </div>
                                         <!-- Dosis -->
                                         <!-- Rango de Edad -->
-                                          <div class="col-sm-4">
+                                          <div class="col-sm-3">
                                             <?php
                                             if(!empty($modelRegistro->CODRANGOEDAD)){
                                             $rango = REdadVac::find()->where(['CODRANGOEDAD'=>$modelRegistro->CODRANGOEDAD])->one();
@@ -315,6 +308,19 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                              ?>
                                           </div>
                                        <!-- Rango de Edad -->
+                                        <!-- Grupo de Riesgo -->
+                                          <div class="col-sm-3">
+                                            <?php
+
+                                              echo  $form->field($modelRegistro, "[{$i}]CODGRUPORIESGO")->dropDownList(
+                                              ArrayHelper::map(Grupoderiesgo::find()->all(), 'CODGRUPORIESGO', 'GRUPORIESGO'),
+                                              [
+                                                'prompt' => 'Seleccione la opcion...'
+                                              ]);
+
+                                             ?>
+                                          </div>
+                                       <!-- Grupo de Riesgo -->
 
                                     </div>
                                 </div>
@@ -345,9 +351,7 @@ var idEstablecimiento = $('#idEstablecimiento').val();
 establecimiento(idEstablecimiento);
 var idCiudadano = $('#regdiario-n_histclinic').val()
 ciudadano(idCiudadano);
-
-
-$.get('index.php?r=regdiarioct/listado-vacunador', function(data){
+$.get('index.php?r=regdiario/listado-vacunador', function(data){
 
 
     $('select#regdiario-nombrevacunador').html(data);
@@ -368,7 +372,7 @@ $('#idEstablecimiento').change(function(){
 });
 $('#regdiario-codlugarvacunacion').change(function(){
   var idEstablecimiento = $(this).val();
-  $.get('index.php?r=regdiarioct/listado-institucion', {id : idEstablecimiento}, function(data){
+  $.get('index.php?r=regdiariogr/listado-institucion', {id : idEstablecimiento}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-descripcionescenariovac').attr('value', data);
   });
@@ -390,64 +394,65 @@ check();
 });
 
 });
+
 function ciudadano(idCiudadano){
 
-  $.get('index.php?r=regdiarioct/nombre-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/nombre-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-nombresciudadano').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/apellido-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/apellido-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-apellidosciudadano').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/nacionalidad-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/nacionalidad-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-nacionalidadciudadano').attr('value', data);
   });
 
-  $.get('index.php?r=regdiarioct/etnia-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/etnia-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-etniaciudadano').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/lugar-residencia-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/lugar-residencia-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-lugarresidenciaciudadano').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/provincia-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/provincia-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-provinciaciudadano').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/canton-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/canton-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-cantonciudadano').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/parroquia-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/parroquia-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-parroquiaciudadano').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/localidad-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/localidad-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-localidadciudadano').attr('value', data);
   });
 
-  $.get('index.php?r=regdiarioct/direccion-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/direccion-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-direccionciudadano').attr('value', data);
   });
 
-  $.get('index.php?r=regdiarioct/telefono-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/telefono-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-telefonociudadano').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/cedula-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/cedula-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-cedulaciudadano').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/sexo-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/sexo-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-sexociudadano').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/pertenece-ciudadano', {id : idCiudadano}, function(data){
+  $.get('index.php?r=regdiariogr/pertenece-ciudadano', {id : idCiudadano}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-perteneceestablecimientociudadano').attr('value', data);
   });
@@ -455,47 +460,45 @@ function ciudadano(idCiudadano){
 }
 function establecimiento(idEstablecimiento){
 
-
-
-  $.get('index.php?r=regdiarioct/zona', {id : idEstablecimiento}, function(data){
+  $.get('index.php?r=regdiariogr/zona', {id : idEstablecimiento}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-zona').attr('value', data);
   });
 
-  $.get('index.php?r=regdiarioct/provincia', {id : idEstablecimiento}, function(data){
+  $.get('index.php?r=regdiariogr/provincia', {id : idEstablecimiento}, function(data){
 
       var data = $.parseJSON(data);
       $('#regdiario-provincia').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/canton', {id : idEstablecimiento}, function(data){
+  $.get('index.php?r=regdiariogr/canton', {id : idEstablecimiento}, function(data){
 
       var data = $.parseJSON(data);
       $('#regdiario-canton').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/distrito', {id : idEstablecimiento}, function(data){
+  $.get('index.php?r=regdiariogr/distrito', {id : idEstablecimiento}, function(data){
 
       var data = $.parseJSON(data);
       $('#regdiario-distrito').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/parroquia', {id : idEstablecimiento}, function(data){
+  $.get('index.php?r=regdiariogr/parroquia', {id : idEstablecimiento}, function(data){
 
       var data = $.parseJSON(data);
       $('#regdiario-parroquia').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/tipo-establecimiento', {id : idEstablecimiento}, function(data){
+  $.get('index.php?r=regdiariogr/tipo-establecimiento', {id : idEstablecimiento}, function(data){
 
       var data = $.parseJSON(data);
       $('#regdiario-tipoestablecimiento').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/zona-ubicacion', {id : idEstablecimiento}, function(data){
+  $.get('index.php?r=regdiariogr/zona-ubicacion', {id : idEstablecimiento}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-zonaubicacion').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/localidad', {id : idEstablecimiento}, function(data){
+  $.get('index.php?r=regdiariogr/localidad', {id : idEstablecimiento}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-localidad').attr('value', data);
   });
-  $.get('index.php?r=regdiarioct/uni-codigo', {id : idEstablecimiento}, function(data){
+  $.get('index.php?r=regdiariogr/uni-codigo', {id : idEstablecimiento}, function(data){
       var data = $.parseJSON(data);
       $('#regdiario-unicodigo').attr('value', data);
   });
@@ -509,243 +512,241 @@ function check(){
 
     //  $("select").bind("click", function(){
 
+                $("#vacunacionregdiariogr-"+0+"-vacuna").change(function(){
 
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
 
-                $("#vacunacionregistrodiario-"+0+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-
-                    $("select#vacunacionregistrodiario-"+0+"-coddosis").html( data );
+                    $("select#vacunacionregdiariogr-"+0+"-coddosis").html( data );
                   });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+0+"-codrangoedad").html( data );
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+0+"-codrangoedad").html( data );
                   });
                 });
 
 
 
-                $("#vacunacionregistrodiario-"+1+"-vacuna").change(function(){
+                $("#vacunacionregdiariogr-"+1+"-vacuna").change(function(){
 
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+1+"-coddosis").html( data );
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+1+"-coddosis").html( data );
                   });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+1+"-codrangoedad").html( data );
-                  });
-                });
-
-
-                $("#vacunacionregistrodiario-"+2+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+2+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+2+"-codrangoedad").html( data );
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+1+"-codrangoedad").html( data );
                   });
                 });
 
 
+                $("#vacunacionregdiariogr-"+2+"-vacuna").change(function(){
 
-                $("#vacunacionregistrodiario-"+3+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+3+"-coddosis").html( data );
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+2+"-coddosis").html( data );
                   });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+3+"-codrangoedad").html( data );
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+2+"-codrangoedad").html( data );
                   });
                 });
 
 
 
-                $("#vacunacionregistrodiario-"+4+"-vacuna").change(function(){
+                $("#vacunacionregdiariogr-"+3+"-vacuna").change(function(){
 
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+4+"-coddosis").html( data );
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+3+"-coddosis").html( data );
                   });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+4+"-codrangoedad").html( data );
-                  });
-                });
-
-
-
-
-
-                $("#vacunacionregistrodiario-"+5+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+5+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+5+"-codrangoedad").html( data );
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+3+"-codrangoedad").html( data );
                   });
                 });
 
 
 
-                $("#vacunacionregistrodiario-"+6+"-vacuna").change(function(){
+                $("#vacunacionregdiariogr-"+4+"-vacuna").change(function(){
 
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+6+"-coddosis").html( data );
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+4+"-coddosis").html( data );
                   });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+6+"-codrangoedad").html( data );
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+4+"-codrangoedad").html( data );
                   });
                 });
 
 
 
 
-                $("#vacunacionregistrodiario-"+7+"-vacuna").change(function(){
 
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+7+"-coddosis").html( data );
+                $("#vacunacionregdiariogr-"+5+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+5+"-coddosis").html( data );
                   });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+7+"-codrangoedad").html( data );
-                  });
-                });
-
-
-
-                $("#vacunacionregistrodiario-"+8+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+8+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+8+"-codrangoedad").html( data );
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+5+"-codrangoedad").html( data );
                   });
                 });
 
 
 
-                $("#vacunacionregistrodiario-"+9+"-vacuna").change(function(){
+                $("#vacunacionregdiariogr-"+6+"-vacuna").change(function(){
 
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+9+"-coddosis").html( data );
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+6+"-coddosis").html( data );
                   });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+9+"-codrangoedad").html( data );
-                  });
-                });
-
-
-                $("#vacunacionregistrodiario-"+10+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+10+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+10+"-codrangoedad").html( data );
-                  });
-                });
-
-
-
-                $("#vacunacionregistrodiario-"+11+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+11+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+11+"-codrangoedad").html( data );
-                  });
-                });
-
-
-
-                $("#vacunacionregistrodiario-"+12+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+12+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+12+"-codrangoedad").html( data );
-                  });
-                });
-
-
-                $("#vacunacionregistrodiario-"+13+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+13+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+13+"-codrangoedad").html( data );
-                  });
-                });
-
-
-
-                $("#vacunacionregistrodiario-"+14+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+14+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+14+"-codrangoedad").html( data );
-                  });
-                });
-
-
-
-                $("#vacunacionregistrodiario-"+15+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+15+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+15+"-codrangoedad").html( data );
-                  });
-                });
-
-
-                $("#vacunacionregistrodiario-"+16+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+16+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+16+"-codrangoedad").html( data );
-                  });
-                });
-
-
-
-                $("#vacunacionregistrodiario-"+17+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+17+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+17+"-codrangoedad").html( data );
-                  });
-                });
-
-
-                $("#vacunacionregistrodiario-"+18+"-vacuna").change(function(){
-
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+18+"-coddosis").html( data );
-                  });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+18+"-codrangoedad").html( data );
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+6+"-codrangoedad").html( data );
                   });
                 });
 
 
 
 
-                $("#vacunacionregistrodiario-"+19+"-vacuna").change(function(){
+                $("#vacunacionregdiariogr-"+7+"-vacuna").change(function(){
 
-                  $.post("index.php?r=regdiarioct/listado-dosis&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+19+"-coddosis").html( data );
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+7+"-coddosis").html( data );
                   });
-                    $.post("index.php?r=regdiarioct/listado-rango-edad&id="+$(this).val(), function( data ){
-                    $("select#vacunacionregistrodiario-"+19+"-codrangoedad").html( data );
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+7+"-codrangoedad").html( data );
+                  });
+                });
+
+
+
+                $("#vacunacionregdiariogr-"+8+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+8+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+8+"-codrangoedad").html( data );
+                  });
+                });
+
+
+
+                $("#vacunacionregdiariogr-"+9+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+9+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+9+"-codrangoedad").html( data );
+                  });
+                });
+
+
+                $("#vacunacionregdiariogr-"+10+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+10+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+10+"-codrangoedad").html( data );
+                  });
+                });
+
+
+
+                $("#vacunacionregdiariogr-"+11+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+11+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+11+"-codrangoedad").html( data );
+                  });
+                });
+
+
+
+                $("#vacunacionregdiariogr-"+12+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+12+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+12+"-codrangoedad").html( data );
+                  });
+                });
+
+
+                $("#vacunacionregdiariogr-"+13+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+13+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+13+"-codrangoedad").html( data );
+                  });
+                });
+
+
+
+                $("#vacunacionregdiariogr-"+14+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+14+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+14+"-codrangoedad").html( data );
+                  });
+                });
+
+
+
+                $("#vacunacionregdiariogr-"+15+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+15+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+15+"-codrangoedad").html( data );
+                  });
+                });
+
+
+                $("#vacunacionregdiariogr-"+16+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+16+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+16+"-codrangoedad").html( data );
+                  });
+                });
+
+
+
+                $("#vacunacionregdiariogr-"+17+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+17+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+17+"-codrangoedad").html( data );
+                  });
+                });
+
+
+                $("#vacunacionregdiariogr-"+18+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+18+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+18+"-codrangoedad").html( data );
+                  });
+                });
+
+
+
+
+                $("#vacunacionregdiariogr-"+19+"-vacuna").change(function(){
+
+                  $.post("index.php?r=regdiariogr/listado-dosis&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+19+"-coddosis").html( data );
+                  });
+                    $.post("index.php?r=regdiariogr/listado-rango-edad&id="+$(this).val(), function( data ){
+                    $("select#vacunacionregdiariogr-"+19+"-codrangoedad").html( data );
                   });
                 });
 
@@ -754,6 +755,7 @@ function check(){
 
 
 }
+
 
 
 

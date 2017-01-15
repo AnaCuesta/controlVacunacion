@@ -71,14 +71,14 @@ class Regdiario extends \yii\db\ActiveRecord
     {
         return [
             [['CODREGISTRODIARIO','ESTADO','CODEDAD', 'UNICODIGOES', 'CODTIPODOC', 'CODLUGARVACUNACION', 'DESCRIPCIONESCENARIOVAC', 'FECHAREGISTROVAC', 'N_HISTCLINIC', 'NOMBREVACUNADOR'], 'required'],
-            [['CODREGISTRODIARIO', 'CODTIPODOC', 'CODLUGARVACUNACION', 'CODEDAD'], 'integer'],
+            [['CODREGISTRODIARIO', 'CODLUGARVACUNACION', 'CODEDAD'], 'integer'],
             [['FECHAREGISTROVAC'], 'safe'],
             [['UNICODIGOES'], 'string', 'max' => 11],
             [['DESCRIPCIONESCENARIOVAC', 'NOMBREVACUNADOR'], 'string', 'max' => 60],
             [['N_HISTCLINIC'], 'string', 'max' => 10],
             [['CODEDAD'], 'exist', 'skipOnError' => true, 'targetClass' => Edad::className(), 'targetAttribute' => ['CODEDAD' => 'CODEDAD']],
             [['CODLUGARVACUNACION'], 'exist', 'skipOnError' => true, 'targetClass' => Escenariovac::className(), 'targetAttribute' => ['CODLUGARVACUNACION' => 'CODLUGARVACUNACION']],
-            [['CODTIPODOC'], 'exist', 'skipOnError' => true, 'targetClass' => Tipodocumento::className(), 'targetAttribute' => ['CODTIPODOC' => 'CODTIPODOC']],
+          //  [['CODTIPODOC'], 'exist', 'skipOnError' => true, 'targetClass' => Tipodocumento::className(), 'targetAttribute' => ['CODTIPODOC' => 'CODTIPODOC']],
             [['N_HISTCLINIC'], 'exist', 'skipOnError' => true, 'targetClass' => Ciudadano::className(), 'targetAttribute' => ['N_HISTCLINIC' => 'N_HISTCLINIC']],
             [['UNICODIGOES'], 'exist', 'skipOnError' => true, 'targetClass' => Establecimiento::className(), 'targetAttribute' => ['UNICODIGOES' => 'UNICODIGOES']],
         ];

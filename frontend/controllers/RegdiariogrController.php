@@ -23,14 +23,14 @@ use frontend\models\Autoidetnica;
 use frontend\models\Lugarresidencia;
 use frontend\models\Localidad;
 use frontend\models\Genero;
-use frontend\models\Vacunacionregistrodiario;
+use frontend\models\Vacunacionregdiariogr;
 use frontend\models\Nacionalidad;
 use common\models\Model;
 use yii\helpers\ArrayHelper;
 /**
  * RegdiarioController implements the CRUD actions for Regdiario model.
  */
-class RegdiarioafController extends Controller
+class RegdiariogrController extends Controller
 {
     /**
      * @inheritdoc
@@ -52,12 +52,14 @@ class RegdiarioafController extends Controller
        */
       public function actionListadoInstitucion($id)
       {
+        if(!empty($id)){
           if($id==1){
           echo Json::encode('Unido Somos Mas');
           }else{
           echo Json::encode('');
 
           }
+        }
       }
     /**
        *  Obtiene el nombre de la zona
@@ -367,6 +369,7 @@ class RegdiarioafController extends Controller
                        $ciudadano = Ciudadano::find()->where(['N_HISTCLINIC' => $id])->one();
 
                        if( count($ciudadano) > 0){
+
                            $genero = Genero::find()->where(['CODSEXO' => $ciudadano->CODSEXO])->one();
 
                            echo Json::encode($genero->SEXO);
@@ -465,14 +468,14 @@ class RegdiarioafController extends Controller
         public function actionProvincia($id)
         {
           if(!empty($id)){
-          $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
-          $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
-          $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
-          $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();
-          echo Json::encode($provincia->PROVINCIA);
-        }else{
-          echo Json::encode('');
-        }
+              $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+              $parroquia = Parroquia::find()->where(['CODPARROQUIA' => $establecimiento->CODPARROQUIA])->one();
+              $canton = Canton::find()->where(['CODCANTON' => $parroquia->CODCANTON])->one();
+              $provincia = Provincia::find()->where(['CODPROVINCIA' => $canton->CODPROVINCIA])->one();
+              echo Json::encode($provincia->PROVINCIA);
+            }else{
+              echo Json::encode('');
+            }
         }
 
        /**
@@ -496,12 +499,12 @@ class RegdiarioafController extends Controller
            */
           public function actionTipoEstablecimiento($id)
           {
-            if(!empty($id)){
+          if(!empty($id)){
             $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
             echo Json::encode($establecimiento->TIPOESTABLECIMIENTO);
-            }else{
-              echo Json::encode('');
-            }
+          }else{
+            echo Json::encode('');
+          }
           }
         /**
            *  Obtiene el nombre de la zona
@@ -526,10 +529,9 @@ class RegdiarioafController extends Controller
             if(!empty($id)){
             $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
             echo Json::encode($establecimiento->LOCALIDADEST);
-            }else{
-              echo Json::encode('');
-
-            }
+          }else{
+            echo Json::encode('');
+          }
           }
         /**
            *  Obtiene el nombre de la zona
@@ -537,13 +539,12 @@ class RegdiarioafController extends Controller
            */
           public function actionUniCodigo($id)
           {
-            if(!empty($id)){
-              $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
-              echo Json::encode($establecimiento->UNICODIGOES);
-            }else{
-              echo Json::encode('');
-
-            }
+          if(!empty($id)){
+            $establecimiento = Establecimiento::find()->where(['UNICODIGOES' => $id])->one();
+            echo Json::encode($establecimiento->UNICODIGOES);
+          }else{
+            echo Json::encode('');
+          }
           }
 
 
@@ -553,6 +554,7 @@ class RegdiarioafController extends Controller
      */
     public function actionIndex()
     {
+
         $searchModel = new RegdiarioSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -583,9 +585,10 @@ class RegdiarioafController extends Controller
     {
         $model = new Regdiario();
 
-        $model->CODTIPODOC = 4;
+        $model->CODTIPODOC = 3;
 
-        $modelRegistro = [new Vacunacionregistrodiario];
+
+        $modelRegistro = [new Vacunacionregdiariogr];
 
         $idRegistro = Regdiario::find()->max('CODREGISTRODIARIO');
 
@@ -594,7 +597,7 @@ class RegdiarioafController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
         // get Payment data from POST
-         $modelRegistro = Model::createMultiple(Vacunacionregistrodiario::classname());
+         $modelRegistro = Model::createMultiple(Vacunacionregdiariogr::classname());
          Model::loadMultiple($modelRegistro, Yii::$app->request->post());
 
          $valid = $model->validate();
@@ -637,7 +640,7 @@ class RegdiarioafController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'modelRegistro' => (empty($modelRegistro)) ? [new Vacunacionregistrodiario] : $modelRegistro
+            'modelRegistro' => (empty($modelRegistro)) ? [new Vacunacionregdiariogr] : $modelRegistro
         ]);
 
         }
@@ -655,28 +658,28 @@ class RegdiarioafController extends Controller
       $model = $this->findModel($id);
 
 
-      //$modelRegistro = [new Vacunacionregistrodiario];
+      //$modelRegistro = [new Vacunacionregdiariogr];
 
-      $modelRegistro =  Vacunacionregistrodiario::find()->where(['CODREGISTRODIARIO' => $id])->all();// get values by actual Id
+      $modelRegistro =  Vacunacionregdiariogr::find()->where(['CODREGISTRODIARIO' => $id])->all();// get values by actual Id
       // get values by actual Id
 
 
 
-      //$modelRegistro =  $model->Vacunacionregistrodiario;
+      //$modelRegistro =  $model->Vacunacionregdiariogr;
 
       if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-        $oldIDs = ArrayHelper::map($modelRegistro, 'IDVAUNACIONREGDIARIO', 'IDVAUNACIONREGDIARIO');
+        $oldIDs = ArrayHelper::map($modelRegistro, 'CODVACREGDIARIOGR', 'CODVACREGDIARIOGR');
 
-        $dosisOldIDs = Vacunacionregistrodiario::find()->where(['CODREGISTRODIARIO' => $id])->one() ;
+        $dosisOldIDs = Vacunacionregdiariogr::find()->where(['CODREGISTRODIARIO' => $id])->one() ;
 
-        $modelRegistro = Model::createMultipleUpdate(Vacunacionregistrodiario::classname(), $modelRegistro,'IDVAUNACIONREGDIARIO');
+        $modelRegistro = Model::createMultipleUpdate(Vacunacionregdiariogr::classname(), $modelRegistro,'CODVACREGDIARIOGR');
 
 
 
         Model::loadMultiple($modelRegistro, Yii::$app->request->post());
 
-        $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelRegistro, 'IDVAUNACIONREGDIARIO', 'IDVAUNACIONREGDIARIO')));
+        $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelRegistro, 'CODVACREGDIARIOGR', 'CODVACREGDIARIOGR')));
 
         //validaciones
 
@@ -692,7 +695,7 @@ class RegdiarioafController extends Controller
 
           if (! empty($deletedIDs)) {
 
-            Vacunacionregistrodiario::deleteAll(['IDVAUNACIONREGDIARIO' => $deletedIDs]);
+            Vacunacionregdiariogr::deleteAll(['CODVACREGDIARIOGR' => $deletedIDs]);
 
 
 
@@ -701,6 +704,7 @@ class RegdiarioafController extends Controller
 
           $dosis = ArrayHelper::getColumn($modelRegistro, 'CODDOSIS');
           $rangoEdad = ArrayHelper::getColumn($modelRegistro, 'CODRANGOEDAD');
+          $grupoRiesgo = ArrayHelper::getColumn($modelRegistro, 'CODGRUPORIESGO');
 
 
 
@@ -711,6 +715,8 @@ class RegdiarioafController extends Controller
               $modelRegistro->CODDOSIS = $dosis[$i];
 
               $modelRegistro->CODRANGOEDAD = $rangoEdad[$i];
+
+              $modelRegistro->CODGRUPORIESGO = $grupoRiesgo[$i];
 
               //print_r($dosis[$i]);
 
@@ -735,7 +741,7 @@ class RegdiarioafController extends Controller
       } else {
           return $this->render('update', [
               'model' => $model,
-              'modelRegistro' => (empty($modelRegistro)) ? [new Vacunacionregistrodiario] : $modelRegistro
+              'modelRegistro' => (empty($modelRegistro)) ? [new Vacunacionregdiariogr] : $modelRegistro
 
           ]);
       }
@@ -749,11 +755,11 @@ class RegdiarioafController extends Controller
      */
     public function actionDelete($id)
     {
-      $modelRegistro =  Vacunacionregistrodiario::find()->where(['CODREGISTRODIARIO' => $id])->all();
+      $modelRegistro =  Vacunacionregdiariogr::find()->where(['CODREGISTRODIARIO' => $id])->all();
 
       $oldIDs = ArrayHelper::map($modelRegistro, 'IDVAUNACIONREGDIARIO', 'IDVAUNACIONREGDIARIO');
 
-      Vacunacionregistrodiario::deleteAll(['IDVAUNACIONREGDIARIO' => $oldIDs]);
+      Vacunacionregdiariogr::deleteAll(['IDVAUNACIONREGDIARIO' => $oldIDs]);
 
       $this->findModel($id)->delete();
 
